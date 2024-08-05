@@ -1,4 +1,5 @@
 #pragma once
+#include "MyForm1.h"
 
 namespace Numbersystems {
 
@@ -123,10 +124,11 @@ namespace Numbersystems {
 					L"13", L"14", L"15", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27", L"28", L"29", L"30", L"31",
 					L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBox1->Location = System::Drawing::Point(428, 177);
+			this->comboBox1->Location = System::Drawing::Point(428, 176);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(63, 33);
 			this->comboBox1->TabIndex = 4;
+			this->comboBox1->Text = L"3";
 			// 
 			// textBox5
 			// 
@@ -146,6 +148,7 @@ namespace Numbersystems {
 			this->calculator->TabIndex = 6;
 			this->calculator->Text = L"Calculator";
 			this->calculator->UseVisualStyleBackColor = true;
+			this->calculator->Click += gcnew System::EventHandler(this, &MyForm::calculator_Click);
 			// 
 			// MyForm
 			// 
@@ -170,5 +173,9 @@ namespace Numbersystems {
 
 		}
 #pragma endregion
-	};
+	private: System::Void calculator_Click(System::Object^ sender, System::EventArgs^ e) {
+		MyForm1^ form1 = gcnew MyForm1(); //создаем новый экземпл€р формы
+		form1->Show();
+	}
+};
 }
