@@ -42,8 +42,11 @@ namespace Numbersystems {
 
 	private: System::Windows::Forms::ComboBox^ comboBox2;
 	private: System::Windows::Forms::ComboBox^ comboBox3;
-
-
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ label4;
 
 	protected:
 
@@ -68,13 +71,18 @@ namespace Numbersystems {
 			this->listBox = (gcnew System::Windows::Forms::ListBox());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
 			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// textBox5
 			// 
 			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBox5->Location = System::Drawing::Point(18, 19);
+			this->textBox5->Location = System::Drawing::Point(13, 65);
 			this->textBox5->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBox5->Name = L"textBox5";
 			this->textBox5->Size = System::Drawing::Size(403, 30);
@@ -84,7 +92,7 @@ namespace Numbersystems {
 			// 
 			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBox1->Location = System::Drawing::Point(18, 169);
+			this->textBox1->Location = System::Drawing::Point(13, 240);
 			this->textBox1->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(403, 30);
@@ -94,7 +102,7 @@ namespace Numbersystems {
 			// 
 			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBox2->Location = System::Drawing::Point(18, 229);
+			this->textBox2->Location = System::Drawing::Point(13, 334);
 			this->textBox2->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(403, 30);
@@ -102,6 +110,7 @@ namespace Numbersystems {
 			// 
 			// comboBox1
 			// 
+			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->comboBox1->FormattingEnabled = true;
@@ -112,25 +121,26 @@ namespace Numbersystems {
 					L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27",
 					L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBox1->Location = System::Drawing::Point(428, 16);
+			this->comboBox1->Location = System::Drawing::Point(423, 62);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(63, 33);
 			this->comboBox1->TabIndex = 9;
-			this->comboBox1->Text = L"10";
+			this->comboBox1->TextChanged += gcnew System::EventHandler(this, &MyForm1::comboBox1_TextChanged);
 			// 
 			// listBox
 			// 
 			this->listBox->FormattingEnabled = true;
 			this->listBox->ItemHeight = 25;
 			this->listBox->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"+", L"-", L"*", L"/", L"^" });
-			this->listBox->Location = System::Drawing::Point(168, 57);
+			this->listBox->Location = System::Drawing::Point(168, 103);
 			this->listBox->Name = L"listBox";
 			this->listBox->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->listBox->Size = System::Drawing::Size(173, 104);
+			this->listBox->Size = System::Drawing::Size(168, 104);
 			this->listBox->TabIndex = 12;
 			// 
 			// comboBox2
 			// 
+			this->comboBox2->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->comboBox2->FormattingEnabled = true;
@@ -141,14 +151,14 @@ namespace Numbersystems {
 					L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27",
 					L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBox2->Location = System::Drawing::Point(428, 166);
+			this->comboBox2->Location = System::Drawing::Point(423, 237);
 			this->comboBox2->Name = L"comboBox2";
 			this->comboBox2->Size = System::Drawing::Size(63, 33);
 			this->comboBox2->TabIndex = 13;
-			this->comboBox2->Text = L"2";
 			// 
 			// comboBox3
 			// 
+			this->comboBox3->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->comboBox3->FormattingEnabled = true;
@@ -159,17 +169,67 @@ namespace Numbersystems {
 					L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27",
 					L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBox3->Location = System::Drawing::Point(428, 226);
+			this->comboBox3->Location = System::Drawing::Point(423, 331);
 			this->comboBox3->Name = L"comboBox3";
 			this->comboBox3->Size = System::Drawing::Size(63, 33);
 			this->comboBox3->TabIndex = 14;
-			this->comboBox3->Text = L"8";
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Location = System::Drawing::Point(418, 34);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(60, 25);
+			this->label5->TabIndex = 15;
+			this->label5->Text = L"Basis";
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(418, 209);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(60, 25);
+			this->label1->TabIndex = 16;
+			this->label1->Text = L"Basis";
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(418, 303);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(60, 25);
+			this->label2->TabIndex = 17;
+			this->label2->Text = L"Basis";
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label3->Location = System::Drawing::Point(250, 275);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(27, 29);
+			this->label3->TabIndex = 18;
+			this->label3->Text = L"=";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(211, 9);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(0, 25);
+			this->label4->TabIndex = 19;
 			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(511, 287);
+			this->ClientSize = System::Drawing::Size(509, 415);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->label1);
+			this->Controls->Add(this->label5);
 			this->Controls->Add(this->comboBox3);
 			this->Controls->Add(this->comboBox2);
 			this->Controls->Add(this->listBox);
@@ -190,5 +250,8 @@ namespace Numbersystems {
 
 		}
 #pragma endregion
-	};
+	private: System::Void comboBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+		label5->Text = L"Basis " + comboBox1->Text;
+	}
+};
 }
