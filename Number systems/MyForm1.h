@@ -21,7 +21,6 @@ namespace Numbersystems {
 
 			this->MaximizeBox = false;
 		}
-
 	protected:
 		/// <summary>
 		/// Освободить все используемые ресурсы.
@@ -43,6 +42,8 @@ namespace Numbersystems {
 
 	private: System::Windows::Forms::ComboBox^ comboBox2;
 	private: System::Windows::Forms::ComboBox^ comboBox3;
+
+
 
 	protected:
 
@@ -121,7 +122,7 @@ namespace Numbersystems {
 			// 
 			this->listBox->FormattingEnabled = true;
 			this->listBox->ItemHeight = 25;
-			this->listBox->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"+", L"-", L"*", L"/" });
+			this->listBox->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"+", L"-", L"*", L"/", L"^" });
 			this->listBox->Location = System::Drawing::Point(168, 57);
 			this->listBox->Name = L"listBox";
 			this->listBox->RightToLeft = System::Windows::Forms::RightToLeft::No;
