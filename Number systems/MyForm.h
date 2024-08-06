@@ -19,9 +19,8 @@ namespace Numbersystems {
 		MyForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: добавьте код конструктора
-			//
+			
+			this->MaximizeBox = false;
 		}
 
 	protected:
@@ -63,6 +62,7 @@ namespace Numbersystems {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
@@ -164,18 +164,23 @@ namespace Numbersystems {
 			this->Controls->Add(this->textBox1);
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"MyForm";
+			this->Text = L"Number systems";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
 	private: System::Void calculator_Click(System::Object^ sender, System::EventArgs^ e) {
-		MyForm1^ form1 = gcnew MyForm1(); //создаем новый экземпл€р формы
-		form1->Show();
+		if (Application::OpenForms->Count < 2)
+		{
+			MyForm1^ form1 = gcnew MyForm1(); //создаем новый экземпл€р формы
+			form1->Show();
+		}
 	}
 };
 }

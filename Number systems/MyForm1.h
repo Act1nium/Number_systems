@@ -18,9 +18,8 @@ namespace Numbersystems {
 		MyForm1(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: добавьте код конструктора
-			//
+
+			this->MaximizeBox = false;
 		}
 
 	protected:
@@ -38,9 +37,10 @@ namespace Numbersystems {
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
+	private: System::Windows::Forms::ListBox^ listBox;
 
 
-	private: System::Windows::Forms::ListBox^ listBox1;
+
 	private: System::Windows::Forms::ComboBox^ comboBox2;
 	private: System::Windows::Forms::ComboBox^ comboBox3;
 
@@ -59,11 +59,12 @@ namespace Numbersystems {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm1::typeid));
 			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
-			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
+			this->listBox = (gcnew System::Windows::Forms::ListBox());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
 			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
 			this->SuspendLayout();
@@ -116,15 +117,15 @@ namespace Numbersystems {
 			this->comboBox1->TabIndex = 9;
 			this->comboBox1->Text = L"10";
 			// 
-			// listBox1
+			// listBox
 			// 
-			this->listBox1->FormattingEnabled = true;
-			this->listBox1->ItemHeight = 25;
-			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"+", L"-", L"*", L"/" });
-			this->listBox1->Location = System::Drawing::Point(179, 57);
-			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(120, 104);
-			this->listBox1->TabIndex = 12;
+			this->listBox->FormattingEnabled = true;
+			this->listBox->ItemHeight = 25;
+			this->listBox->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"+", L"-", L"*", L"/" });
+			this->listBox->Location = System::Drawing::Point(179, 57);
+			this->listBox->Name = L"listBox";
+			this->listBox->Size = System::Drawing::Size(120, 104);
+			this->listBox->TabIndex = 12;
 			// 
 			// comboBox2
 			// 
@@ -169,17 +170,19 @@ namespace Numbersystems {
 			this->ClientSize = System::Drawing::Size(511, 287);
 			this->Controls->Add(this->comboBox3);
 			this->Controls->Add(this->comboBox2);
-			this->Controls->Add(this->listBox1);
+			this->Controls->Add(this->listBox);
 			this->Controls->Add(this->comboBox1);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->textBox5);
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->Name = L"MyForm1";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"MyForm1";
+			this->Text = L"Number systems";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
