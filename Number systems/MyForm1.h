@@ -20,6 +20,8 @@ namespace Numbersystems {
 			InitializeComponent();
 
 			this->MaximizeBox = false;
+
+			textBox2->ReadOnly = true;
 		}
 	protected:
 		/// <summary>
@@ -34,7 +36,7 @@ namespace Numbersystems {
 		}
 	private: System::Windows::Forms::TextBox^ textBox5;
 	private: System::Windows::Forms::TextBox^ textBox1;
-	private: System::Windows::Forms::TextBox^ textBox2;
+
 	private: System::Windows::Forms::ComboBox^ comboBox1;
 	private: System::Windows::Forms::ListBox^ listBox;
 
@@ -46,7 +48,9 @@ namespace Numbersystems {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::TextBox^ textBox2;
+
+
 
 	protected:
 
@@ -66,7 +70,6 @@ namespace Numbersystems {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm1::typeid));
 			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->listBox = (gcnew System::Windows::Forms::ListBox());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
@@ -75,7 +78,7 @@ namespace Numbersystems {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// textBox5
@@ -98,16 +101,6 @@ namespace Numbersystems {
 			this->textBox1->Size = System::Drawing::Size(403, 30);
 			this->textBox1->TabIndex = 7;
 			// 
-			// textBox2
-			// 
-			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->textBox2->Location = System::Drawing::Point(13, 334);
-			this->textBox2->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(403, 30);
-			this->textBox2->TabIndex = 8;
-			// 
 			// comboBox1
 			// 
 			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
@@ -125,7 +118,6 @@ namespace Numbersystems {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(63, 33);
 			this->comboBox1->TabIndex = 9;
-			this->comboBox1->TextChanged += gcnew System::EventHandler(this, &MyForm1::comboBox1_TextChanged);
 			// 
 			// listBox
 			// 
@@ -206,26 +198,27 @@ namespace Numbersystems {
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(250, 275);
+			this->label3->Location = System::Drawing::Point(242, 275);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(27, 29);
 			this->label3->TabIndex = 18;
 			this->label3->Text = L"=";
 			// 
-			// label4
+			// textBox2
 			// 
-			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(211, 9);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(0, 25);
-			this->label4->TabIndex = 19;
+			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->textBox2->Location = System::Drawing::Point(13, 334);
+			this->textBox2->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(403, 30);
+			this->textBox2->TabIndex = 8;
 			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
-			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
@@ -250,8 +243,5 @@ namespace Numbersystems {
 
 		}
 #pragma endregion
-	private: System::Void comboBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-		label5->Text = L"Basis " + comboBox1->Text;
-	}
 };
 }
