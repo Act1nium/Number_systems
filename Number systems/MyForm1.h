@@ -122,9 +122,10 @@ namespace Numbersystems {
 			this->listBox->FormattingEnabled = true;
 			this->listBox->ItemHeight = 25;
 			this->listBox->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"+", L"-", L"*", L"/" });
-			this->listBox->Location = System::Drawing::Point(179, 57);
+			this->listBox->Location = System::Drawing::Point(168, 57);
 			this->listBox->Name = L"listBox";
-			this->listBox->Size = System::Drawing::Size(120, 104);
+			this->listBox->RightToLeft = System::Windows::Forms::RightToLeft::No;
+			this->listBox->Size = System::Drawing::Size(173, 104);
 			this->listBox->TabIndex = 12;
 			// 
 			// comboBox2
