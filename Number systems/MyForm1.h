@@ -18,10 +18,6 @@ namespace Numbersystems {
 		MyForm1(void)
 		{
 			InitializeComponent();
-
-			this->MaximizeBox = false;
-
-			textBox2->ReadOnly = true;
 		}
 	protected:
 		/// <summary>
@@ -211,6 +207,7 @@ namespace Numbersystems {
 			this->textBox2->Location = System::Drawing::Point(13, 334);
 			this->textBox2->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBox2->Name = L"textBox2";
+			this->textBox2->ReadOnly = true;
 			this->textBox2->Size = System::Drawing::Size(403, 30);
 			this->textBox2->TabIndex = 8;
 			// 
@@ -235,6 +232,7 @@ namespace Numbersystems {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->MaximizeBox = false;
 			this->Name = L"MyForm1";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Number systems";

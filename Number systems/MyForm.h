@@ -19,8 +19,6 @@ namespace Numbersystems {
 		MyForm(void)
 		{
 			InitializeComponent();
-			
-			this->MaximizeBox = false;
 		}
 
 	protected:
@@ -228,6 +226,7 @@ namespace Numbersystems {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->MaximizeBox = false;
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Number systems";
