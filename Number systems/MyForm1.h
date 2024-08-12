@@ -1,4 +1,7 @@
 #pragma once
+#include <map>
+
+using namespace System::Collections::Generic;
 
 namespace Numbersystems {
 

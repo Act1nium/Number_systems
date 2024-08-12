@@ -15,10 +15,51 @@ namespace Numbersystems {
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
+	private:
+		Dictionary<System::String^, int>^ numbers10 = gcnew Dictionary<System::String^, int>(); //Dictionary для перевода в десятичную СС
+		String^ decimal = ""; //переменная для хранения числа в 10 СС
+		String^ tempString = ""; //временная переменная типа String^
 	public:
 		MyForm(void)
 		{
 			InitializeComponent();
+
+			numbers10->Add("0", 0);
+			numbers10->Add("1", 1);
+			numbers10->Add("2", 2);
+			numbers10->Add("3", 3);
+			numbers10->Add("4", 4);
+			numbers10->Add("5", 5);
+			numbers10->Add("6", 6);
+			numbers10->Add("7", 7);
+			numbers10->Add("8", 8);
+			numbers10->Add("9", 9);
+			numbers10->Add("A", 10);
+			numbers10->Add("B", 11);
+			numbers10->Add("C", 12);
+			numbers10->Add("D", 13);
+			numbers10->Add("E", 14);
+			numbers10->Add("F", 15);
+			numbers10->Add("G", 16);
+			numbers10->Add("H", 17);
+			numbers10->Add("I", 18);
+			numbers10->Add("J", 19);
+			numbers10->Add("K", 20);
+			numbers10->Add("L", 21);
+			numbers10->Add("M", 22);
+			numbers10->Add("N", 23);
+			numbers10->Add("O", 24);
+			numbers10->Add("P", 25);
+			numbers10->Add("Q", 26);
+			numbers10->Add("R", 27);
+			numbers10->Add("S", 28);
+			numbers10->Add("T", 29);
+			numbers10->Add("U", 30);
+			numbers10->Add("V", 31);
+			numbers10->Add("W", 32);
+			numbers10->Add("X", 33);
+			numbers10->Add("Y", 34);
+			numbers10->Add("Z", 35);
 		}
 
 	protected:
@@ -98,6 +139,7 @@ namespace Numbersystems {
 			this->textBoxDecimal->Name = L"textBoxDecimal";
 			this->textBoxDecimal->Size = System::Drawing::Size(473, 30);
 			this->textBoxDecimal->TabIndex = 0;
+			this->textBoxDecimal->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			// 
 			// textBoxBinary
 			// 
@@ -248,6 +290,37 @@ private: System::Void ButtonCalculator_Click(System::Object^ sender, System::Eve
 	{
 		MyForm1^ form1 = gcnew MyForm1(); //создаем новый экземпляр формы
 		form1->Show();
+	}
+}
+private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	decimal = textBoxDecimal->Text;
+	decimal = decimal->ToUpper();
+	textBoxDecimal->Text = decimal;
+	if (textBoxDecimal->Text != "")
+	{
+		for (int i = 0; i < decimal->Length; i++)
+		{
+			if (numbers10[decimal->Substring(i, 1)] >= 10)
+			{
+				if (i != decimal->Length - 1)
+				{
+					decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+					textBoxDecimal->Text = decimal;
+					textBoxDecimal->SelectionStart = i;
+				}
+				else
+				{
+					decimal = decimal->Substring(0, decimal->Length - 1);
+					textBoxDecimal->Text = decimal;
+					textBoxDecimal->SelectionStart = textBoxDecimal->Text->Length;
+				}
+			}
+		}
+		/*if (numbers10[decimal->Substring(decimal->Length - 1, 1)] >= 10)
+		{
+			decimal = decimal->Substring(0, decimal->Length - 1);
+			textBoxDecimal->Text = decimal;
+		}*/
 	}
 }
 };
