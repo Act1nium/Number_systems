@@ -17,9 +17,8 @@ namespace Numbersystems {
 	{
 	private:
 		Dictionary<System::String^, int>^ numbers10 = gcnew Dictionary<System::String^, int>(); //Dictionary для перевода в десятичную СС
-		String^ decimal = ""; //переменная для хранения числа в 10 СС
-		String^ tempString = ""; //временная переменная типа String^
-		int pointsDecimal = 0; //кол-во точек к числе в 10 СС
+		String^ tempString = ""; //временная переменная типа
+		int temp; //временная переменная
 	public:
 		MyForm(void)
 		{
@@ -294,6 +293,15 @@ private: System::Void ButtonCalculator_Click(System::Object^ sender, System::Eve
 	}
 }
 private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	//переменные
+	String^ decimal = ""; //переменная для хранения числа в 10 СС
+	String^ decimalBeforePoint = ""; //число в 10 СС до точки
+	String^ decimalAfterPoint = ""; //число в 10 СС после точки
+	int pointsDecimal = 0; //кол-во точек к числе в 10 СС
+	int number10BeforePoint = 0; //целая часть числа в 10 СС
+	double number10Fractional = 0; //дробная часть числа в 10 СС
+	double number10; //число в 10 СС
+
 	decimal = textBoxDecimal->Text;
 	decimal = decimal->ToUpper();
 	textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
@@ -395,6 +403,35 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			}
 		}
 		pointsDecimal = 0;
+		//делим введенное число на целую и дробную части
+		for (int i = 0; i < decimal->Length; i++)
+		{
+			if (decimal[i] != '.')
+			{
+				if (decimal[i] != '-')
+				{
+					if (pointsDecimal == 0)
+						decimalBeforePoint += decimal[i];
+					else if (pointsDecimal == 1)
+						decimalAfterPoint += decimal[i];
+				}
+			}
+			else
+				pointsDecimal++;
+		}
+		//переводим в десятичную СС целую часть числа
+		for (int i = 0; i < decimalBeforePoint->Length; i++)
+			number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
+		//переводим в десятичную СС дробную часть числа 
+		if (decimalAfterPoint != "")
+		{
+			for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
+			{
+				number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
+			}
+		}
+
+		number10 = number10BeforePoint + number10Fractional;
 	}
 }
 };
