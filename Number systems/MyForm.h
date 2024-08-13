@@ -19,6 +19,7 @@ namespace Numbersystems {
 		Dictionary<System::String^, int>^ numbers10 = gcnew Dictionary<System::String^, int>(); //Dictionary для перевода в десятичную СС
 		String^ decimal = ""; //переменная для хранения числа в 10 СС
 		String^ tempString = ""; //временная переменная типа String^
+		int pointsDecimal = 0; //кол-во точек к числе в 10 СС
 	public:
 		MyForm(void)
 		{
@@ -295,7 +296,9 @@ private: System::Void ButtonCalculator_Click(System::Object^ sender, System::Eve
 private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	decimal = textBoxDecimal->Text;
 	decimal = decimal->ToUpper();
+	textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 	textBoxDecimal->Text = decimal;
+	textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 	//разрешаем вводить только нужные символы
 	if (textBoxDecimal->Text != "")
 	{
@@ -303,10 +306,12 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		{
 			if (numbers10->ContainsKey(decimal->Substring(i, 1)))
 			{
-				if (numbers10[decimal->Substring(i, 1)] >= 10)
+				if (numbers10[decimal->Substring(i, 1)] >= 10 || i == 1 && decimal[1] == '0' && decimal[0] == '0')
 				{
 					decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+					textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 					textBoxDecimal->Text = decimal;
+					textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 					textBoxDecimal->SelectionStart = i;
 				}
 			}
@@ -318,21 +323,78 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 					if (i != 0)
 					{
 						decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+						textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 						textBoxDecimal->Text = decimal;
+						textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 						textBoxDecimal->SelectionStart = i;
 					}
 					break;
 				case '.':
-
+					if (pointsDecimal > 0)
+					{
+						decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+						textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+						textBoxDecimal->Text = decimal;
+						textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+						textBoxDecimal->SelectionStart = i;
+					}
+					else
+					{
+						if (decimal == "." || decimal == "-.")
+						{
+							decimal = decimal->Replace(".", "");
+							decimal += "0.";
+							textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->Text = decimal;
+							textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->SelectionStart = i + 2;
+						}
+						else
+						pointsDecimal++;
+					}
+					break;
+				case ',':
+					if (pointsDecimal > 0)
+					{
+						decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+						textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+						textBoxDecimal->Text = decimal;
+						textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+						textBoxDecimal->SelectionStart = i;
+					}
+					else
+					{
+						if (decimal == "," || decimal == "-,")
+						{
+							decimal = decimal->Replace(",", "");
+							decimal += "0.";
+							textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->Text = decimal;
+							textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->SelectionStart = i + 2;
+						}
+						else
+						{
+							pointsDecimal++;
+							decimal = decimal->Replace(",", ".");
+							textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->Text = decimal;
+							textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+							textBoxDecimal->SelectionStart = i + 1;
+						}
+					}
 					break;
 				default:
 					decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+					textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 					textBoxDecimal->Text = decimal;
+					textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 					textBoxDecimal->SelectionStart = i;
 					break;
 				}
 			}
 		}
+		pointsDecimal = 0;
 	}
 }
 };
