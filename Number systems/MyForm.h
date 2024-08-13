@@ -19,7 +19,6 @@ namespace Numbersystems {
 		Dictionary<System::String^, int>^ numbers10 = gcnew Dictionary<System::String^, int>(); //Dictionary для перевода в десятичную СС
 		String^ decimal = ""; //переменная для хранения числа в 10 СС
 		String^ tempString = ""; //временная переменная типа String^
-		int minusesDecimal = 0;
 	public:
 		MyForm(void)
 		{
@@ -297,6 +296,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	decimal = textBoxDecimal->Text;
 	decimal = decimal->ToUpper();
 	textBoxDecimal->Text = decimal;
+	//разрешаем вводить только нужные символы
 	if (textBoxDecimal->Text != "")
 	{
 		for (int i = 0; i < decimal->Length; i++)
@@ -305,33 +305,31 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			{
 				if (numbers10[decimal->Substring(i, 1)] >= 10)
 				{
-					if (i != decimal->Length - 1)
+					decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
+					textBoxDecimal->Text = decimal;
+					textBoxDecimal->SelectionStart = i;
+				}
+			}
+			else
+			{
+				switch (decimal[i])
+				{
+				case '-':
+					if (i != 0)
 					{
 						decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
 						textBoxDecimal->Text = decimal;
 						textBoxDecimal->SelectionStart = i;
 					}
-					else
-					{
-						decimal = decimal->Substring(0, decimal->Length - 1);
-						textBoxDecimal->Text = decimal;
-						textBoxDecimal->SelectionStart = textBoxDecimal->Text->Length;
-					}
-				}
-			}
-			else
-			{
-				if (i != decimal->Length - 1)
-				{
+					break;
+				case '.':
+
+					break;
+				default:
 					decimal = decimal->Substring(0, i) + decimal->Substring(i + 1);
 					textBoxDecimal->Text = decimal;
 					textBoxDecimal->SelectionStart = i;
-				}
-				else
-				{
-					decimal = decimal->Substring(0, decimal->Length - 1);
-					textBoxDecimal->Text = decimal;
-					textBoxDecimal->SelectionStart = textBoxDecimal->Text->Length;
+					break;
 				}
 			}
 		}
