@@ -19,8 +19,6 @@ namespace Numbersystems {
 		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
 		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
 		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
-	private: System::Windows::Forms::Label^ labelError;
-		   String^ lastDecimal = ""; //прошлое число в 10 СС
 	public:
 		void ReverseString(String^& str)
 		{
@@ -215,7 +213,6 @@ namespace Numbersystems {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->labelError = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// textBoxDecimal
@@ -342,20 +339,11 @@ namespace Numbersystems {
 			this->label5->TabIndex = 11;
 			this->label5->Text = L"Basis";
 			// 
-			// labelError
-			// 
-			this->labelError->AutoSize = true;
-			this->labelError->Location = System::Drawing::Point(209, 9);
-			this->labelError->Name = L"labelError";
-			this->labelError->Size = System::Drawing::Size(0, 25);
-			this->labelError->TabIndex = 12;
-			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
-			this->Controls->Add(this->labelError);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label3);
@@ -399,6 +387,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
 	String^ binaryAfterPoint = ""; //число в 2 СС после точки
 	String^ binary = ""; //число в 2 СС
+	String^ lastDecimal = ""; //прошлое число в 10 СС
 	int pointsDecimal = 0; //кол-во точек к числе в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	int temp; //временная переменная - число для перевода из 10 ССы
@@ -411,7 +400,6 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 	textBoxDecimal->Text = decimal;
 	textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-	labelError->Text = "";
 	//разрешаем вводить только нужные символы
 	if (textBoxDecimal->Text != "")
 	{
@@ -526,42 +514,32 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			else
 				pointsDecimal++;
 		}
-		if (decimalBeforePoint->Length < 10)
+		pointsDecimal = 0;
+		//переводим в 10 СС целую часть числа
+		for (int i = 0; i < decimalBeforePoint->Length; i++)
+			number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
+		//переводим в 10 СС дробную часть числа 
+		if (decimalAfterPoint != "")
 		{
-			pointsDecimal = 0;
-			//переводим в 10 СС целую часть числа
-			for (int i = 0; i < decimalBeforePoint->Length; i++)
-				number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
-			//переводим в 10 СС дробную часть числа 
-			if (decimalAfterPoint != "")
-			{
-				for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
-					number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
-			}
+			for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
+				number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
+		}
 
-			number10 = number10BeforePoint + number10Fractional;
+		number10 = number10BeforePoint + number10Fractional;
 
-			strNumber10Fractional = "0.";
-			//переводим целую часть числа из 10 СС в 2 СС
-			if (number10BeforePoint != 0)
+		strNumber10Fractional = "0.";
+		//переводим целую часть числа из 10 СС в 2 СС
+		if (number10BeforePoint != 0)
+		{
+			while (number10BeforePoint != 0)
 			{
-				while (number10BeforePoint != 0)
-				{
-					binaryBeforePoint += numbers[number10BeforePoint % 2];
-					number10BeforePoint /= 2;
-				}
-				ReverseString(binaryBeforePoint);
+				binaryBeforePoint += numbers[number10BeforePoint % 2];
+				number10BeforePoint /= 2;
 			}
-			else
-				binaryBeforePoint = "0";
+			ReverseString(binaryBeforePoint);
 		}
 		else
-		{
-			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			textBoxDecimal->Text = "";
-			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			labelError->Text = "ERROR";
-		}
+			binaryBeforePoint = "0";
 	}
 	//переводим дробную часть числа из 10 СС 2 СС
 	while (number10Fractional >= 1)
@@ -613,6 +591,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			else
 			{
 				zero = false;
+				break;
 			}
 		}
 	}
@@ -624,6 +603,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 				binary = "-" + binary;
 		}
 	}
+	zero = false;
 
 	textBoxBinary->Text = binary;
 }
