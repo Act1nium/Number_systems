@@ -19,6 +19,7 @@ namespace Numbersystems {
 		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
 		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
 		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
+		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
 	public:
 		void ReverseString(String^& str)
 		{
@@ -145,6 +146,42 @@ namespace Numbersystems {
 			decimals->Add(34, 4);
 			decimals->Add(35, 4);
 			decimals->Add(36, 4);
+
+			maxLength->Add(2, 31);
+			maxLength->Add(3, 20);
+			maxLength->Add(4, 16);
+			maxLength->Add(5, 14);
+			maxLength->Add(6, 12);
+			maxLength->Add(7, 12);
+			maxLength->Add(8, 11);
+			maxLength->Add(9, 10);
+			maxLength->Add(10, 9);
+			maxLength->Add(11, 9);
+			maxLength->Add(12, 9);
+			maxLength->Add(13, 9);
+			maxLength->Add(14, 9);
+			maxLength->Add(15, 8);
+			maxLength->Add(16, 8);
+			maxLength->Add(17, 8);
+			maxLength->Add(18, 8);
+			maxLength->Add(19, 8);
+			maxLength->Add(20, 8);
+			maxLength->Add(21, 8);
+			maxLength->Add(22, 31);
+			maxLength->Add(23, 7);
+			maxLength->Add(24, 7);
+			maxLength->Add(25, 7);
+			maxLength->Add(26, 7);
+			maxLength->Add(27, 7);
+			maxLength->Add(28, 7);
+			maxLength->Add(29, 7);
+			maxLength->Add(30, 7);
+			maxLength->Add(31, 7);
+			maxLength->Add(32, 7);
+			maxLength->Add(33, 7);
+			maxLength->Add(34, 7);
+			maxLength->Add(35, 7);
+			maxLength->Add(36, 6);
 		}
 
 	protected:
@@ -453,7 +490,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 							textBoxDecimal->SelectionStart = i + 2;
 						}
 						else
-						pointsDecimal++;
+							pointsDecimal++;
 					}
 					break;
 				case ',':
@@ -526,7 +563,9 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		}
 
 		number10 = number10BeforePoint + number10Fractional;
-
+	}
+	if (textBoxDecimal->Text != "")
+	{
 		strNumber10Fractional = "0.";
 		//переводим целую часть числа из 10 СС в 2 СС
 		if (number10BeforePoint != 0)
