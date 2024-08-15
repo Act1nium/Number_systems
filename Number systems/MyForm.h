@@ -569,6 +569,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 					pointsDecimal++;
 			}
 		}
+		pointsDecimal = 0;
 		if (decimalAfterPoint->Length > decimals[10])
 		{
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
