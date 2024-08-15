@@ -19,9 +19,9 @@ namespace Numbersystems {
 		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
 		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
 		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
+		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
 		String^ lastDecimal; //прошлое число в 10 СС
-	private: System::Windows::Forms::Label^ labelError;
-		   Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
+
 	public:
 		void ReverseString(String^& str)
 		{
@@ -34,6 +34,10 @@ namespace Numbersystems {
 
 			str = temp;
 		}
+
+	private: System::Windows::Forms::Label^ labelError;
+		   
+	
 	public:
 		MyForm(void)
 		{
@@ -680,93 +684,6 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			zero = false;
 
 			textBoxBinary->Text = binary;
-
-
-
-
-
-
-
-			//if (textBoxDecimal->Text != "")
-			//{
-			//	//переводим целую часть числа из 10 СС в 2 СС
-			//	if (number10BeforePoint != 0)
-			//	{
-			//		while (number10BeforePoint != 0)
-			//		{
-			//			octalBeforePoint += numbers[number10BeforePoint % 2];
-			//			number10BeforePoint /= 2;
-			//		}
-			//		ReverseString(octalBeforePoint);
-			//	}
-			//	else
-			//		octalBeforePoint = "0";
-			//}
-			////переводим дробную часть числа из 10 СС 2 СС
-			//while (number10Fractional >= 1)
-			//	number10Fractional /= 10;
-			//for (int i = 0; number10Fractional != 0 && i < decimals[8]; i++)
-			//{
-			//	number10Fractional *= 8;
-			//	temp = number10Fractional;
-			//	if (number10Fractional != 0)
-			//	{
-			//		octalAfterPoint += numbers[temp];
-			//		if (temp != 0)
-			//		{
-			//			for (int i = 0; i < number10Fractional.ToString()->Length; i++)
-			//			{
-			//				if (number10Fractional.ToString()[i] != ',')
-			//				{
-			//					if (pointsDecimal == 1)
-			//						strNumber10Fractional += number10Fractional.ToString()[i];
-			//				}
-			//				else
-			//				{
-			//					pointsDecimal += 1;
-			//				}
-			//			}
-			//			pointsDecimal = 0;
-			//			System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
-			//			number10Fractional = System::Double::Parse(strNumber10Fractional, culture);
-			//			strNumber10Fractional = "0.";
-			//		}
-			//	}
-			//}
-			//if (binaryAfterPoint != "")
-			//{
-			//	binary += binaryBeforePoint + "." + binaryAfterPoint;
-			//}
-			//else
-			//	binary = binaryBeforePoint;
-
-			//for (int i = 0; i < binary->Length; i++)
-			//{
-			//	if (binary[i] != '-' && binary[i] != '.')
-			//	{
-			//		if (binary[i] == '0')
-			//		{
-			//			if (i == binary->Length - 1)
-			//				zero = true;
-			//		}
-			//		else
-			//		{
-			//			zero = false;
-			//			break;
-			//		}
-			//	}
-			//}
-			//if (!zero)
-			//{
-			//	if (decimal != "")
-			//	{
-			//		if (decimal[0] == '-')
-			//			binary = "-" + binary;
-			//	}
-			//}
-			//zero = false;
-
-			//textBoxBinary->Text = binary;
 		}
 		else
 		{
