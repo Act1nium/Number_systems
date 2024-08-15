@@ -378,12 +378,12 @@ namespace Numbersystems {
 			numbers->Add(35, "Z");
 
 			decimals->Add(2, 20);
-			decimals->Add(3, 16);
+			decimals->Add(3, 18);
 			decimals->Add(4, 16);
 			decimals->Add(5, 14);
 			decimals->Add(6, 12);
 			decimals->Add(7, 10);
-			decimals->Add(8, 7);
+			decimals->Add(8, 8);
 			decimals->Add(9, 7);
 			decimals->Add(10, 6);
 			decimals->Add(11, 6);
@@ -407,11 +407,11 @@ namespace Numbersystems {
 			decimals->Add(29, 5);
 			decimals->Add(30, 5);
 			decimals->Add(31, 5);
-			decimals->Add(32, 4);
-			decimals->Add(33, 4);
-			decimals->Add(34, 4);
-			decimals->Add(35, 4);
-			decimals->Add(36, 4);
+			decimals->Add(32, 5);
+			decimals->Add(33, 5);
+			decimals->Add(34, 5);
+			decimals->Add(35, 5);
+			decimals->Add(36, 5);
 
 			maxLength->Add(2, 31);
 			maxLength->Add(3, 20);
@@ -576,7 +576,7 @@ namespace Numbersystems {
 			this->comboBoxChoice->Name = L"comboBoxChoice";
 			this->comboBoxChoice->Size = System::Drawing::Size(63, 33);
 			this->comboBoxChoice->TabIndex = 4;
-			this->comboBoxChoice->TextUpdate += gcnew System::EventHandler(this, &MyForm::comboBoxChoice_TextUpdate);
+			this->comboBoxChoice->TextChanged += gcnew EventHandler(this, &MyForm::comboBoxChoice_TextChanged);
 			// 
 			// textBoxChosen
 			// 
@@ -710,17 +710,17 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
 	String^ binaryAfterPoint = ""; //число в 2 СС после точки
 
-	String^ octal = ""; //число в 2 СС
-	String^ octalBeforePoint = ""; //число в 2 СС до точки
-	String^ octalAfterPoint = ""; //число в 2 СС после точки
+	String^ octal = ""; //число в 8 СС
+	String^ octalBeforePoint = ""; //число в 8 СС до точки
+	String^ octalAfterPoint = ""; //число в 8 СС после точки
 
-	String^ hexadecimal = ""; //число в 2 СС
-	String^ hexadecimalBeforePoint = ""; //число в 2 СС до точки
-	String^ hexadecimalAfterPoint = ""; //число в 2 СС после точки
+	String^ hexadecimal = ""; //число в 16 СС
+	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
+	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
 
-	String^ chosen = ""; //число в 2 СС
-	String^ chosenBeforePoint = ""; //число в 2 СС до точки
-	String^ chosenAfterPoint = ""; //число в 2 СС после точки
+	String^ chosen = ""; //число в выбранной СС
+	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
+	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
 	//разрешаем вводить только нужные символы (1)
@@ -764,15 +764,25 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		}
 	}
 }
-private: System::Void comboBoxChoice_TextUpdate(System::Object^ sender, System::EventArgs^ e) {
 
+private: System::Void comboBoxChoice_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	//переменные
+	double number10; //число в 10 СС
+	int number10BeforePoint = 0; //целая часть числа в 10 СС
+	double number10Fractional = 0; //дробная часть числа в 10 СС
+	int points = 0; //кол-во точек к числе в 10 СС
 
+	String^ chosen = ""; //число в выбранной СС
+	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
+	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
-
-
-
-	/*Devide
-	InputSystemTo10*/
+	chosen = comboBoxChoice->Text;
+	Devide(chosen, chosenBeforePoint, chosenAfterPoint, points);
+	
+	/*if (textBoxDecimal->Text != "")
+		InputSystemTo10(chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text), number10, number10BeforePoint, number10Fractional);*/
+	/*strNumber10Fractional = "0.";
+	ToOutput*/
 }
 };
 }
