@@ -113,14 +113,14 @@ namespace Numbersystems {
 			numbers->Add(34, "Y");
 			numbers->Add(35, "Z");
 
-			decimals->Add(2, 12);
-			decimals->Add(3, 11);
-			decimals->Add(4, 10);
-			decimals->Add(5, 9);
-			decimals->Add(6, 8);
-			decimals->Add(7, 7);
-			decimals->Add(8, 6);
-			decimals->Add(9, 6);
+			decimals->Add(2, 20);
+			decimals->Add(3, 18);
+			decimals->Add(4, 16);
+			decimals->Add(5, 14);
+			decimals->Add(6, 12);
+			decimals->Add(7, 10);
+			decimals->Add(8, 8);
+			decimals->Add(9, 7);
 			decimals->Add(10, 6);
 			decimals->Add(11, 6);
 			decimals->Add(12, 6);
@@ -436,9 +436,11 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
 	String^ binaryAfterPoint = ""; //число в 2 СС после точки
 	String^ binary = ""; //число в 2 СС
+	String^ octalBeforePoint = ""; //число в 8 СС до точки
+	String^ octalAfterPoint = ""; //число в 8 СС после точки
 	int pointsDecimal = 0; //кол-во точек к числе в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	int temp; //временная переменная - число для перевода из 10 ССы
+	int temp; //временная переменная
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	double number10; //число в 10 СС
 	bool zero = false; //является ли число нулем
@@ -565,7 +567,19 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 				else
 					pointsDecimal++;
 			}
-			pointsDecimal = 0;
+		}
+		if (decimalAfterPoint->Length > decimals[10])
+		{
+			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			temp = textBoxDecimal->SelectionStart;
+			textBoxDecimal->Text = decimal->Substring(0, textBoxDecimal->SelectionStart - 1) + decimal->Substring(textBoxDecimal->SelectionStart);
+			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			textBoxDecimal->SelectionStart = temp - 1;
+			decimal = textBoxDecimal->Text;
+		}
+		//переводим число в 10 СС
+		if (decimal != lastDecimal)
+		{
 			//переводим в 10 СС целую часть числа
 			for (int i = 0; i < decimalBeforePoint->Length; i++)
 				number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
@@ -579,7 +593,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			number10 = number10BeforePoint + number10Fractional;
 		}
 	}
-
+	//переводим число в 2 СС
 	if (decimal != lastDecimal)
 	{
 		lastDecimal = decimal;
@@ -666,6 +680,93 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			zero = false;
 
 			textBoxBinary->Text = binary;
+
+
+
+
+
+
+
+			//if (textBoxDecimal->Text != "")
+			//{
+			//	//переводим целую часть числа из 10 СС в 2 СС
+			//	if (number10BeforePoint != 0)
+			//	{
+			//		while (number10BeforePoint != 0)
+			//		{
+			//			octalBeforePoint += numbers[number10BeforePoint % 2];
+			//			number10BeforePoint /= 2;
+			//		}
+			//		ReverseString(octalBeforePoint);
+			//	}
+			//	else
+			//		octalBeforePoint = "0";
+			//}
+			////переводим дробную часть числа из 10 СС 2 СС
+			//while (number10Fractional >= 1)
+			//	number10Fractional /= 10;
+			//for (int i = 0; number10Fractional != 0 && i < decimals[8]; i++)
+			//{
+			//	number10Fractional *= 8;
+			//	temp = number10Fractional;
+			//	if (number10Fractional != 0)
+			//	{
+			//		octalAfterPoint += numbers[temp];
+			//		if (temp != 0)
+			//		{
+			//			for (int i = 0; i < number10Fractional.ToString()->Length; i++)
+			//			{
+			//				if (number10Fractional.ToString()[i] != ',')
+			//				{
+			//					if (pointsDecimal == 1)
+			//						strNumber10Fractional += number10Fractional.ToString()[i];
+			//				}
+			//				else
+			//				{
+			//					pointsDecimal += 1;
+			//				}
+			//			}
+			//			pointsDecimal = 0;
+			//			System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
+			//			number10Fractional = System::Double::Parse(strNumber10Fractional, culture);
+			//			strNumber10Fractional = "0.";
+			//		}
+			//	}
+			//}
+			//if (binaryAfterPoint != "")
+			//{
+			//	binary += binaryBeforePoint + "." + binaryAfterPoint;
+			//}
+			//else
+			//	binary = binaryBeforePoint;
+
+			//for (int i = 0; i < binary->Length; i++)
+			//{
+			//	if (binary[i] != '-' && binary[i] != '.')
+			//	{
+			//		if (binary[i] == '0')
+			//		{
+			//			if (i == binary->Length - 1)
+			//				zero = true;
+			//		}
+			//		else
+			//		{
+			//			zero = false;
+			//			break;
+			//		}
+			//	}
+			//}
+			//if (!zero)
+			//{
+			//	if (decimal != "")
+			//	{
+			//		if (decimal[0] == '-')
+			//			binary = "-" + binary;
+			//	}
+			//}
+			//zero = false;
+
+			//textBoxBinary->Text = binary;
 		}
 		else
 		{
