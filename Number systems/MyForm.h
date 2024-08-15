@@ -86,6 +86,19 @@ namespace Numbersystems {
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i + 2;
 							}
+							else if (inputNumber[0] == '.')
+							{
+								inputNumber = "0" + inputNumber;
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i + 2;
+							}
+							else if (inputNumber[0] == '-' && inputNumber[1] == '.')
+							{
+								inputNumber = inputNumber->Replace("-", "");
+								inputNumber = "-" + "0." + inputNumber;
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i + 2;
+							}
 							else
 								pointsInput++;
 						}
@@ -123,6 +136,27 @@ namespace Numbersystems {
 					}
 				}
 			}
+		}
+		//делим введенное число на целую и дробную части
+		void Devide(String^& inputNumber, String^& inputNumberBeforePoint, String^& inputNumberAfterPoint, int& pointsInput)
+		{
+			pointsInput = 0;
+			for (int i = 0; i < inputNumber->Length; i++)
+			{
+				if (inputNumber[i] != '.')
+				{
+					if (inputNumber[i] != '-')
+					{
+						if (pointsInput == 0)
+							inputNumberBeforePoint += inputNumber[i];
+						else if (pointsInput == 1)
+							inputNumberAfterPoint += inputNumber[i];
+					}
+				}
+				else
+					pointsInput++;
+			}
+			pointsInput = 0;
 		}
 
 	private: System::Windows::Forms::Label^ labelError;
@@ -551,48 +585,32 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 
 		if (decimal != lastDecimal)
 		{
-			pointsDecimal = 0;
-			//делим введенное число на целую и дробную части
-			for (int i = 0; i < decimal->Length; i++)
-			{
-				if (decimal[i] != '.')
-				{
-					if (decimal[i] != '-')
-					{
-						if (pointsDecimal == 0)
-							decimalBeforePoint += decimal[i];
-						else if (pointsDecimal == 1)
-							decimalAfterPoint += decimal[i];
-					}
-				}
-				else
-					pointsDecimal++;
-			}
-		}
-		pointsDecimal = 0;
-		if (decimalAfterPoint->Length > decimals[10])
-		{
-			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			temp = textBoxDecimal->SelectionStart;
-			textBoxDecimal->Text = decimal->Substring(0, textBoxDecimal->SelectionStart - 1) + decimal->Substring(textBoxDecimal->SelectionStart);
-			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			textBoxDecimal->SelectionStart = temp - 1;
-			decimal = textBoxDecimal->Text;
-		}
-		//переводим число в 10 СС
-		if (decimal != lastDecimal)
-		{
-			//переводим в 10 СС целую часть числа
-			for (int i = 0; i < decimalBeforePoint->Length; i++)
-				number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
-			//переводим в 10 СС дробную часть числа 
-			if (decimalAfterPoint != "")
-			{
-				for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
-					number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
-			}
+			Devide(decimal, decimalBeforePoint, decimalAfterPoint, pointsDecimal);
 
-			number10 = number10BeforePoint + number10Fractional;
+			if (decimalAfterPoint->Length > decimals[10])
+			{
+				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+				temp = textBoxDecimal->SelectionStart;
+				textBoxDecimal->Text = decimal->Substring(0, textBoxDecimal->SelectionStart - 1) + decimal->Substring(textBoxDecimal->SelectionStart);
+				textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+				textBoxDecimal->SelectionStart = temp - 1;
+				decimal = textBoxDecimal->Text;
+			}
+			//переводим число в 10 СС
+			if (decimal != lastDecimal)
+			{
+				//переводим в 10 СС целую часть числа
+				for (int i = 0; i < decimalBeforePoint->Length; i++)
+					number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
+				//переводим в 10 СС дробную часть числа 
+				if (decimalAfterPoint != "")
+				{
+					for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
+						number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
+				}
+
+				number10 = number10BeforePoint + number10Fractional;
+			}
 		}
 	}
 	//переводим число в 2 СС
