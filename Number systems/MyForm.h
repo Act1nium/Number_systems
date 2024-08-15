@@ -43,7 +43,7 @@ namespace Numbersystems {
 			labelError->Text = "";
 		}
 		//вторая часть отсеивания неверных символов
-		void Symbols2(TextBox^ textBoxInput, String^& inputNumber, int& pointsInput)
+		void Symbols2(TextBox^ textBoxInput, String^& inputNumber, int& dots)
 		{
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
@@ -51,7 +51,9 @@ namespace Numbersystems {
 				{
 					if (numbers10[inputNumber->Substring(i, 1)] >= 10 ||
 						i == 1 && inputNumber[0] == '0' && inputNumber[1] == '0' ||
-						i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0' && inputNumber[2] == '0')
+						i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0' && inputNumber[2] == '0' ||
+						i == 1 && inputNumber[0] == '0' ||
+						i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
 					{
 						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 						textBoxInput->Text = inputNumber;
@@ -71,7 +73,7 @@ namespace Numbersystems {
 						}
 						break;
 					case '.':
-						if (pointsInput > 0)
+						if (dots > 0)
 						{
 							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 							textBoxInput->Text = inputNumber;
@@ -100,11 +102,11 @@ namespace Numbersystems {
 								textBoxInput->SelectionStart = i + 2;
 							}
 							else
-								pointsInput++;
+								dots++;
 						}
 						break;
 					case ',':
-						if (pointsInput > 0)
+						if (dots > 0)
 						{
 							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 							textBoxInput->Text = inputNumber;
@@ -136,7 +138,7 @@ namespace Numbersystems {
 							}
 							else
 							{
-								pointsInput++;
+								dots++;
 								inputNumber = inputNumber->Replace(",", ".");
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i + 1;
@@ -154,25 +156,25 @@ namespace Numbersystems {
 		}
 		//делим введенное число на целую и дробную части
 		void Devide(String^& inputNumber,
-			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint, int& pointsInput)
+			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint, int& dots)
 		{
-			pointsInput = 0;
+			dots = 0;
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
 				if (inputNumber[i] != '.')
 				{
 					if (inputNumber[i] != '-')
 					{
-						if (pointsInput == 0)
+						if (dots == 0)
 							inputNumberBeforePoint += inputNumber[i];
-						else if (pointsInput == 1)
+						else if (dots == 1)
 							inputNumberAfterPoint += inputNumber[i];
 					}
 				}
 				else
-					pointsInput++;
+					dots++;
 			}
-			pointsInput = 0;
+			dots = 0;
 		}
 		//проверка кол-ва знаков после запятой (точки)
 		void CheckLength(String^& inputNumber, String^& inputNumberAfterPoint,
@@ -204,6 +206,93 @@ namespace Numbersystems {
 
 				num10 = num10BeforePoint + num10Fractional;
 			}
+		}
+		//переводим число в 2 СС
+		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber, int& dots,
+			int& num10BeforePoint, double& num10Fractional, String^& strNum10Fractional,
+			String^& outputNumber, String^& outputNumberBeforePoint, String^& outputAfterPoint,
+			int outputSystem, int& temp, bool& null)
+		{
+			if (textBoxDecimal->Text != "")
+			{
+				//переводим целую часть числа из 10 СС в 2 СС
+				if (num10BeforePoint != 0)
+				{
+					while (num10BeforePoint != 0)
+					{
+						outputNumberBeforePoint += numbers[num10BeforePoint % 2];
+						num10BeforePoint /= outputSystem;
+					}
+					ReverseString(outputNumberBeforePoint);
+				}
+				else
+					outputNumberBeforePoint = "0";
+			}
+			//переводим дробную часть числа из 10 СС 2 СС
+			while (num10Fractional >= 1)
+				num10Fractional /= 10;
+			for (int i = 0; num10Fractional != 0 && i < decimals[2]; i++)
+			{
+				num10Fractional *= outputSystem;
+				temp = num10Fractional;
+				if (num10Fractional != 0)
+				{
+					outputAfterPoint += numbers[temp];
+					if (temp != 0)
+					{
+						for (int i = 0; i < num10Fractional.ToString()->Length; i++)
+						{
+							if (num10Fractional.ToString()[i] != ',')
+							{
+								if (dots == 1)
+									strNum10Fractional += num10Fractional.ToString()[i];
+							}
+							else
+							{
+								dots += 1;
+							}
+						}
+						dots = 0;
+						System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
+						num10Fractional = System::Double::Parse(strNum10Fractional, culture);
+						strNum10Fractional = "0.";
+					}
+				}
+			}
+			if (outputAfterPoint != "")
+			{
+				outputNumber += outputNumberBeforePoint + "." + outputAfterPoint;
+			}
+			else
+				outputNumber = outputNumberBeforePoint;
+
+			for (int i = 0; i < outputNumber->Length; i++)
+			{
+				if (outputNumber[i] != '-' && outputNumber[i] != '.')
+				{
+					if (outputNumber[i] == '0')
+					{
+						if (i == outputNumber->Length - 1)
+							null = true;
+					}
+					else
+					{
+						null = false;
+						break;
+					}
+				}
+			}
+			if (!null)
+			{
+				if (inputNumber != "")
+				{
+					if (inputNumber[0] == '-')
+						outputNumber = "-" + outputNumber;
+				}
+			}
+			null = false;
+
+			textBoxOutput->Text = outputNumber;
 		}
 
 	private: System::Windows::Forms::Label^ labelError;
@@ -610,9 +699,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
 	String^ binaryAfterPoint = ""; //число в 2 СС после точки
 	String^ binary = ""; //число в 2 СС
-	String^ octalBeforePoint = ""; //число в 8 СС до точки
-	String^ octalAfterPoint = ""; //число в 8 СС после точки
-	int pointsDecimal = 0; //кол-во точек к числе в 10 СС
+	int points = 0; //кол-во точек к числе в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	int temporary; //временная переменная
 	int inputSystem = 10; //входящая СС
@@ -628,12 +715,12 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	{
 		//разрешаем вводить только нужные символы
 		textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-		Symbols2(textBoxDecimal, decimal, pointsDecimal);
+		Symbols2(textBoxDecimal, decimal, points);
 		textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 
 		if (decimal != lastDecimal)
 		{
-			Devide(decimal, decimalBeforePoint, decimalAfterPoint, pointsDecimal);
+			Devide(decimal, decimalBeforePoint, decimalAfterPoint, points);
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			CheckLength(decimal, decimalAfterPoint, inputSystem, temporary);
 			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
@@ -647,86 +734,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		strNumber10Fractional = "0.";
 		if (decimalBeforePoint->Length < maxLength[10])
 		{
-			if (textBoxDecimal->Text != "")
-			{
-				//переводим целую часть числа из 10 СС в 2 СС
-				if (number10BeforePoint != 0)
-				{
-					while (number10BeforePoint != 0)
-					{
-						binaryBeforePoint += numbers[number10BeforePoint % 2];
-						number10BeforePoint /= 2;
-					}
-					ReverseString(binaryBeforePoint);
-				}
-				else
-					binaryBeforePoint = "0";
-			}
-			//переводим дробную часть числа из 10 СС 2 СС
-			while (number10Fractional >= 1)
-				number10Fractional /= 10;
-			for (int i = 0; number10Fractional != 0 && i < decimals[2]; i++)
-			{
-				number10Fractional *= 2;
-				temporary = number10Fractional;
-				if (number10Fractional != 0)
-				{
-					binaryAfterPoint += numbers[temporary];
-					if (temporary != 0)
-					{
-						for (int i = 0; i < number10Fractional.ToString()->Length; i++)
-						{
-							if (number10Fractional.ToString()[i] != ',')
-							{
-								if (pointsDecimal == 1)
-									strNumber10Fractional += number10Fractional.ToString()[i];
-							}
-							else
-							{
-								pointsDecimal += 1;
-							}
-						}
-						pointsDecimal = 0;
-						System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
-						number10Fractional = System::Double::Parse(strNumber10Fractional, culture);
-						strNumber10Fractional = "0.";
-					}
-				}
-			}
-			if (binaryAfterPoint != "")
-			{
-				binary += binaryBeforePoint + "." + binaryAfterPoint;
-			}
-			else
-				binary = binaryBeforePoint;
-
-			for (int i = 0; i < binary->Length; i++)
-			{
-				if (binary[i] != '-' && binary[i] != '.')
-				{
-					if (binary[i] == '0')
-					{
-						if (i == binary->Length - 1)
-							zero = true;
-					}
-					else
-					{
-						zero = false;
-						break;
-					}
-				}
-			}
-			if (!zero)
-			{
-				if (decimal != "")
-				{
-					if (decimal[0] == '-')
-						binary = "-" + binary;
-				}
-			}
-			zero = false;
-
-			textBoxBinary->Text = binary;
+			ToOutput(textBoxBinary, decimal, points, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2, temporary, zero);
 		}
 		else
 		{
