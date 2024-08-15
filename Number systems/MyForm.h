@@ -25,14 +25,14 @@ namespace Numbersystems {
 		public:
 		void ReverseString(String^& str)
 		{
-			String^ temp = "";
+			String^ temporary = "";
 
 			for (int i = str->Length - 1; i >= 0; i--)
 			{
-				temp += str[i];
+				temporary += str[i];
 			}
 
-			str = temp;
+			str = temporary;
 		}
 		//первая часть отсеивания неверных символов
 		void Symbols1(TextBox^ textBoxInput, String^ &inputNumber)
@@ -95,7 +95,7 @@ namespace Numbersystems {
 							else if (inputNumber[0] == '-' && inputNumber[1] == '.')
 							{
 								inputNumber = inputNumber->Replace("-", "");
-								inputNumber = "-" + "0." + inputNumber;
+								inputNumber = "-" + "0" + inputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i + 2;
 							}
@@ -116,6 +116,21 @@ namespace Numbersystems {
 							{
 								inputNumber = inputNumber->Replace(",", "");
 								inputNumber += "0.";
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i + 2;
+							}
+							else if (inputNumber[0] == ',')
+							{
+								inputNumber = inputNumber->Replace(",", "");
+								inputNumber = "0." + inputNumber;
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i + 2;
+							}
+							else if (inputNumber[0] == '-' && inputNumber[1] == ',')
+							{
+								inputNumber = inputNumber->Replace("-", "");
+								inputNumber = inputNumber->Replace(",", "");
+								inputNumber = "-" + "0." + inputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i + 2;
 							}
@@ -157,6 +172,17 @@ namespace Numbersystems {
 					pointsInput++;
 			}
 			pointsInput = 0;
+		}
+		//проверка кол-ва знаков после запятой (точки)
+		void CheckLength(String^ &inputNumber, String^ &inputNumberAfterPoint, int &enterSystem, int &temp)
+		{
+			if (inputNumberAfterPoint->Length > decimals[enterSystem])
+			{
+				temp = textBoxDecimal->SelectionStart;
+				textBoxDecimal->Text = inputNumber->Substring(0, textBoxDecimal->SelectionStart - 1) + inputNumber->Substring(textBoxDecimal->SelectionStart);
+				textBoxDecimal->SelectionStart = temp - 1;
+				inputNumber = textBoxDecimal->Text;
+			}
 		}
 
 	private: System::Windows::Forms::Label^ labelError;
@@ -567,7 +593,8 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ octalAfterPoint = ""; //число в 8 СС после точки
 	int pointsDecimal = 0; //кол-во точек к числе в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	int temp; //временная переменная
+	int temporary; //временная переменная
+	int inputSystem = 10; //входящая СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	double number10; //число в 10 СС
 	bool zero = false; //является ли число нулем
@@ -586,14 +613,17 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		if (decimal != lastDecimal)
 		{
 			Devide(decimal, decimalBeforePoint, decimalAfterPoint, pointsDecimal);
+			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			CheckLength(decimal, decimalAfterPoint, inputSystem, temporary);
+			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 
 			if (decimalAfterPoint->Length > decimals[10])
 			{
 				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-				temp = textBoxDecimal->SelectionStart;
+				temporary = textBoxDecimal->SelectionStart;
 				textBoxDecimal->Text = decimal->Substring(0, textBoxDecimal->SelectionStart - 1) + decimal->Substring(textBoxDecimal->SelectionStart);
 				textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-				textBoxDecimal->SelectionStart = temp - 1;
+				textBoxDecimal->SelectionStart = temporary - 1;
 				decimal = textBoxDecimal->Text;
 			}
 			//переводим число в 10 СС
@@ -641,11 +671,11 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			for (int i = 0; number10Fractional != 0 && i < decimals[2]; i++)
 			{
 				number10Fractional *= 2;
-				temp = number10Fractional;
+				temporary = number10Fractional;
 				if (number10Fractional != 0)
 				{
-					binaryAfterPoint += numbers[temp];
-					if (temp != 0)
+					binaryAfterPoint += numbers[temporary];
+					if (temporary != 0)
 					{
 						for (int i = 0; i < number10Fractional.ToString()->Length; i++)
 						{
