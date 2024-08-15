@@ -378,12 +378,12 @@ namespace Numbersystems {
 			numbers->Add(35, "Z");
 
 			decimals->Add(2, 20);
-			decimals->Add(3, 18);
+			decimals->Add(3, 16);
 			decimals->Add(4, 16);
 			decimals->Add(5, 14);
 			decimals->Add(6, 12);
 			decimals->Add(7, 10);
-			decimals->Add(8, 8);
+			decimals->Add(8, 7);
 			decimals->Add(9, 7);
 			decimals->Add(10, 6);
 			decimals->Add(11, 6);
@@ -406,7 +406,7 @@ namespace Numbersystems {
 			decimals->Add(28, 5);
 			decimals->Add(29, 5);
 			decimals->Add(30, 5);
-			decimals->Add(31, 4);
+			decimals->Add(31, 5);
 			decimals->Add(32, 4);
 			decimals->Add(33, 4);
 			decimals->Add(34, 4);
@@ -771,8 +771,8 @@ private: System::Void comboBoxChoice_TextUpdate(System::Object^ sender, System::
 
 
 
-	Devide
-	InputSystemTo10
+	/*Devide
+	InputSystemTo10*/
 }
 };
 }
