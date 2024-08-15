@@ -35,7 +35,7 @@ namespace Numbersystems {
 			str = temporary;
 		}
 		//первая часть отсеивания неверных символов
-		void Symbols1(TextBox^ textBoxInput, String^ &inputNumber)
+		void Symbols1(TextBox^ textBoxInput, String^& inputNumber)
 		{
 			inputNumber = textBoxInput->Text;
 			inputNumber = inputNumber->ToUpper();
@@ -153,7 +153,8 @@ namespace Numbersystems {
 			}
 		}
 		//делим введенное число на целую и дробную части
-		void Devide(String^& inputNumber, String^& inputNumberBeforePoint, String^& inputNumberAfterPoint, int& pointsInput)
+		void Devide(String^& inputNumber,
+			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint, int& pointsInput)
 		{
 			pointsInput = 0;
 			for (int i = 0; i < inputNumber->Length; i++)
@@ -174,7 +175,8 @@ namespace Numbersystems {
 			pointsInput = 0;
 		}
 		//проверка кол-ва знаков после запятой (точки)
-		void CheckLength(String^ &inputNumber, String^ &inputNumberAfterPoint, int &enterSystem, int &temp)
+		void CheckLength(String^& inputNumber, String^& inputNumberAfterPoint,
+			int& enterSystem, int& temp)
 		{
 			if (inputNumberAfterPoint->Length > decimals[enterSystem])
 			{
@@ -182,6 +184,25 @@ namespace Numbersystems {
 				textBoxDecimal->Text = inputNumber->Substring(0, textBoxDecimal->SelectionStart - 1) + inputNumber->Substring(textBoxDecimal->SelectionStart);
 				textBoxDecimal->SelectionStart = temp - 1;
 				inputNumber = textBoxDecimal->Text;
+			}
+		}
+		//переводим число в 10 СС
+		void InputSystemTo10(String^& inputNumber,
+			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint,
+			int& enterSystem, double& num10, int& num10BeforePoint, double& num10Fractional)
+		{			if (inputNumber != lastDecimal)
+			{
+				//переводим в 10 СС целую часть числа
+				for (int i = 0; i < inputNumberBeforePoint->Length; i++)
+					num10BeforePoint += numbers10[inputNumberBeforePoint->Substring(i, 1)] * pow(enterSystem, inputNumberBeforePoint->Length - i - 1);
+				//переводим в 10 СС дробную часть числа 
+				if (inputNumberAfterPoint != "")
+				{
+					for (int i = 0; i < inputNumberAfterPoint->Length && i < 30; i++)
+						num10Fractional += numbers10[inputNumberAfterPoint->Substring(i, 1)] * pow(enterSystem, -(i + 1));
+				}
+
+				num10 = num10BeforePoint + num10Fractional;
 			}
 		}
 
@@ -616,31 +637,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			CheckLength(decimal, decimalAfterPoint, inputSystem, temporary);
 			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-
-			if (decimalAfterPoint->Length > decimals[10])
-			{
-				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-				temporary = textBoxDecimal->SelectionStart;
-				textBoxDecimal->Text = decimal->Substring(0, textBoxDecimal->SelectionStart - 1) + decimal->Substring(textBoxDecimal->SelectionStart);
-				textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-				textBoxDecimal->SelectionStart = temporary - 1;
-				decimal = textBoxDecimal->Text;
-			}
-			//переводим число в 10 СС
-			if (decimal != lastDecimal)
-			{
-				//переводим в 10 СС целую часть числа
-				for (int i = 0; i < decimalBeforePoint->Length; i++)
-					number10BeforePoint += numbers10[decimalBeforePoint->Substring(i, 1)] * pow(10, decimalBeforePoint->Length - i - 1);
-				//переводим в 10 СС дробную часть числа 
-				if (decimalAfterPoint != "")
-				{
-					for (int i = 0; i < decimalAfterPoint->Length && i < 30; i++)
-						number10Fractional += numbers10[decimalAfterPoint->Substring(i, 1)] * pow(10, -(i + 1));
-				}
-
-				number10 = number10BeforePoint + number10Fractional;
-			}
+			InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		}
 	}
 	//переводим число в 2 СС
