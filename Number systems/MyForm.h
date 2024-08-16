@@ -192,20 +192,18 @@ namespace Numbersystems {
 		void InputSystemTo10(String^& inputNumber,
 			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint,
 			int& enterSystem, double& num10, int& num10BeforePoint, double& num10Fractional)
-		{			if (inputNumber != lastDecimal)
+		{		
+			//переводим в 10 СС целую часть числа
+			for (int i = 0; i < inputNumberBeforePoint->Length; i++)
+				num10BeforePoint += numbers10[inputNumberBeforePoint->Substring(i, 1)] * pow(enterSystem, inputNumberBeforePoint->Length - i - 1);
+			//переводим в 10 СС дробную часть числа 
+			if (inputNumberAfterPoint != "")
 			{
-				//переводим в 10 СС целую часть числа
-				for (int i = 0; i < inputNumberBeforePoint->Length; i++)
-					num10BeforePoint += numbers10[inputNumberBeforePoint->Substring(i, 1)] * pow(enterSystem, inputNumberBeforePoint->Length - i - 1);
-				//переводим в 10 СС дробную часть числа 
-				if (inputNumberAfterPoint != "")
-				{
-					for (int i = 0; i < inputNumberAfterPoint->Length && i < 30; i++)
-						num10Fractional += numbers10[inputNumberAfterPoint->Substring(i, 1)] * pow(enterSystem, -(i + 1));
-				}
-
-				num10 = num10BeforePoint + num10Fractional;
+				for (int i = 0; i < inputNumberAfterPoint->Length && i < 30; i++)
+					num10Fractional += numbers10[inputNumberAfterPoint->Substring(i, 1)] * pow(enterSystem, -(i + 1));
 			}
+
+			num10 = num10BeforePoint + num10Fractional;
 		}
 		//переводим число в 2 СС
 		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber, int& dots,
@@ -697,7 +695,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = ""; // число в 10 СС после точки(строкой)
+	String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
 	int points = 0; //кол-во точек к числе в 10 СС
 	int temporary; //временная переменная
 	bool zero = false; //является ли число нулем
@@ -766,23 +764,33 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 }
 
 private: System::Void comboBoxChoice_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	//переменные
-	double number10; //число в 10 СС
-	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	double number10Fractional = 0; //дробная часть числа в 10 СС
-	int points = 0; //кол-во точек к числе в 10 СС
+	if (textBoxDecimal->Text != "")
+	{
+		//переменные
+		int inputSystem = 10;
+		double number10; //число в 10 СС
+		int number10BeforePoint = 0; //целая часть числа в 10 СС
+		double number10Fractional = 0; //дробная часть числа в 10 СС
+		String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+		int temporary; //временная переменная
+		int points = 0; //кол-во точек к числе в 10 СС
+		bool zero = false; //является ли число нулем
 
-	String^ chosen = ""; //число в выбранной СС
-	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+		String^ decimal = textBoxDecimal->Text; //переменная для хранения числа в 10 СС
+		String^ decimalBeforePoint = ""; //число в 10 СС до точки
+		String^ decimalAfterPoint = ""; //число в 10 СС после точки
 
-	chosen = comboBoxChoice->Text;
-	Devide(chosen, chosenBeforePoint, chosenAfterPoint, points);
-	
-	/*if (textBoxDecimal->Text != "")
-		InputSystemTo10(chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text), number10, number10BeforePoint, number10Fractional);*/
-	/*strNumber10Fractional = "0.";
-	ToOutput*/
+		String^ chosen = ""; //число в выбранной СС
+		String^ chosenBeforePoint = ""; //число в выбранной СС до точки
+		String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+		int chosenSystem = System::Int32::Parse(comboBoxChoice->Text);
+
+
+		Devide(decimal, decimalBeforePoint, decimalAfterPoint, points);
+		InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+		strNumber10Fractional = "0.";
+		ToOutput(textBoxChosen, decimal, points, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, chosenSystem, temporary, zero);
+	}
 }
 };
 }
