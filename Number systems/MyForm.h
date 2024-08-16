@@ -38,17 +38,15 @@ namespace Numbersystems {
 
 			str = temporary;
 		}
-		//первая часть отсеивания неверных символов
-		void Symbols1(TextBox^ textBoxInput, String^& inputNumber)
+		//вторая часть отсеивания неверных символов
+		void Symbols(TextBox^ textBoxInput, String^& inputNumber, int& enterSystem, int& dots)
 		{
+			int cursor = textBoxInput->SelectionStart;
 			inputNumber = textBoxInput->Text;
 			inputNumber = inputNumber->ToUpper();
 			textBoxInput->Text = inputNumber;
+			textBoxInput->SelectionStart = cursor;
 			labelError->Text = "";
-		}
-		//вторая часть отсеивания неверных символов
-		void Symbols2(TextBox^ textBoxInput, String^& inputNumber, int& enterSystem, int& dots)
-		{
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
 				if (numbers10->ContainsKey(inputNumber->Substring(i, 1)))
@@ -770,16 +768,11 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
-	//разрешаем вводить только нужные символы (1)
-	textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-	Symbols1(textBoxDecimal, decimal);
-	textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-
 	if (textBoxDecimal->Text != "")
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-		Symbols2(textBoxDecimal, decimal, inputSystem, points);
+		Symbols(textBoxDecimal, decimal, inputSystem, points);
 		textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 
 		if (decimal != lastDecimal)
@@ -862,16 +855,11 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
-	//разрешаем вводить только нужные символы (1)
-	textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-	Symbols1(textBoxBinary, binary);
-	textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-
 	if (textBoxBinary->Text != "")
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-		Symbols2(textBoxBinary, binary, inputSystem, points);
+		Symbols(textBoxBinary, binary, inputSystem, points);
 		textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 
 		if (binary != lastBinary)
@@ -954,16 +942,11 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
-	//разрешаем вводить только нужные символы (1)
-	textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-	Symbols1(textBoxOctal, octal);
-	textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-
 	if (textBoxOctal->Text != "")
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-		Symbols2(textBoxOctal, octal, inputSystem, points);
+		Symbols(textBoxOctal, octal, inputSystem, points);
 		textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 
 		if (octal != lastOctal)
@@ -1044,16 +1027,11 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
-	//разрешаем вводить только нужные символы (1)
-	textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-	Symbols1(textBoxHexadecimal, hexadecimal);
-	textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-
 	if (textBoxHexadecimal->Text != "")
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-		Symbols2(textBoxHexadecimal, hexadecimal, inputSystem, points);
+		Symbols(textBoxHexadecimal, hexadecimal, inputSystem, points);
 		textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 
 		if (hexadecimal != lastHexadecimal)
@@ -1139,16 +1117,11 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 		String^ chosenAfterPoint = ""; //число в выбранной СС после точки
 
 
-		//разрешаем вводить только нужные символы (1)
-		textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-		Symbols1(textBoxChosen, chosen);
-		textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-
 		if (textBoxChosen->Text != "")
 		{
 			//разрешаем вводить только нужные символы (2)
 			textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-			Symbols2(textBoxChosen, chosen, inputSystem, points);
+			Symbols(textBoxChosen, chosen, inputSystem, points);
 			textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 
 			if (chosen != lastChosen)
