@@ -53,9 +53,23 @@ namespace Numbersystems {
 				{
 					if (numbers10[inputNumber->Substring(i, 1)] >= enterSystem)
 					{
+						if (i != 0)
+						{
+							if (!numbers10->ContainsKey(inputNumber->Substring(i - 1, 1)))
+							{
+								inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
+								textBoxInput->Text = inputNumber;
+							}
+							else if (numbers10[inputNumber->Substring(i - 1, 1)] >= enterSystem)
+							{
+								inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
+								textBoxInput->Text = inputNumber;
+							}
+						}
 						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 						textBoxInput->Text = inputNumber;
 						textBoxInput->SelectionStart = i;
+						i--;
 					}
 					else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
 					{
@@ -162,7 +176,9 @@ namespace Numbersystems {
 								textBoxInput->SelectionStart = i + 2;
 							}
 							else
+							{
 								dots++;
+							}
 						}
 						break;
 					case ',':
@@ -209,6 +225,7 @@ namespace Numbersystems {
 						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 						textBoxInput->Text = inputNumber;
 						textBoxInput->SelectionStart = i;
+						i--;
 						break;
 					}
 				}
@@ -243,7 +260,7 @@ namespace Numbersystems {
 			if (inputNumberAfterPoint->Length > decimals[enterSystem])
 			{
 				temp = textBoxInput->SelectionStart;
-				textBoxInput->Text = inputNumber->Substring(0, textBoxInput->SelectionStart - 1) + inputNumber->Substring(textBoxInput->SelectionStart);
+				textBoxInput->Text = inputNumber->Substring(0, inputNumber->Length - inputNumberAfterPoint->Length + decimals[enterSystem]);
 				textBoxInput->SelectionStart = temp - 1;
 				inputNumber = textBoxInput->Text;
 			}
