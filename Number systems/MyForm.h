@@ -161,11 +161,6 @@ namespace Numbersystems {
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i + 2;
 							}
-							else if (Char::IsLetter(inputNumber[i - 1]))
-							{
-								dots++;
-								textBoxInput->SelectionStart = i + 1;
-							}
 							else
 								dots++;
 						}
@@ -242,15 +237,15 @@ namespace Numbersystems {
 			dots = 0;
 		}
 		//проверка кол-ва знаков после запятой (точки)
-		void CheckLength(String^& inputNumber, String^& inputNumberAfterPoint,
+		void CheckLength(TextBox^ textBoxInput, String^& inputNumber, String^& inputNumberAfterPoint,
 			int& enterSystem, int& temp)
 		{
 			if (inputNumberAfterPoint->Length > decimals[enterSystem])
 			{
-				temp = textBoxDecimal->SelectionStart;
-				textBoxDecimal->Text = inputNumber->Substring(0, textBoxDecimal->SelectionStart - 1) + inputNumber->Substring(textBoxDecimal->SelectionStart);
-				textBoxDecimal->SelectionStart = temp - 1;
-				inputNumber = textBoxDecimal->Text;
+				temp = textBoxInput->SelectionStart;
+				textBoxInput->Text = inputNumber->Substring(0, textBoxInput->SelectionStart - 1) + inputNumber->Substring(textBoxInput->SelectionStart);
+				textBoxInput->SelectionStart = temp - 1;
+				inputNumber = textBoxInput->Text;
 			}
 		}
 		//переводим число в 10 СС
@@ -802,7 +797,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		{
 			Devide(decimal, decimalBeforePoint, decimalAfterPoint, points);
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			CheckLength(decimal, decimalAfterPoint, inputSystem, temporary);
+			CheckLength(textBoxDecimal, decimal, decimalAfterPoint, inputSystem, temporary);
 			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		}
@@ -889,7 +884,7 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 		{
 			Devide(binary, binaryBeforePoint, binaryAfterPoint, points);
 			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			CheckLength(binary, binaryAfterPoint, inputSystem, temporary);
+			CheckLength(textBoxBinary, binary, binaryAfterPoint, inputSystem, temporary);
 			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 			InputSystemTo10(binary, binaryBeforePoint, binaryAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		}
@@ -976,7 +971,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 		{
 			Devide(octal, octalBeforePoint, octalAfterPoint, points);
 			textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			CheckLength(octal, octalAfterPoint, inputSystem, temporary);
+			CheckLength(textBoxOctal, octal, octalAfterPoint, inputSystem, temporary);
 			textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 			InputSystemTo10(octal, octalBeforePoint, octalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		}
@@ -1061,7 +1056,7 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 		{
 			Devide(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, points);
 			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			CheckLength(hexadecimal, hexadecimalAfterPoint, inputSystem, temporary);
+			CheckLength(textBoxHexadecimal, hexadecimal, hexadecimalAfterPoint, inputSystem, temporary);
 			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 			InputSystemTo10(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		}
@@ -1151,7 +1146,7 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 			{
 				Devide(chosen, chosenBeforePoint, chosenAfterPoint, points);
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				CheckLength(chosen, chosenAfterPoint, inputSystem, temporary);
+				CheckLength(textBoxChosen, chosen, chosenAfterPoint, inputSystem, temporary);
 				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				InputSystemTo10(chosen, chosenBeforePoint, chosenAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 			}
