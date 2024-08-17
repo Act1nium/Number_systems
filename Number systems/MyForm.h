@@ -72,6 +72,18 @@ namespace Numbersystems {
 								inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = 1;
+								for (int k = 1; k < inputNumber->Length; k++)
+								{
+									if (inputNumber[k] == '0')
+									{
+										inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);;
+										textBoxInput->Text = inputNumber;
+										textBoxInput->SelectionStart = 1;
+										k--;
+									}
+									else
+										break;
+								}
 							}
 						}
 						else
@@ -87,6 +99,17 @@ namespace Numbersystems {
 								inputNumber = inputNumber->Substring(1);
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = 0;
+								for (int k = 0; k < inputNumber->Length; k++)
+								{
+									if (inputNumber[k] == '0')
+									{
+										inputNumber = inputNumber->Substring(1);
+										textBoxInput->Text = inputNumber;
+										k--;
+									}
+									else
+										break;
+								}
 							}
 						}
 					}
