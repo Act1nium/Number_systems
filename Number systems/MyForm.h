@@ -47,11 +47,10 @@ namespace Numbersystems {
 		//вторая часть отсеивания неверных символов
 		void Symbols(TextBox^ textBoxInput, String^& inputNumber, int& enterSystem)
 		{
-			int cursor = textBoxInput->SelectionStart;
+			temporary = textBoxInput->SelectionStart;
 			inputNumber = textBoxInput->Text;
 			inputNumber = inputNumber->ToUpper();
 			textBoxInput->Text = inputNumber;
-			textBoxInput->SelectionStart = cursor;
 			labelErrors->Text = "";
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
@@ -237,6 +236,8 @@ namespace Numbersystems {
 				}
 			}
 			points = 0;
+
+			textBoxInput->SelectionStart = temporary;
 		}
 		//делим введенное число на целую и дробную части
 		void Devide(String^& inputNumber,
@@ -267,7 +268,7 @@ namespace Numbersystems {
 			{
 				temporary = textBoxInput->SelectionStart;
 				textBoxInput->Text = inputNumber->Substring(0, inputNumber->Length - inputNumberAfterPoint->Length + decimals[enterSystem]);
-				textBoxInput->SelectionStart = temporary - 1;
+				textBoxInput->SelectionStart = temporary;
 				inputNumber = textBoxInput->Text;
 			}
 		}
