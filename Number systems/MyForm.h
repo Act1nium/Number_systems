@@ -52,6 +52,7 @@ namespace Numbersystems {
 			inputNumber = inputNumber->ToUpper();
 			textBoxInput->Text = inputNumber;
 			labelErrors->Text = "";
+			textBoxInput->SelectionStart = temporary;
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
 				if (numbers10->ContainsKey(inputNumber->Substring(i, 1)))
@@ -62,8 +63,11 @@ namespace Numbersystems {
 						{
 							if (!numbers10->ContainsKey(inputNumber->Substring(i - 1, 1)))
 							{
-								inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
-								textBoxInput->Text = inputNumber;
+								if (inputNumber[i - 1] != '.' && inputNumber[i - 1] != ',' && inputNumber[i - 1] != '-')
+								{
+									inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
+									textBoxInput->Text = inputNumber;
+								}
 							}
 							else if (numbers10[inputNumber->Substring(i - 1, 1)] >= enterSystem)
 							{
@@ -236,8 +240,6 @@ namespace Numbersystems {
 				}
 			}
 			points = 0;
-
-			textBoxInput->SelectionStart = temporary;
 		}
 		//делим введенное число на целую и дробную части
 		void Devide(String^& inputNumber,
