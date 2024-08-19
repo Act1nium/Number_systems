@@ -21,11 +21,11 @@ namespace Numbersystems {
 		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
 		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
 
-		String^ lastDecimal; //прошлое число в 10 СС
-		String^ lastBinary; //прошлое число в 2 СС
-		String^ lastOctal; //прошлое число в 8 СС
-		String^ lastHexadecimal; //прошлое число в 16 СС
-		String^ lastChosen; //прошлое число в выбранной СС
+		String^ lastDecimal = ""; //прошлое число в 10 СС
+		String^ lastBinary = ""; //прошлое число в 2 СС
+		String^ lastOctal = ""; //прошлое число в 8 СС
+		String^ lastHexadecimal = ""; //прошлое число в 16 СС
+		String^ lastChosen = ""; //прошлое число в выбранной СС
 
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
@@ -45,7 +45,7 @@ namespace Numbersystems {
 			str = temporaryorary;
 		}
 		//вторая часть отсеивания неверных символов
-		void Symbols(TextBox^ textBoxInput, String^& inputNumber, int& enterSystem)
+		void Symbols(TextBox^ textBoxInput, String^& inputNumber, String^& lastInputNumber, int& enterSystem)
 		{
 			temporary = textBoxInput->SelectionStart;
 			inputNumber = textBoxInput->Text;
@@ -55,188 +55,178 @@ namespace Numbersystems {
 			textBoxInput->SelectionStart = temporary;
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
-				if (numbers10->ContainsKey(inputNumber->Substring(i, 1)))
+				if (inputNumber != lastInputNumber)
 				{
-					if (numbers10[inputNumber->Substring(i, 1)] >= enterSystem)
+					if (numbers10->ContainsKey(inputNumber->Substring(i, 1)))
 					{
-						if (i != 0)
+						if (numbers10[inputNumber->Substring(i, 1)] >= enterSystem)
 						{
-							if (!numbers10->ContainsKey(inputNumber->Substring(i - 1, 1)))
+							inputNumber = lastInputNumber;
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+						}
+						else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
+						{
+							if (inputNumber[0] == '-')
 							{
-								if (inputNumber[i - 1] != '.' && inputNumber[i - 1] != ',' && inputNumber[i - 1] != '-')
+								if (textBoxInput->SelectionStart == 3)
 								{
-									inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
+									inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i;
+								}
+								else if (textBoxInput->SelectionStart == 2)
+								{
+									inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = 1;
+									for (int k = 1; k < inputNumber->Length; k++)
+									{
+										if (inputNumber[k] == '0')
+										{
+											inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);;
+											textBoxInput->Text = inputNumber;
+											textBoxInput->SelectionStart = 1;
+											k--;
+										}
+										else
+											break;
+									}
 								}
 							}
-							else if (numbers10[inputNumber->Substring(i - 1, 1)] >= enterSystem)
+							else
 							{
-								inputNumber = inputNumber->Substring(0, i - 1) + inputNumber->Substring(i);
-								textBoxInput->Text = inputNumber;
+								if (textBoxInput->SelectionStart == 2)
+								{
+									inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i;
+								}
+								else if (textBoxInput->SelectionStart == 1)
+								{
+									inputNumber = inputNumber->Substring(1);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = 0;
+									for (int k = 0; k < inputNumber->Length; k++)
+									{
+										if (inputNumber[k] == '0')
+										{
+											inputNumber = inputNumber->Substring(1);
+											textBoxInput->Text = inputNumber;
+											k--;
+										}
+										else
+											break;
+									}
+								}
 							}
 						}
-						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-						textBoxInput->Text = inputNumber;
-						textBoxInput->SelectionStart = i;
-						i--;
-					}
-					else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
-					{
-						if (inputNumber[0] == '-')
+						else if (i == 1 && inputNumber[0] == '0' && inputNumber[1] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0' && inputNumber[2] == '0')
 						{
-							if (textBoxInput->SelectionStart == 3)
+							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+						}
+					}
+					else
+					{
+						switch (inputNumber[i])
+						{
+						case '-':
+							if (i != 0)
 							{
 								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i;
 							}
-							else if (textBoxInput->SelectionStart == 2)
-							{
-								inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = 1;
-								for (int k = 1; k < inputNumber->Length; k++)
-								{
-									if (inputNumber[k] == '0')
-									{
-										inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);;
-										textBoxInput->Text = inputNumber;
-										textBoxInput->SelectionStart = 1;
-										k--;
-									}
-									else
-										break;
-								}
-							}
-						}
-						else
-						{
-							if (textBoxInput->SelectionStart == 2)
+							break;
+						case '.':
+							if (points > 0)
 							{
 								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i;
 							}
-							else if (textBoxInput->SelectionStart == 1)
+							else
 							{
-								inputNumber = inputNumber->Substring(1);
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = 0;
-								for (int k = 0; k < inputNumber->Length; k++)
+								if (inputNumber == "." || inputNumber == "-.")
 								{
-									if (inputNumber[k] == '0')
-									{
-										inputNumber = inputNumber->Substring(1);
-										textBoxInput->Text = inputNumber;
-										k--;
-									}
-									else
-										break;
+									inputNumber = inputNumber->Replace(".", "");
+									inputNumber += "0.";
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '.')
+								{
+									inputNumber = "0" + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '-' && inputNumber[1] == '.')
+								{
+									inputNumber = inputNumber->Replace("-", "");
+									inputNumber = "-" + "0" + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else
+								{
+									points++;
 								}
 							}
+							break;
+						case ',':
+							if (points > 0)
+							{
+								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i;
+							}
+							else
+							{
+								if (inputNumber == "," || inputNumber == "-,")
+								{
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber += "0.";
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == ',')
+								{
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber = "0." + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '-' && inputNumber[1] == ',')
+								{
+									inputNumber = inputNumber->Replace("-", "");
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber = "-" + "0." + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else
+								{
+									points++;
+									inputNumber = inputNumber->Replace(",", ".");
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 1;
+								}
+							}
+							break;
+						default:
+							inputNumber = lastInputNumber;
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+							break;
 						}
-					}
-					else if (i == 1 && inputNumber[0] == '0' && inputNumber[1] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0' && inputNumber[2] == '0')
-					{
-						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-						textBoxInput->Text = inputNumber;
-						textBoxInput->SelectionStart = i;
 					}
 				}
 				else
 				{
-					switch (inputNumber[i])
-					{
-					case '-':
-						if (i != 0)
-						{
-							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-							textBoxInput->Text = inputNumber;
-							textBoxInput->SelectionStart = i;
-						}
-						break;
-					case '.':
-						if (points > 0)
-						{
-							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-							textBoxInput->Text = inputNumber;
-							textBoxInput->SelectionStart = i;
-						}
-						else
-						{
-							if (inputNumber == "." || inputNumber == "-.")
-							{
-								inputNumber = inputNumber->Replace(".", "");
-								inputNumber += "0.";
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else if (inputNumber[0] == '.')
-							{
-								inputNumber = "0" + inputNumber;
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else if (inputNumber[0] == '-' && inputNumber[1] == '.')
-							{
-								inputNumber = inputNumber->Replace("-", "");
-								inputNumber = "-" + "0" + inputNumber;
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else
-							{
-								points++;
-							}
-						}
-						break;
-					case ',':
-						if (points > 0)
-						{
-							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-							textBoxInput->Text = inputNumber;
-							textBoxInput->SelectionStart = i;
-						}
-						else
-						{
-							if (inputNumber == "," || inputNumber == "-,")
-							{
-								inputNumber = inputNumber->Replace(",", "");
-								inputNumber += "0.";
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else if (inputNumber[0] == ',')
-							{
-								inputNumber = inputNumber->Replace(",", "");
-								inputNumber = "0." + inputNumber;
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else if (inputNumber[0] == '-' && inputNumber[1] == ',')
-							{
-								inputNumber = inputNumber->Replace("-", "");
-								inputNumber = inputNumber->Replace(",", "");
-								inputNumber = "-" + "0." + inputNumber;
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 2;
-							}
-							else
-							{
-								points++;
-								inputNumber = inputNumber->Replace(",", ".");
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i + 1;
-							}
-						}
-						break;
-					default:
-						inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-						textBoxInput->Text = inputNumber;
-						textBoxInput->SelectionStart = i;
-						i--;
-						break;
-					}
+					points = 0;
+					break;
 				}
 			}
 			points = 0;
@@ -667,6 +657,7 @@ public:
 			this->comboBoxChoice->Name = L"comboBoxChoice";
 			this->comboBoxChoice->Size = System::Drawing::Size(63, 33);
 			this->comboBoxChoice->TabIndex = 4;
+			this->comboBoxChoice->TextChanged += gcnew EventHandler(this, &MyForm::comboBoxChoice_TextChanged);
 			// 
 			// textBoxChosen
 			// 
@@ -794,6 +785,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	String^ decimal = ""; //переменная для хранения числа в 10 СС
 	String^ decimalBeforePoint = ""; //число в 10 СС до точки
 	String^ decimalAfterPoint = ""; //число в 10 СС после точки
+	String^ last10 = lastDecimal; //копия прошлого числа в 10 СС
 	
 	String^ binary = ""; //число в 2 СС
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
@@ -816,7 +808,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-		Symbols(textBoxDecimal, decimal, inputSystem);
+		Symbols(textBoxDecimal, decimal, last10, inputSystem);
 		textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 
 		if (decimal != lastDecimal)
@@ -882,6 +874,7 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 	String^ binary = ""; //число в 2 СС
 	String^ binaryBeforePoint = ""; //число в 2 СС до точки
 	String^ binaryAfterPoint = ""; //число в 2 СС после точки
+	String^ last2 = lastBinary; //копия прошлого числа в 2 СС
 
 	String^ octal = ""; //число в 8 СС
 	String^ octalBeforePoint = ""; //число в 8 СС до точки
@@ -900,7 +893,7 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-		Symbols(textBoxBinary, binary, inputSystem);
+		Symbols(textBoxBinary, binary, last2, inputSystem);
 		textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 
 		if (binary != lastBinary)
@@ -970,6 +963,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 	String^ octal = ""; //число в 8 СС
 	String^ octalBeforePoint = ""; //число в 8 СС до точки
 	String^ octalAfterPoint = ""; //число в 8 СС после точки
+	String^ last8 = lastOctal; //копия прошлого числа в 8 СС
 
 	String^ hexadecimal = ""; //число в 16 СС
 	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
@@ -984,7 +978,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-		Symbols(textBoxOctal, octal, inputSystem);
+		Symbols(textBoxOctal, octal, last8, inputSystem);
 		textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 
 		if (octal != lastOctal)
@@ -1056,6 +1050,7 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 	String^ hexadecimal = ""; //число в 16 СС
 	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
 	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
+	String^ last16 = lastHexadecimal; //копия прошлого числа в 16 СС
 
 	String^ chosen = ""; //число в выбранной СС
 	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
@@ -1066,7 +1061,7 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 	{
 		//разрешаем вводить только нужные символы (2)
 		textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-		Symbols(textBoxHexadecimal, hexadecimal, inputSystem);
+		Symbols(textBoxHexadecimal, hexadecimal, last16, inputSystem);
 		textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 
 		if (hexadecimal != lastHexadecimal)
@@ -1147,13 +1142,14 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 		String^ chosen = ""; //число в выбранной СС
 		String^ chosenBeforePoint = ""; //число в выбранной СС до точки
 		String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+		String^ lastC = lastChosen; //копия прошлого числа в выбранной СС
 
 
 		if (textBoxChosen->Text != "")
 		{
 			//разрешаем вводить только нужные символы (2)
 			textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-			Symbols(textBoxChosen, chosen, inputSystem);
+			Symbols(textBoxChosen, chosen, lastC, inputSystem);
 			textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 
 			if (chosen != lastChosen)
