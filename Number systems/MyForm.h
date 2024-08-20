@@ -19,7 +19,7 @@ namespace Numbersystems {
 		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
 		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
 		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
-		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
+		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символов INT_MAX
 
 		String^ lastDecimal = ""; //прошлое число в 10 СС
 		String^ lastBinary = ""; //прошлое число в 2 СС
@@ -31,8 +31,8 @@ namespace Numbersystems {
 		int temporary; //временная переменная
 		bool zero = false; //является ли число нулем
 
-
-		public:
+	public:
+		//разворот строки
 		void ReverseString(String^& str)
 		{
 			String^ temporaryorary = "";
@@ -44,7 +44,7 @@ namespace Numbersystems {
 
 			str = temporaryorary;
 		}
-		//вторая часть отсеивания неверных символов
+		//отсеиваниe неверных символов
 		void Symbols(TextBox^ textBoxInput, String^& inputNumber, String^& lastInputNumber, int& enterSystem)
 		{
 			temporary = textBoxInput->SelectionStart;
@@ -282,12 +282,12 @@ namespace Numbersystems {
 			num10 = num10BeforePoint + num10Fractional;
 		}
 		//переводим число в нужную СС
-		void ToOutput(TextBox^ textBoxInput, TextBox^ textBoxOutput, String^& inputNumber,
+		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber,
 			int num10BeforePoint, double num10Fractional, String^ strNum10Fractional,
 			String^& outputNumber, String^& outputNumberBeforePoint, String^& outputAfterPoint,
 			int outputSystem)
 		{
-			if (textBoxInput->Text != "")
+			if (inputNumber != "")
 			{
 				//переводим целую часть числа из 10 СС в нужную СС
 				if (num10BeforePoint != 0)
@@ -336,6 +336,16 @@ namespace Numbersystems {
 			if (outputAfterPoint != "")
 			{
 				outputNumber += outputNumberBeforePoint + "." + outputAfterPoint;
+				if (outputNumber != "0")
+				{
+					for (int i = outputNumber->Length - 1; i >= 0; i--)
+					{
+						if (outputNumber[i] == '0')
+							outputNumber = outputNumber->Substring(0, outputNumber->Length - 1);
+						else
+							break;
+					}
+				}
 			}
 			else
 				outputNumber = outputNumberBeforePoint;
@@ -776,11 +786,12 @@ private: System::Void ButtonCalculator_Click(System::Object^ sender, System::Eve
 private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	//переменные
 	int inputSystem = 10; //входящая СС
+
 	double number10; //число в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
 
 	String^ decimal = ""; //переменная для хранения числа в 10 СС
 	String^ decimalBeforePoint = ""; //число в 10 СС до точки
@@ -806,66 +817,70 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 
 	if (textBoxDecimal->Text != "")
 	{
-		//разрешаем вводить только нужные символы (2)
+		//разрешаем вводить только нужные символы
 		textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 		Symbols(textBoxDecimal, decimal, last10, inputSystem);
 		textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+		Devide(decimal, decimalBeforePoint, decimalAfterPoint);
 
-		if (decimal != lastDecimal)
+		if (decimalBeforePoint->Length < maxLength[10])
 		{
-			Devide(decimal, decimalBeforePoint, decimalAfterPoint);
-			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			CheckLength(textBoxDecimal, decimal, decimalAfterPoint, inputSystem);
-			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			if (decimal != lastDecimal)
+			{
+				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+				CheckLength(textBoxDecimal, decimal, decimalAfterPoint, inputSystem);
+				textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+				InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			}
 		}
 	}
 
-	if (decimal != lastDecimal)
+	if (decimalBeforePoint->Length < maxLength[10])
 	{
-		lastDecimal = decimal;
-		strNumber10Fractional = "0.";
-		if (decimalBeforePoint->Length < maxLength[10])
+		if (decimal != lastDecimal)
 		{
+			lastDecimal = decimal;
+
 			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			ToOutput(textBoxDecimal, textBoxBinary, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
+			ToOutput(textBoxBinary, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
 			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 			lastBinary = binary;
 
 			textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			ToOutput(textBoxDecimal, textBoxOctal, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
+			ToOutput(textBoxOctal, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
 			textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 			lastOctal = octal;
 
 			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			ToOutput(textBoxDecimal, textBoxHexadecimal, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
+			ToOutput(textBoxHexadecimal, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
 			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 			lastHexadecimal = hexadecimal;
 
 			if (comboBoxChoice->Text != "")
 			{
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				ToOutput(textBoxDecimal, textBoxChosen, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
+				ToOutput(textBoxChosen, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				lastChosen = chosen;
 			}
 		}
-		else
-		{
-			textBoxDecimal->Text = "";
-			labelErrors->Text = "ERROR";
-		}
+	}
+	else
+	{
+		textBoxDecimal->Text = "";
+		labelErrors->Text = "ERROR";
 	}
 }
 
 private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	//переменные
 	int inputSystem = 2; //входящая СС
+
 	double number10; //число в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
 
 	String^ decimal = ""; //переменная для хранения числа в 10 СС
 	String^ decimalBeforePoint = ""; //число в 10 СС до точки
@@ -891,66 +906,70 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 
 	if (textBoxBinary->Text != "")
 	{
-		//разрешаем вводить только нужные символы (2)
+		//разрешаем вводить только нужные символы
 		textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 		Symbols(textBoxBinary, binary, last2, inputSystem);
 		textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+		Devide(binary, binaryBeforePoint, binaryAfterPoint);
 
-		if (binary != lastBinary)
+		if (binaryBeforePoint->Length < maxLength[inputSystem])
 		{
-			Devide(binary, binaryBeforePoint, binaryAfterPoint);
-			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			CheckLength(textBoxBinary, binary, binaryAfterPoint, inputSystem);
-			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			InputSystemTo10(binary, binaryBeforePoint, binaryAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			if (binary != lastBinary)
+			{
+				textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+				CheckLength(textBoxBinary, binary, binaryAfterPoint, inputSystem);
+				textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+				InputSystemTo10(binary, binaryBeforePoint, binaryAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			}
 		}
 	}
 
-	if (binary != lastBinary)
+	if (binaryBeforePoint->Length < maxLength[inputSystem])
 	{
-		lastBinary = binary;
-		strNumber10Fractional = "0.";
-		if (binaryBeforePoint->Length < maxLength[inputSystem])
+		if (binary != lastBinary)
 		{
+			lastBinary = binary;
+
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			ToOutput(textBoxBinary, textBoxDecimal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
+			ToOutput(textBoxDecimal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
 			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			lastDecimal = decimal;
 
 			textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			ToOutput(textBoxBinary, textBoxOctal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
+			ToOutput(textBoxOctal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
 			textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 			lastOctal = octal;
 
 			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			ToOutput(textBoxBinary, textBoxHexadecimal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
+			ToOutput(textBoxHexadecimal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
 			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 			lastHexadecimal = hexadecimal;
 
 			if (comboBoxChoice->Text != "")
 			{
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				ToOutput(textBoxBinary, textBoxChosen, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
+				ToOutput(textBoxChosen, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
 				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				lastChosen = chosen;
 			}
 		}
-		else
-		{
-			textBoxBinary->Text = "";
-			labelErrors->Text = "ERROR";
-		}
+	}
+	else
+	{
+		textBoxBinary->Text = "";
+		labelErrors->Text = "ERROR";
 	}
 }
 
 private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	//переменные
 	int inputSystem = 8; //входящая СС
+
 	double number10; //число в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
 
 	String^ decimal = ""; //переменная для хранения числа в 10 СС
 	String^ decimalBeforePoint = ""; //число в 10 СС до точки
@@ -976,46 +995,20 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 
 	if (textBoxOctal->Text != "")
 	{
-		//разрешаем вводить только нужные символы (2)
+		//разрешаем вводить только нужные символы
 		textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 		Symbols(textBoxOctal, octal, last8, inputSystem);
 		textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+		Devide(octal, octalBeforePoint, octalAfterPoint);
 
-		if (octal != lastOctal)
-		{
-			Devide(octal, octalBeforePoint, octalAfterPoint);
-			textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			CheckLength(textBoxOctal, octal, octalAfterPoint, inputSystem);
-			textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			InputSystemTo10(octal, octalBeforePoint, octalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
-		}
-	}
-
-	if (octal != lastOctal)
-	{
-		lastOctal = octal;
-		strNumber10Fractional = "0.";
 		if (octalBeforePoint->Length < maxLength[inputSystem])
 		{
-			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			ToOutput(textBoxOctal, textBoxDecimal, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
-			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-
-			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			ToOutput(textBoxOctal, textBoxBinary, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
-			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-
-			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			ToOutput(textBoxOctal, textBoxHexadecimal, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
-			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			lastHexadecimal = hexadecimal;
-
-			if (comboBoxChoice->Text != "")
+			if (octal != lastOctal)
 			{
-				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				ToOutput(textBoxOctal, textBoxChosen, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
-				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				lastChosen = chosen;
+				textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+				CheckLength(textBoxOctal, octal, octalAfterPoint, inputSystem);
+				textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+				InputSystemTo10(octal, octalBeforePoint, octalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 			}
 		}
 		else
@@ -1024,16 +1017,46 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 			labelErrors->Text = "ERROR";
 		}
 	}
+
+	if (octalBeforePoint->Length < maxLength[inputSystem])
+	{
+		if (octal != lastOctal)
+		{
+			lastOctal = octal;
+
+			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			ToOutput(textBoxDecimal, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
+			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+
+			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+			ToOutput(textBoxBinary, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
+			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+
+			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+			ToOutput(textBoxHexadecimal, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
+			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+			lastHexadecimal = hexadecimal;
+
+			if (comboBoxChoice->Text != "")
+			{
+				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+				ToOutput(textBoxChosen, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
+				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+				lastChosen = chosen;
+			}
+		}
+	}
 }
 
 private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	//переменные
 	int inputSystem = 16; //входящая СС
+
 	double number10; //число в 10 СС
 	int number10BeforePoint = 0; //целая часть числа в 10 СС
 	double number10Fractional = 0; //дробная часть числа в 10 СС
 	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
 
 	String^ decimal = ""; //переменная для хранения числа в 10 СС
 	String^ decimalBeforePoint = ""; //число в 10 СС до точки
@@ -1059,55 +1082,58 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 
 	if (textBoxHexadecimal->Text != "")
 	{
-		//разрешаем вводить только нужные символы (2)
+		//разрешаем вводить только нужные символы
 		textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 		Symbols(textBoxHexadecimal, hexadecimal, last16, inputSystem);
 		textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+		Devide(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint);
 
-		if (hexadecimal != lastHexadecimal)
+		if (hexadecimalBeforePoint->Length < maxLength[inputSystem])
 		{
-			Devide(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint);
-			textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			CheckLength(textBoxHexadecimal, hexadecimal, hexadecimalAfterPoint, inputSystem);
-			textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-			InputSystemTo10(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			if (hexadecimal != lastHexadecimal)
+			{
+				textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+				CheckLength(textBoxHexadecimal, hexadecimal, hexadecimalAfterPoint, inputSystem);
+				textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+				InputSystemTo10(hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+			}
 		}
 	}
 
-	if (hexadecimal != lastHexadecimal)
+	if (hexadecimalBeforePoint->Length < maxLength[inputSystem])
 	{
-		lastHexadecimal = hexadecimal;
-		strNumber10Fractional = "0.";
-		if (hexadecimalBeforePoint->Length < maxLength[inputSystem])
+		if (hexadecimal != lastHexadecimal)
 		{
+			lastHexadecimal = hexadecimal;
+
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-			ToOutput(textBoxHexadecimal, textBoxDecimal, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
+			ToOutput(textBoxDecimal, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
 			textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			lastDecimal = decimal;
 
 			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-			ToOutput(textBoxHexadecimal, textBoxBinary, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
+			ToOutput(textBoxBinary, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
 			textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 			lastBinary = binary;
 
 			textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-			ToOutput(textBoxHexadecimal, textBoxOctal, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
+			ToOutput(textBoxOctal, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
 			textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 			lastOctal = octal;
 
 			if (comboBoxChoice->Text != "")
 			{
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				ToOutput(textBoxHexadecimal, textBoxChosen, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
+				ToOutput(textBoxChosen, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
 				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				lastChosen = chosen;
 			}
 		}
-		else
-		{
-			textBoxHexadecimal->Text = "";
-			labelErrors->Text = "ERROR";
-		}
+	}
+	else
+	{
+		textBoxHexadecimal->Text = "";
+		labelErrors->Text = "ERROR";
 	}
 }
 
@@ -1115,13 +1141,13 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 	if (comboBoxChoice->Text != "")
 	{
 		//переменные
-
 		int inputSystem = System::Int32::Parse(comboBoxChoice->Text); //входящая СС
+
 		double number10; //число в 10 СС
 		int number10BeforePoint = 0; //целая часть числа в 10 СС
 		double number10Fractional = 0; //дробная часть числа в 10 СС
 		String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-		String^ strNumber10Fractional = ""; // число в 10 СС после точки (строкой)
+		String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
 
 		String^ decimal = ""; //переменная для хранения числа в 10 СС
 		String^ decimalBeforePoint = ""; //число в 10 СС до точки
@@ -1147,52 +1173,55 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 
 		if (textBoxChosen->Text != "")
 		{
-			//разрешаем вводить только нужные символы (2)
+			//разрешаем вводить только нужные символы
 			textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 			Symbols(textBoxChosen, chosen, lastC, inputSystem);
 			textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+			Devide(chosen, chosenBeforePoint, chosenAfterPoint);
 
-			if (chosen != lastChosen)
+			if (chosenBeforePoint->Length < maxLength[inputSystem])
 			{
-				Devide(chosen, chosenBeforePoint, chosenAfterPoint);
-				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				CheckLength(textBoxChosen, chosen, chosenAfterPoint, inputSystem);
-				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-				InputSystemTo10(chosen, chosenBeforePoint, chosenAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+				if (chosen != lastChosen)
+				{
+					textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+					CheckLength(textBoxChosen, chosen, chosenAfterPoint, inputSystem);
+					textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+					InputSystemTo10(chosen, chosenBeforePoint, chosenAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
+				}
 			}
 		}
 
-		if (chosen != lastChosen)
+		if (chosenBeforePoint->Length < maxLength[inputSystem])
 		{
-			lastChosen = chosen;
-			strNumber10Fractional = "0.";
-			if (chosenBeforePoint->Length < maxLength[inputSystem])
+			if (chosen != lastChosen)
 			{
+				lastChosen = chosen;
+
 				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
-				ToOutput(textBoxChosen, textBoxDecimal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
+				ToOutput(textBoxDecimal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
 				textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 				lastDecimal = decimal;
 
 				textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
-				ToOutput(textBoxChosen, textBoxBinary, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
+				ToOutput(textBoxBinary, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
 				textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 				lastBinary = binary;
 
 				textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
-				ToOutput(textBoxChosen, textBoxOctal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
+				ToOutput(textBoxOctal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, octal, octalBeforePoint, octalAfterPoint, 8);
 				textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 				lastOctal = octal;
 
 				textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
-				ToOutput(textBoxChosen, textBoxHexadecimal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
+				ToOutput(textBoxHexadecimal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, hexadecimal, hexadecimalBeforePoint, hexadecimalAfterPoint, 16);
 				textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 				lastHexadecimal = hexadecimal;
 			}
-			else
-			{
-				textBoxChosen->Text = "";
-				labelErrors->Text = "ERROR";
-			}
+		}
+		else
+		{
+			textBoxChosen->Text = "";
+			labelErrors->Text = "ERROR";
 		}
 	}
 	else
@@ -1226,7 +1255,7 @@ private: System::Void comboBoxChoice_TextChanged(System::Object^ sender, System:
 		Devide(decimal, decimalBeforePoint, decimalAfterPoint);
 		InputSystemTo10(decimal, decimalBeforePoint, decimalAfterPoint, inputSystem, number10, number10BeforePoint, number10Fractional);
 		textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
-		ToOutput(textBoxDecimal, textBoxChosen, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, chosenSystem);
+		ToOutput(textBoxChosen, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, chosenSystem);
 		textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 		lastChosen = chosen;
 	}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <map>
 
 using namespace System::Collections::Generic;
@@ -13,18 +13,519 @@ namespace Numbersystems {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// ������ ��� MyForm1
+	/// Сводка для MyForm1
 	/// </summary>
 	public ref class MyForm1 : public System::Windows::Forms::Form
 	{
+	private:
+		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
+		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
+		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
+		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символо INT_MAX
+
+		String^ lastFirst = ""; //прошлое первое число
+		String^ lastSecond = ""; //прошлое второе число
+
+		int points = 0; //кол-во точек в числe
+		int temporary; //временная переменная
+		bool zero = false; //является ли число нулем
+	private: System::Windows::Forms::ListBox^ listBoxOperation;
+
+	public:
+		//разворот строки
+		void ReverseString(String^& str)
+		{
+			String^ temporaryorary = "";
+
+			for (int i = str->Length - 1; i >= 0; i--)
+			{
+				temporaryorary += str[i];
+			}
+
+			str = temporaryorary;
+		}
+		//отсеиваниe неверных символов
+		void Symbols(TextBox^ textBoxInput, String^& inputNumber, String^& lastInputNumber, int& enterSystem)
+		{
+			temporary = textBoxInput->SelectionStart;
+			inputNumber = textBoxInput->Text;
+			inputNumber = inputNumber->ToUpper();
+			textBoxInput->Text = inputNumber;
+			labelErrors->Text = "";
+			textBoxInput->SelectionStart = temporary;
+			for (int i = 0; i < inputNumber->Length; i++)
+			{
+				if (inputNumber != lastInputNumber)
+				{
+					if (numbers10->ContainsKey(inputNumber->Substring(i, 1)))
+					{
+						if (numbers10[inputNumber->Substring(i, 1)] >= enterSystem)
+						{
+							inputNumber = lastInputNumber;
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+						}
+						else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
+						{
+							if (inputNumber[0] == '-')
+							{
+								if (textBoxInput->SelectionStart == 3)
+								{
+									inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i;
+								}
+								else if (textBoxInput->SelectionStart == 2)
+								{
+									inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = 1;
+									for (int k = 1; k < inputNumber->Length; k++)
+									{
+										if (inputNumber[k] == '0')
+										{
+											inputNumber = inputNumber->Substring(0, 1) + inputNumber->Substring(2);;
+											textBoxInput->Text = inputNumber;
+											textBoxInput->SelectionStart = 1;
+											k--;
+										}
+										else
+											break;
+									}
+								}
+							}
+							else
+							{
+								if (textBoxInput->SelectionStart == 2)
+								{
+									inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i;
+								}
+								else if (textBoxInput->SelectionStart == 1)
+								{
+									inputNumber = inputNumber->Substring(1);
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = 0;
+									for (int k = 0; k < inputNumber->Length; k++)
+									{
+										if (inputNumber[k] == '0')
+										{
+											inputNumber = inputNumber->Substring(1);
+											textBoxInput->Text = inputNumber;
+											k--;
+										}
+										else
+											break;
+									}
+								}
+							}
+						}
+						else if (i == 1 && inputNumber[0] == '0' && inputNumber[1] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0' && inputNumber[2] == '0')
+						{
+							inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+						}
+					}
+					else
+					{
+						switch (inputNumber[i])
+						{
+						case '-':
+							if (i != 0)
+							{
+								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i;
+							}
+							break;
+						case '.':
+							if (points > 0)
+							{
+								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i;
+							}
+							else
+							{
+								if (inputNumber == "." || inputNumber == "-.")
+								{
+									inputNumber = inputNumber->Replace(".", "");
+									inputNumber += "0.";
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '.')
+								{
+									inputNumber = "0" + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '-' && inputNumber[1] == '.')
+								{
+									inputNumber = inputNumber->Replace("-", "");
+									inputNumber = "-" + "0" + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else
+								{
+									points++;
+								}
+							}
+							break;
+						case ',':
+							if (points > 0)
+							{
+								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = i;
+							}
+							else
+							{
+								if (inputNumber == "," || inputNumber == "-,")
+								{
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber += "0.";
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == ',')
+								{
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber = "0." + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '-' && inputNumber[1] == ',')
+								{
+									inputNumber = inputNumber->Replace("-", "");
+									inputNumber = inputNumber->Replace(",", "");
+									inputNumber = "-" + "0." + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else
+								{
+									points++;
+									inputNumber = inputNumber->Replace(",", ".");
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 1;
+								}
+							}
+							break;
+						default:
+							inputNumber = lastInputNumber;
+							textBoxInput->Text = inputNumber;
+							textBoxInput->SelectionStart = i;
+							break;
+						}
+					}
+				}
+				else
+				{
+					points = 0;
+					break;
+				}
+			}
+			points = 0;
+		}
+		//делим введенное число на целую и дробную части
+		void Devide(String^& inputNumber,
+			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint)
+		{
+			for (int i = 0; i < inputNumber->Length; i++)
+			{
+				if (inputNumber[i] != '.')
+				{
+					if (inputNumber[i] != '-')
+					{
+						if (points == 0)
+							inputNumberBeforePoint += inputNumber[i];
+						else if (points == 1)
+							inputNumberAfterPoint += inputNumber[i];
+					}
+				}
+				else
+					points++;
+			}
+			points = 0;
+		}
+		//проверка кол-ва знаков после запятой (точки)
+		void CheckLength(TextBox^ textBoxInput, String^& inputNumber, String^& inputNumberAfterPoint,
+			int& enterSystem)
+		{
+			if (inputNumberAfterPoint->Length > decimals[enterSystem])
+			{
+				temporary = textBoxInput->SelectionStart;
+				textBoxInput->Text = inputNumber->Substring(0, inputNumber->Length - inputNumberAfterPoint->Length + decimals[enterSystem]);
+				textBoxInput->SelectionStart = temporary;
+				inputNumber = textBoxInput->Text;
+			}
+		}
+		//переводим число в 10 СС
+		void InputSystemTo10(String^& inputNumber,
+			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint,
+			int& enterSystem, double& num10, int& num10BeforePoint, double& num10Fractional)
+		{
+			//переводим в 10 СС целую часть числа
+			for (int i = 0; i < inputNumberBeforePoint->Length; i++)
+				num10BeforePoint += numbers10[inputNumberBeforePoint->Substring(i, 1)] * pow(enterSystem, inputNumberBeforePoint->Length - i - 1);
+			//переводим в 10 СС дробную часть числа 
+			if (inputNumberAfterPoint != "")
+			{
+				for (int i = 0; i < inputNumberAfterPoint->Length && i < 30; i++)
+					num10Fractional += numbers10[inputNumberAfterPoint->Substring(i, 1)] * pow(enterSystem, -(i + 1));
+			}
+
+			num10 = num10BeforePoint + num10Fractional;
+		}
+		//переводим ответ в нужную СС
+		void ToOutput(TextBox^ textBoxOutput,
+			int num10BeforePoint, double num10Fractional, String^ strNum10Fractional,
+			String^& outputNumber, String^& outputNumberBeforePoint, String^& outputAfterPoint,
+			int outputSystem)
+		{
+			//переводим целую часть числа из 10 СС в нужную СС
+			if (num10BeforePoint != 0)
+			{
+				while (num10BeforePoint != 0)
+				{
+					outputNumberBeforePoint += numbers[num10BeforePoint % outputSystem];
+					num10BeforePoint /= outputSystem;
+				}
+				ReverseString(outputNumberBeforePoint);
+			}
+			else
+				outputNumberBeforePoint = "0";
+			//переводим дробную часть числа из 10 СС нужную СС
+			while (num10Fractional >= 1)
+				num10Fractional /= 10;
+			for (int i = 0; num10Fractional != 0 && i < decimals[outputSystem]; i++)
+			{
+				num10Fractional *= outputSystem;
+				temporary = num10Fractional;
+				if (num10Fractional != 0)
+				{
+					outputAfterPoint += numbers[temporary];
+					if (temporary != 0)
+					{
+						for (int i = 0; i < num10Fractional.ToString()->Length; i++)
+						{
+							if (num10Fractional.ToString()[i] != ',')
+							{
+								if (points == 1)
+									strNum10Fractional += num10Fractional.ToString()[i];
+							}
+							else
+							{
+								points++;
+							}
+						}
+						points = 0;
+						System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
+						num10Fractional = System::Double::Parse(strNum10Fractional, culture);
+						strNum10Fractional = "0.";
+					}
+				}
+			}
+			if (outputAfterPoint != "")
+			{
+				outputNumber += outputNumberBeforePoint + "." + outputAfterPoint;
+				if (outputNumber != "0")
+				{
+					for (int i = outputNumber->Length - 1; i >= 0; i--)
+					{
+						if (outputNumber[i] == '0')
+							outputNumber = outputNumber->Substring(0, outputNumber->Length - 1);
+						else
+							break;
+					}
+				}
+			}
+			else
+				outputNumber = outputNumberBeforePoint;
+
+			for (int i = 0; i < outputNumber->Length; i++)
+			{
+				if (outputNumber[i] != '-' && outputNumber[i] != '.')
+				{
+					if (outputNumber[i] == '0')
+					{
+						if (i == outputNumber->Length - 1)
+							zero = true;
+					}
+					else
+					{
+						zero = false;
+						break;
+					}
+				}
+			}
+			if (!zero)
+			{
+					if (System::Convert::ToString(num10BeforePoint)[0] == '-')
+						outputNumber = "-" + outputNumber;
+			}
+			zero = false;
+
+			textBoxOutput->Text = outputNumber;
+		}
 	public:
 		MyForm1(void)
 		{
 			InitializeComponent();
+
+			numbers10->Add("0", 0);
+			numbers10->Add("1", 1);
+			numbers10->Add("2", 2);
+			numbers10->Add("3", 3);
+			numbers10->Add("4", 4);
+			numbers10->Add("5", 5);
+			numbers10->Add("6", 6);
+			numbers10->Add("7", 7);
+			numbers10->Add("8", 8);
+			numbers10->Add("9", 9);
+			numbers10->Add("A", 10);
+			numbers10->Add("B", 11);
+			numbers10->Add("C", 12);
+			numbers10->Add("D", 13);
+			numbers10->Add("E", 14);
+			numbers10->Add("F", 15);
+			numbers10->Add("G", 16);
+			numbers10->Add("H", 17);
+			numbers10->Add("I", 18);
+			numbers10->Add("J", 19);
+			numbers10->Add("K", 20);
+			numbers10->Add("L", 21);
+			numbers10->Add("M", 22);
+			numbers10->Add("N", 23);
+			numbers10->Add("O", 24);
+			numbers10->Add("P", 25);
+			numbers10->Add("Q", 26);
+			numbers10->Add("R", 27);
+			numbers10->Add("S", 28);
+			numbers10->Add("T", 29);
+			numbers10->Add("U", 30);
+			numbers10->Add("V", 31);
+			numbers10->Add("W", 32);
+			numbers10->Add("X", 33);
+			numbers10->Add("Y", 34);
+			numbers10->Add("Z", 35);
+
+			numbers->Add(0, "0");
+			numbers->Add(1, "1");
+			numbers->Add(2, "2");
+			numbers->Add(3, "3");
+			numbers->Add(4, "4");
+			numbers->Add(5, "5");
+			numbers->Add(6, "6");
+			numbers->Add(7, "7");
+			numbers->Add(8, "8");
+			numbers->Add(9, "9");
+			numbers->Add(10, "A");
+			numbers->Add(11, "B");
+			numbers->Add(12, "C");
+			numbers->Add(13, "D");
+			numbers->Add(14, "E");
+			numbers->Add(15, "F");
+			numbers->Add(16, "G");
+			numbers->Add(17, "H");
+			numbers->Add(18, "I");
+			numbers->Add(19, "J");
+			numbers->Add(20, "K");
+			numbers->Add(21, "L");
+			numbers->Add(22, "M");
+			numbers->Add(23, "N");
+			numbers->Add(24, "O");
+			numbers->Add(25, "P");
+			numbers->Add(26, "Q");
+			numbers->Add(27, "R");
+			numbers->Add(28, "S");
+			numbers->Add(29, "T");
+			numbers->Add(30, "U");
+			numbers->Add(31, "V");
+			numbers->Add(32, "W");
+			numbers->Add(33, "X");
+			numbers->Add(34, "Y");
+			numbers->Add(35, "Z");
+
+			decimals->Add(2, 20);
+			decimals->Add(3, 18);
+			decimals->Add(4, 16);
+			decimals->Add(5, 14);
+			decimals->Add(6, 12);
+			decimals->Add(7, 10);
+			decimals->Add(8, 8);
+			decimals->Add(9, 7);
+			decimals->Add(10, 6);
+			decimals->Add(11, 6);
+			decimals->Add(12, 6);
+			decimals->Add(13, 6);
+			decimals->Add(14, 6);
+			decimals->Add(15, 6);
+			decimals->Add(16, 6);
+			decimals->Add(17, 6);
+			decimals->Add(18, 6);
+			decimals->Add(19, 6);
+			decimals->Add(20, 6);
+			decimals->Add(21, 5);
+			decimals->Add(22, 5);
+			decimals->Add(23, 5);
+			decimals->Add(24, 5);
+			decimals->Add(25, 5);
+			decimals->Add(26, 5);
+			decimals->Add(27, 5);
+			decimals->Add(28, 5);
+			decimals->Add(29, 5);
+			decimals->Add(30, 5);
+			decimals->Add(31, 5);
+			decimals->Add(32, 5);
+			decimals->Add(33, 5);
+			decimals->Add(34, 5);
+			decimals->Add(35, 5);
+			decimals->Add(36, 5);
+
+			maxLength->Add(2, 31);
+			maxLength->Add(3, 20);
+			maxLength->Add(4, 16);
+			maxLength->Add(5, 14);
+			maxLength->Add(6, 12);
+			maxLength->Add(7, 12);
+			maxLength->Add(8, 11);
+			maxLength->Add(9, 10);
+			maxLength->Add(10, 10);
+			maxLength->Add(11, 9);
+			maxLength->Add(12, 9);
+			maxLength->Add(13, 9);
+			maxLength->Add(14, 9);
+			maxLength->Add(15, 8);
+			maxLength->Add(16, 8);
+			maxLength->Add(17, 8);
+			maxLength->Add(18, 8);
+			maxLength->Add(19, 8);
+			maxLength->Add(20, 8);
+			maxLength->Add(21, 8);
+			maxLength->Add(22, 7);
+			maxLength->Add(23, 7);
+			maxLength->Add(24, 7);
+			maxLength->Add(25, 7);
+			maxLength->Add(26, 7);
+			maxLength->Add(27, 7);
+			maxLength->Add(28, 7);
+			maxLength->Add(29, 7);
+			maxLength->Add(30, 7);
+			maxLength->Add(31, 7);
+			maxLength->Add(32, 7);
+			maxLength->Add(33, 7);
+			maxLength->Add(34, 7);
+			maxLength->Add(35, 7);
+			maxLength->Add(36, 6);
 		}
 	protected:
 		/// <summary>
-		/// ���������� ��� ������������ �������.
+		/// Освободить все используемые ресурсы.
 		/// </summary>
 		~MyForm1()
 		{
@@ -36,7 +537,7 @@ namespace Numbersystems {
 	private: System::Windows::Forms::TextBox^ textBoxFirst;
 	private: System::Windows::Forms::TextBox^ textBoxSecond;
 	private: System::Windows::Forms::ComboBox^ comboBoxFirst;
-	private: System::Windows::Forms::ListBox^ listBoxOperation;
+
 	protected:
 
 
@@ -55,6 +556,7 @@ namespace Numbersystems {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ label3;
 	private: System::Windows::Forms::TextBox^ textBoxAnswer;
+	private: System::Windows::Forms::Label^ labelErrors;
 
 
 
@@ -63,14 +565,14 @@ namespace Numbersystems {
 
 	private:
 		/// <summary>
-		/// ������������ ���������� ������������.
+		/// Обязательная переменная конструктора.
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// ��������� ����� ��� ��������� ������������ � �� ��������� 
-		/// ���������� ����� ������ � ������� ��������� ����.
+		/// Требуемый метод для поддержки конструктора — не изменяйте 
+		/// содержимое этого метода с помощью редактора кода.
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -78,7 +580,6 @@ namespace Numbersystems {
 			this->textBoxFirst = (gcnew System::Windows::Forms::TextBox());
 			this->textBoxSecond = (gcnew System::Windows::Forms::TextBox());
 			this->comboBoxFirst = (gcnew System::Windows::Forms::ComboBox());
-			this->listBoxOperation = (gcnew System::Windows::Forms::ListBox());
 			this->comboBoxSecond = (gcnew System::Windows::Forms::ComboBox());
 			this->comboBoxAnswer = (gcnew System::Windows::Forms::ComboBox());
 			this->label5 = (gcnew System::Windows::Forms::Label());
@@ -86,6 +587,8 @@ namespace Numbersystems {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->textBoxAnswer = (gcnew System::Windows::Forms::TextBox());
+			this->labelErrors = (gcnew System::Windows::Forms::Label());
+			this->listBoxOperation = (gcnew System::Windows::Forms::ListBox());
 			this->SuspendLayout();
 			// 
 			// textBoxFirst
@@ -97,6 +600,7 @@ namespace Numbersystems {
 			this->textBoxFirst->Name = L"textBoxFirst";
 			this->textBoxFirst->Size = System::Drawing::Size(403, 30);
 			this->textBoxFirst->TabIndex = 6;
+			this->textBoxFirst->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
 			// 
 			// textBoxSecond
 			// 
@@ -125,17 +629,6 @@ namespace Numbersystems {
 			this->comboBoxFirst->Name = L"comboBoxFirst";
 			this->comboBoxFirst->Size = System::Drawing::Size(63, 33);
 			this->comboBoxFirst->TabIndex = 9;
-			// 
-			// listBoxOperation
-			// 
-			this->listBoxOperation->FormattingEnabled = true;
-			this->listBoxOperation->ItemHeight = 25;
-			this->listBoxOperation->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"+", L"-", L"*", L"/", L"^" });
-			this->listBoxOperation->Location = System::Drawing::Point(168, 103);
-			this->listBoxOperation->Name = L"listBoxOperation";
-			this->listBoxOperation->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->listBoxOperation->Size = System::Drawing::Size(168, 104);
-			this->listBoxOperation->TabIndex = 12;
 			// 
 			// comboBoxSecond
 			// 
@@ -205,7 +698,7 @@ namespace Numbersystems {
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(242, 275);
+			this->label3->Location = System::Drawing::Point(240, 275);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(27, 29);
 			this->label3->TabIndex = 18;
@@ -222,11 +715,31 @@ namespace Numbersystems {
 			this->textBoxAnswer->Size = System::Drawing::Size(403, 30);
 			this->textBoxAnswer->TabIndex = 8;
 			// 
+			// labelErrors
+			// 
+			this->labelErrors->AutoSize = true;
+			this->labelErrors->Location = System::Drawing::Point(210, 20);
+			this->labelErrors->Name = L"labelErrors";
+			this->labelErrors->Size = System::Drawing::Size(0, 25);
+			this->labelErrors->TabIndex = 19;
+			// 
+			// listBoxOperation
+			// 
+			this->listBoxOperation->FormattingEnabled = true;
+			this->listBoxOperation->ItemHeight = 25;
+			this->listBoxOperation->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"+", L"-", L"*", L"/", L"^" });
+			this->listBoxOperation->Location = System::Drawing::Point(168, 110);
+			this->listBoxOperation->Name = L"listBoxOperation";
+			this->listBoxOperation->RightToLeft = System::Windows::Forms::RightToLeft::No;
+			this->listBoxOperation->Size = System::Drawing::Size(168, 104);
+			this->listBoxOperation->TabIndex = 12;
+			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
+			this->Controls->Add(this->labelErrors);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
@@ -252,5 +765,125 @@ namespace Numbersystems {
 
 		}
 #pragma endregion
+private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+	if (comboBoxFirst->Text != "")
+	{
+		//переменные
+		int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
+
+		double firstNumber10; //первое число в 10 СС
+		int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
+		double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
+
+		String^ first = ""; //первое число
+		String^ firstBeforePoint = ""; //первое число до точки
+		String^ firstAfterPoint = ""; //первое число после точки
+		String^ lastF = lastFirst; //копия прошлого первого числа
+
+		if (textBoxFirst->Text != "")
+		{
+			//разрешаем вводить только нужные символы
+			textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+			Symbols(textBoxFirst, first, lastF, firstSystem);
+			textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+			Devide(first, firstBeforePoint, firstAfterPoint);
+
+			if (firstBeforePoint->Length < maxLength[firstSystem])
+			{
+				if (first != lastFirst)
+				{
+					lastFirst = first;
+
+					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+					CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
+					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+
+					if (textBoxFirst->Text != "" && textBoxSecond->Text != "" &&
+						comboBoxSecond->Text != "" && comboBoxAnswer->Text != "" &&
+						listBoxOperation->Text != "")
+					{
+						if (!(listBoxOperation->Text[0] == '/' && System::Double::Parse(textBoxSecond->Text) == 0))
+						{
+							//переменные
+							int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
+							int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
+
+							double secondNumber10; //второе число в 10 СС
+							int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
+							double secondNumber10Fractional = 0; //дробная часть вторрого числа в 10 СС
+
+							String^ second = textBoxSecond->Text; //первое число
+							String^ secondBeforePoint = ""; //первое число до точки
+							String^ secondAfterPoint = ""; //первое число после точки
+							String^ lastS = lastSecond; //копия прошлого первого числа
+
+							double answer10; //ответ в 10 СС
+							String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+							int answer10BeforePoint; //ответ в 10 СС до точки
+							double answer10Fractional; //десятичная часть ответа в 10 СС
+							String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+
+							String^ answer = ""; //ответ
+							String^ answerBeforePoint = ""; //ответ до точки
+							String^ answerAfterPoint = ""; //ответ после точки
+							//переводим введенные числа в 10 СС
+							InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+
+							Devide(second, secondBeforePoint, secondAfterPoint);
+							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+							//считаем
+							switch (listBoxOperation->Text[0])
+							{
+							case '+':
+								answer10 = firstNumber10 + secondNumber10;
+								break;
+							case '-':
+								answer10 = firstNumber10 - secondNumber10;
+								break;
+							case '*':
+								answer10 = firstNumber10 * secondNumber10;
+								break;
+							case '/':
+								answer10 = firstNumber10 / secondNumber10;
+								break;
+							case '^':
+								answer10 = pow(firstNumber10, secondNumber10);
+								break;
+							}
+
+							strAnswer10 = System::Convert::ToString(answer10);
+							answer10BeforePoint = answer10;
+							if (System::Convert::ToString(answer10BeforePoint)[0] == '-')
+							{
+								answer10BeforePoint *= -1;
+							}
+							answer10Fractional = answer10 - answer10BeforePoint;
+
+							ToOutput(textBoxAnswer, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+						}
+						else
+							labelErrors->Text = "ERROR";
+					}
+				}
+			}
+			else
+			{
+				textBoxFirst->Text = "";
+				labelErrors->Text = "ERROR";
+			}
+		}
+		else
+		{
+			lastFirst = first;
+			textBoxAnswer->Text = "";
+		}
+	}
+	else
+	{
+		textBoxFirst->Text = "";
+		labelErrors->Text = "Choose a basis";
+	}
+}
 };
 }
