@@ -264,6 +264,15 @@ namespace Numbersystems {
 				inputNumber = textBoxInput->Text;
 			}
 		}
+		//является ли число нулем
+		bool IsZero(TextBox^ textBox)
+		{
+			for (int i = 0; i < textBox->Text->Length; i++)
+			{
+				if (textBox->Text[i] != '0' && textBox->Text[i] != '-' && textBox->Text[i] != ',')
+					return false;
+			}
+		}
 		//переводим число в 10 СС
 		void InputSystemTo10(String^& inputNumber,
 			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint,
@@ -280,6 +289,8 @@ namespace Numbersystems {
 			}
 
 			num10 = num10BeforePoint + num10Fractional;
+			if (inputNumber[0] == '-')
+				num10 *= -1;
 		}
 		//переводим ответ в нужную СС
 		void ToOutput(TextBox^ textBoxOutput,
@@ -791,19 +802,22 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 			if (firstBeforePoint->Length < maxLength[firstSystem])
 			{
-				if (first != lastFirst)
+				lastFirst = first;
+
+				textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+				CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
+				textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+
+				if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
+					textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
+					comboBoxSecond->Text != "" && comboBoxAnswer->Text != "" &&
+					listBoxOperation->Text != "")
 				{
-					lastFirst = first;
-
-					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-					CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
-					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-
-					if (textBoxFirst->Text != "" && textBoxSecond->Text != "" &&
-						comboBoxSecond->Text != "" && comboBoxAnswer->Text != "" &&
-						listBoxOperation->Text != "")
+					textBoxSecond->Text = textBoxSecond->Text->Replace(".", ",");
+					if (!(listBoxOperation->Text[0] == '/' && IsZero(textBoxSecond)))
 					{
-						if (!(listBoxOperation->Text[0] == '/' && System::Double::Parse(textBoxSecond->Text) == 0))
+						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
+						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && textBoxSecond->Text[0] == '0'))
 						{
 							//переменные
 							int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
@@ -856,14 +870,21 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 							answer10BeforePoint = answer10;
 							if (System::Convert::ToString(answer10BeforePoint)[0] == '-')
 							{
+								answer10Fractional = -1 * (answer10 - answer10BeforePoint);
 								answer10BeforePoint *= -1;
 							}
-							answer10Fractional = answer10 - answer10BeforePoint;
+							else
+								answer10Fractional = answer10 - answer10BeforePoint;
 
 							ToOutput(textBoxAnswer, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 						}
 						else
-							labelErrors->Text = "ERROR";
+							labelErrors->Text = "COMPLEX";
+					}
+					else
+					{
+						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
+						labelErrors->Text = "ERROR";
 					}
 				}
 			}
