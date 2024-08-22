@@ -293,7 +293,7 @@ namespace Numbersystems {
 				num10 *= -1;
 		}
 		//переводим ответ в нужную СС
-		void ToOutput(TextBox^ textBoxOutput,
+		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber,
 			int num10BeforePoint, double num10Fractional, String^ strNum10Fractional,
 			String^& outputNumber, String^& outputNumberBeforePoint, String^& outputAfterPoint,
 			int outputSystem)
@@ -376,7 +376,7 @@ namespace Numbersystems {
 			}
 			if (!zero)
 			{
-					if (System::Convert::ToString(num10BeforePoint)[0] == '-')
+					if (System::Convert::ToString(inputNumber)[0] == '-')
 						outputNumber = "-" + outputNumber;
 			}
 			zero = false;
@@ -869,22 +869,19 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 							strAnswer10 = System::Convert::ToString(answer10);
 							answer10BeforePoint = answer10;
 							if (System::Convert::ToString(answer10BeforePoint)[0] == '-')
-							{
-								answer10Fractional = -1 * (answer10 - answer10BeforePoint);
 								answer10BeforePoint *= -1;
-							}
 							else
 								answer10Fractional = answer10 - answer10BeforePoint;
 
-							ToOutput(textBoxAnswer, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 						}
 						else
-							labelErrors->Text = "COMPLEX";
+							textBoxAnswer->Text = "COMPLEX";
 					}
 					else
 					{
 						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-						labelErrors->Text = "ERROR";
+						textBoxAnswer->Text = "ERROR";
 					}
 				}
 			}
