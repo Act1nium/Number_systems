@@ -292,6 +292,35 @@ namespace Numbersystems {
 			if (inputNumber[0] == '-')
 				num10 *= -1;
 		}
+		//считаем
+		void Count(double& total10, String^& strTotal10, int& total10BeforePoint, double& total10Fractional, double& first10, double& second10)
+		{
+			switch (listBoxOperation->Text[0])
+			{
+			case '+':
+				total10 = first10 + second10;
+				break;
+			case '-':
+				total10 = first10 - second10;
+				break;
+			case '*':
+				total10 = first10 * second10;
+				break;
+			case '/':
+				total10 = first10 / second10;
+				break;
+			case '^':
+				total10 = pow(first10, second10);
+				break;
+			}
+
+			strTotal10 = System::Convert::ToString(total10);
+			total10BeforePoint = total10;
+			if (System::Convert::ToString(total10BeforePoint)[0] == '-')
+				total10BeforePoint *= -1;
+			else
+				total10Fractional = total10 - total10BeforePoint;
+		}
 		//переводим ответ в нужную СС
 		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber,
 			int num10BeforePoint, double num10Fractional, String^ strNum10Fractional,
@@ -846,32 +875,8 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 							Devide(second, secondBeforePoint, secondAfterPoint);
 							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
-							//считаем
-							switch (listBoxOperation->Text[0])
-							{
-							case '+':
-								answer10 = firstNumber10 + secondNumber10;
-								break;
-							case '-':
-								answer10 = firstNumber10 - secondNumber10;
-								break;
-							case '*':
-								answer10 = firstNumber10 * secondNumber10;
-								break;
-							case '/':
-								answer10 = firstNumber10 / secondNumber10;
-								break;
-							case '^':
-								answer10 = pow(firstNumber10, secondNumber10);
-								break;
-							}
 
-							strAnswer10 = System::Convert::ToString(answer10);
-							answer10BeforePoint = answer10;
-							if (System::Convert::ToString(answer10BeforePoint)[0] == '-')
-								answer10BeforePoint *= -1;
-							else
-								answer10Fractional = answer10 - answer10BeforePoint;
+							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
 							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 						}
