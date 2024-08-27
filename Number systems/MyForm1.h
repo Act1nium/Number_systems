@@ -262,6 +262,16 @@ namespace Numbersystems {
 				textBoxInput->Text = inputNumber->Substring(0, inputNumber->Length - inputNumberAfterPoint->Length + decimals[enterSystem]);
 				textBoxInput->SelectionStart = temporary;
 				inputNumber = textBoxInput->Text;
+				
+				inputNumberAfterPoint = "";
+				for (int i = inputNumber->Length - 1; i > 1; i--)
+				{
+					if (inputNumber[i] != '.')
+					{
+						inputNumberAfterPoint += inputNumber[i];
+					}
+				}
+				ReverseString(inputNumberAfterPoint);
 			}
 		}
 		//является ли число нулем
