@@ -326,10 +326,12 @@ namespace Numbersystems {
 
 			strTotal10 = System::Convert::ToString(total10);
 			total10BeforePoint = total10;
-			if (System::Convert::ToString(total10BeforePoint)[0] == '-')
+			total10Fractional = total10 - total10BeforePoint;
+			if (System::Convert::ToString(total10)[0] == '-')
+			{
 				total10BeforePoint *= -1;
-			else
-				total10Fractional = total10 - total10BeforePoint;
+				total10Fractional *= -1;
+			}
 		}
 		//переводим ответ в нужную СС
 		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber,
@@ -899,6 +901,8 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 						textBoxAnswer->Text = "ERROR";
 					}
 				}
+				else
+					textBoxAnswer->Text = "";
 			}
 			else
 			{
