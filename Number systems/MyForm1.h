@@ -156,23 +156,8 @@ namespace Numbersystems {
 									textBoxInput->Text = inputNumber;
 									textBoxInput->SelectionStart = i + 2;
 								}
-								else if (inputNumber[0] == '.')
-								{
-									inputNumber = "0" + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == '-' && inputNumber[1] == '.')
-								{
-									inputNumber = inputNumber->Replace("-", "");
-									inputNumber = "-" + "0" + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
 								else
-								{
 									points++;
-								}
 							}
 							break;
 						case ',':
@@ -188,21 +173,6 @@ namespace Numbersystems {
 								{
 									inputNumber = inputNumber->Replace(",", "");
 									inputNumber += "0.";
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == ',')
-								{
-									inputNumber = inputNumber->Replace(",", "");
-									inputNumber = "0." + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == '-' && inputNumber[1] == ',')
-								{
-									inputNumber = inputNumber->Replace("-", "");
-									inputNumber = inputNumber->Replace(",", "");
-									inputNumber = "-" + "0." + inputNumber;
 									textBoxInput->Text = inputNumber;
 									textBoxInput->SelectionStart = i + 2;
 								}
@@ -858,9 +828,16 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 					comboBoxSecond->Text != "" && comboBoxAnswer->Text != "" &&
 					listBoxOperation->Text != "")
 				{
-					textBoxSecond->Text = textBoxSecond->Text->Replace(".", ",");
-					if (!(listBoxOperation->Text[0] == '/' && IsZero(textBoxSecond)))
+					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+					textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
+					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+
+					/*textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);*/
+					textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
+					/*textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);*/
+					if (!(listBoxOperation->Text[0] == '/' && IsZero(textBoxSecond)) && !(IsZero(textBoxFirst) && textBoxSecond->Text[0] == '-'))
 					{
+						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
 						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
 						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && textBoxSecond->Text[0] == '0'))
 						{
@@ -894,11 +871,7 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							if (answer10 == INFINITY)
-								textBoxAnswer->Text = "INFINITY";
-							else if (answer10 == -INFINITY)
-								textBoxAnswer->Text = "-INFINITY";
-							else if (answer10 < INT_MIN || answer10 > INT_MAX)
+							if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
 								textBoxAnswer->Text = "ERROR";
 							else
 								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
@@ -908,7 +881,13 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 					}
 					else
 					{
+						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
+						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+
+						/*textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);*/
 						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
+						/*textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);*/
 						textBoxAnswer->Text = "ERROR";
 					}
 				}

@@ -156,23 +156,8 @@ namespace Numbersystems {
 									textBoxInput->Text = inputNumber;
 									textBoxInput->SelectionStart = i + 2;
 								}
-								else if (inputNumber[0] == '.')
-								{
-									inputNumber = "0" + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == '-' && inputNumber[1] == '.')
-								{
-									inputNumber = inputNumber->Replace("-", "");
-									inputNumber = "-" + "0" + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
 								else
-								{
 									points++;
-								}
 							}
 							break;
 						case ',':
@@ -188,21 +173,6 @@ namespace Numbersystems {
 								{
 									inputNumber = inputNumber->Replace(",", "");
 									inputNumber += "0.";
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == ',')
-								{
-									inputNumber = inputNumber->Replace(",", "");
-									inputNumber = "0." + inputNumber;
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else if (inputNumber[0] == '-' && inputNumber[1] == ',')
-								{
-									inputNumber = inputNumber->Replace("-", "");
-									inputNumber = inputNumber->Replace(",", "");
-									inputNumber = "-" + "0." + inputNumber;
 									textBoxInput->Text = inputNumber;
 									textBoxInput->SelectionStart = i + 2;
 								}
