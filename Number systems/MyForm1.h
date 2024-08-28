@@ -894,7 +894,14 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+							if (answer10 == INFINITY)
+								textBoxAnswer->Text = "INFINITY";
+							else if (answer10 == -INFINITY)
+								textBoxAnswer->Text = "-INFINITY";
+							else if (answer10 < INT_MIN || answer10 > INT_MAX)
+								textBoxAnswer->Text = "ERROR";
+							else
+								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 						}
 						else
 							textBoxAnswer->Text = "COMPLEX";
