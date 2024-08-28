@@ -253,6 +253,7 @@ namespace Numbersystems {
 					return false;
 			}
 		}
+		//является ли число не целым
 		bool IsFractional (TextBox^ textBoxS)
 		{
 			int points = 0;
@@ -263,6 +264,7 @@ namespace Numbersystems {
 				else if (points == 1 && textBoxS->Text[i] != '0')
 					return true;
 			}
+			return false;
 		}
 		//переводим число в 10 СС
 		void InputSystemTo10(String^& inputNumber,
