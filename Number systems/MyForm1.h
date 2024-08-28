@@ -270,6 +270,8 @@ namespace Numbersystems {
 					{
 						inputNumberAfterPoint += inputNumber[i];
 					}
+					else
+						break;
 				}
 				ReverseString(inputNumberAfterPoint);
 			}
