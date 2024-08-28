@@ -832,7 +832,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 			{
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				ToOutput(textBoxChosen, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
-				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				lastChosen = chosen;
 			}
 		}
@@ -1013,7 +1013,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 			{
 				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				ToOutput(textBoxChosen, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, chosen, chosenBeforePoint, chosenAfterPoint, System::Int32::Parse(comboBoxChoice->Text));
-				textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+				textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 				lastChosen = chosen;
 			}
 		}
