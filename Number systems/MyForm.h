@@ -345,6 +345,8 @@ namespace Numbersystems {
 						else
 							break;
 					}
+					if (outputNumber[outputNumber->Length - 1] == '.')
+						outputNumber = outputNumber->Substring(0, outputNumber->Length - 1);
 				}
 			}
 			else
