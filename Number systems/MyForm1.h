@@ -256,14 +256,17 @@ namespace Numbersystems {
 		//является ли число не целым
 		bool IsFractional (TextBox^ textBoxS)
 		{
-			int points = 0;
 			for (int i = 0; i < textBoxS->Text->Length; i++)
 			{
 				if (textBoxS->Text[i] == '.')
 					points++;
 				else if (points == 1 && textBoxS->Text[i] != '0')
+				{
+					points = 0;
 					return true;
+				}
 			}
+			points = 0;
 			return false;
 		}
 		//переводим число в 10 СС
@@ -771,6 +774,7 @@ namespace Numbersystems {
 			this->listBoxOperation->RightToLeft = System::Windows::Forms::RightToLeft::No;
 			this->listBoxOperation->Size = System::Drawing::Size(168, 104);
 			this->listBoxOperation->TabIndex = 12;
+			this->listBoxOperation->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
 			// 
 			// MyForm1
 			// 
@@ -837,76 +841,48 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 				if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
 					textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
-					comboBoxSecond->Text != "" && comboBoxAnswer->Text != "" &&
+					comboBoxAnswer->Text != "" &&
 					listBoxOperation->Text != "")
 				{
-					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-					textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-
-					textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-					textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-					textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-					if (!(listBoxOperation->Text[0] == '/' && IsZero(textBoxSecond)) && !(IsZero(textBoxFirst) && textBoxSecond->Text[0] == '-'))
+					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
 					{
-						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+						//переменные
+						int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
+						int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
 
-						textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-						textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
-						{
-							//переменные
-							int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
-							int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
+						double secondNumber10; //второе число в 10 СС
+						int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
+						double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
 
-							double secondNumber10; //второе число в 10 СС
-							int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
-							double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
+						String^ second = textBoxSecond->Text; //второе число
+						String^ secondBeforePoint = ""; //второе число до точки
+						String^ secondAfterPoint = ""; //второе число после точки
+						String^ lastS = lastSecond; //копия прошлого второго числа
 
-							String^ second = textBoxSecond->Text; //второе число
-							String^ secondBeforePoint = ""; //второе число до точки
-							String^ secondAfterPoint = ""; //второе число после точки
-							String^ lastS = lastSecond; //копия прошлого второго числа
+						double answer10; //ответ в 10 СС
+						String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+						int answer10BeforePoint; //ответ в 10 СС до точки
+						double answer10Fractional; //десятичная часть ответа в 10 СС
+						String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
 
-							double answer10; //ответ в 10 СС
-							String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
-							int answer10BeforePoint; //ответ в 10 СС до точки
-							double answer10Fractional; //десятичная часть ответа в 10 СС
-							String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+						String^ answer = ""; //ответ
+						String^ answerBeforePoint = ""; //ответ до точки
+						String^ answerAfterPoint = ""; //ответ после точки
+						//переводим введенные числа в 10 СС
+						InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
 
-							String^ answer = ""; //ответ
-							String^ answerBeforePoint = ""; //ответ до точки
-							String^ answerAfterPoint = ""; //ответ после точки
-							//переводим введенные числа в 10 СС
-							InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+						Devide(second, secondBeforePoint, secondAfterPoint);
+						InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
 
-							Devide(second, secondBeforePoint, secondAfterPoint);
-							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+						Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
-
-							if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
-								textBoxAnswer->Text = "ERROR";
-							else
-								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
-						}
+						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+							textBoxAnswer->Text = "ERROR";
 						else
-							textBoxAnswer->Text = "COMPLEX";
+							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 					}
 					else
-					{
-						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-
-						textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-						textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						textBoxAnswer->Text = "ERROR";
-					}
+						textBoxAnswer->Text = "COMPLEX";
 				}
 				else
 					textBoxAnswer->Text = "";
@@ -935,7 +911,7 @@ private: System::Void textBoxSecond_TextChanged(System::Object^ sender, System::
 	if (comboBoxSecond->Text != "")
 	{
 		//переменные
-		int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС первого числа
+		int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
 
 		double secondNumber10; //второе число в 10 СС
 		int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
@@ -964,77 +940,48 @@ private: System::Void textBoxSecond_TextChanged(System::Object^ sender, System::
 
 				if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
 					textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
-					comboBoxFirst->Text != "" && comboBoxAnswer->Text != "" &&
+					comboBoxAnswer->Text != "" &&
 					listBoxOperation->Text != "")
 				{
-					textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-					textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-					textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-
-					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-					textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-					if (!(listBoxOperation->Text[0] == '/' && IsZero(textBoxSecond)) && !(IsZero(textBoxFirst) && textBoxSecond->Text[0] == '-'))
+					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
 					{
-						textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-						textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+						//переменные
+						int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
+						int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
 
-						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
-						{
-							//переменные
-							int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
-							int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
+						double firstNumber10; //первое число в 10 СС
+						int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
+						double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
 
-							double firstNumber10; //первое число в 10 СС
-							int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
-							double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
+						String^ first = textBoxFirst->Text; //первое число
+						String^ firstBeforePoint = ""; //первое число до точки
+						String^ firstAfterPoint = ""; //первое число после точки
+						String^ lastF = lastFirst; //копия прошлого первого числа
 
-							String^ first = textBoxFirst->Text; //первое число
-							String^ firstBeforePoint = ""; //первое число до точки
-							String^ firstAfterPoint = ""; //первое число после точки
-							String^ lastF = lastFirst; //копия прошлого первого числа
+						double answer10; //ответ в 10 СС
+						String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+						int answer10BeforePoint; //ответ в 10 СС до точки
+						double answer10Fractional; //десятичная часть ответа в 10 СС
+						String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
 
-							double answer10; //ответ в 10 СС
-							String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
-							int answer10BeforePoint; //ответ в 10 СС до точки
-							double answer10Fractional; //десятичная часть ответа в 10 СС
-							String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+						String^ answer = ""; //ответ
+						String^ answerBeforePoint = ""; //ответ до точки
+						String^ answerAfterPoint = ""; //ответ после точки
+						//переводим введенные числа в 10 СС
+						InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
 
-							String^ answer = ""; //ответ
-							String^ answerBeforePoint = ""; //ответ до точки
-							String^ answerAfterPoint = ""; //ответ после точки
-							//переводим введенные числа в 10 СС
-							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+						Devide(first, firstBeforePoint, firstAfterPoint);
+						InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
 
-							Devide(first, firstBeforePoint, firstAfterPoint);
-							InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+						Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
-
-							if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
-								textBoxAnswer->Text = "ERROR";
-							else
-								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
-						}
+						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+							textBoxAnswer->Text = "ERROR";
 						else
-							textBoxAnswer->Text = "COMPLEX";
+							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 					}
 					else
-					{
-						textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-						textBoxSecond->Text = textBoxSecond->Text->Replace(",", ".");
-						textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-
-						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						textBoxFirst->Text = textBoxFirst->Text->Replace(",", ".");
-						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-						
-						textBoxAnswer->Text = "ERROR";
-					}
+						textBoxAnswer->Text = "COMPLEX";
 				}
 				else
 					textBoxAnswer->Text = "";
@@ -1055,6 +1002,60 @@ private: System::Void textBoxSecond_TextChanged(System::Object^ sender, System::
 	{
 		textBoxSecond->Text = "";
 		labelErrors->Text = "Choose a basis";
+	}
+}
+private: System::Void listBoxOperation_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
+		textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
+		comboBoxAnswer->Text != "")
+	{
+		//переменные
+		int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
+		int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
+
+		String^ first = textBoxFirst->Text; //первое число
+		String^ firstBeforePoint = ""; //первое число до точки
+		String^ firstAfterPoint = ""; //первое число после точки
+
+		double firstNumber10; //первое число в 10 СС
+		int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
+		double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
+
+		String^ second = textBoxSecond->Text; //второе число
+		String^ secondBeforePoint = ""; //второе число до точки
+		String^ secondAfterPoint = ""; //второе число после точки
+
+		double secondNumber10; //второе число в 10 СС
+		int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
+		double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
+
+		if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
+		{
+			double answer10; //ответ в 10 СС
+			String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+			int answer10BeforePoint; //ответ в 10 СС до точки
+			double answer10Fractional; //десятичная часть ответа в 10 СС
+			String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+
+			String^ answer = ""; //ответ
+			String^ answerBeforePoint = ""; //ответ до точки
+			String^ answerAfterPoint = ""; //ответ после точки
+			//переводим введенные числа в 10 СС
+			Devide(first, firstBeforePoint, firstAfterPoint);
+			InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+
+			Devide(second, secondBeforePoint, secondAfterPoint);
+			InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+
+			Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
+
+			if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+				textBoxAnswer->Text = "ERROR";
+			else
+				ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+		}
+		else
+			textBoxAnswer->Text = "COMPLEX";
 	}
 }
 };
