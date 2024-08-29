@@ -639,7 +639,7 @@ public:
 			this->comboBoxChoice->Name = L"comboBoxChoice";
 			this->comboBoxChoice->Size = System::Drawing::Size(63, 33);
 			this->comboBoxChoice->TabIndex = 4;
-			this->comboBoxChoice->TextChanged += gcnew EventHandler(this, &MyForm::comboBoxChoice_TextChanged);
+			this->comboBoxChoice->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::comboBoxChoice_SelectedIndexChanged);
 			// 
 			// textBoxChosen
 			// 
@@ -712,7 +712,7 @@ public:
 			this->labelErrors->AutoSize = true;
 			this->labelErrors->Location = System::Drawing::Point(214, 9);
 			this->labelErrors->Name = L"labelErrors";
-			this->labelErrors->Size = System::Drawing::Size(23, 25);
+			this->labelErrors->Size = System::Drawing::Size(0, 25);
 			this->labelErrors->TabIndex = 12;
 			// 
 			// MyForm
@@ -1203,7 +1203,7 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 	}
 }
 
-private: System::Void comboBoxChoice_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void comboBoxChoice_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	labelErrors->Text = "";
 	if (textBoxDecimal->Text != "")
 	{
