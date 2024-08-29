@@ -1216,7 +1216,7 @@ private: System::Void comboBoxChoice_SelectedIndexChanged(System::Object^ sender
 
 		String^ decimal = textBoxDecimal->Text; //переменная для хранения числа в 10 СС
 		String^ decimalBeforePoint = ""; //число в 10 СС до точки
-		String^ decimalAfterPoint = ""; //число в 10 СС после точки
+		String^ decimalAfterPoint = ""; //число в 10 СС после точки 
 
 		String^ chosen = ""; //число в выбранной СС
 		String^ chosenBeforePoint = ""; //число в выбранной СС до точки

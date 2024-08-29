@@ -670,6 +670,7 @@ namespace Numbersystems {
 			this->comboBoxFirst->Name = L"comboBoxFirst";
 			this->comboBoxFirst->Size = System::Drawing::Size(63, 33);
 			this->comboBoxFirst->TabIndex = 9;
+			this->comboBoxFirst->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
 			// 
 			// comboBoxSecond
 			// 
@@ -688,6 +689,7 @@ namespace Numbersystems {
 			this->comboBoxSecond->Name = L"comboBoxSecond";
 			this->comboBoxSecond->Size = System::Drawing::Size(63, 33);
 			this->comboBoxSecond->TabIndex = 13;
+			this->comboBoxSecond->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
 			// 
 			// comboBoxAnswer
 			// 
@@ -1113,6 +1115,14 @@ private: System::Void comboBoxAnswer_SelectedIndexChanged(System::Object^ sender
 		else
 			textBoxAnswer->Text = "COMPLEX";
 	}
+}
+private: System::Void comboBoxFirst_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+	textBoxFirst->Text = "";
+}
+private: System::Void comboBoxSecond_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+	textBoxSecond->Text = "";
 }
 };
 }
