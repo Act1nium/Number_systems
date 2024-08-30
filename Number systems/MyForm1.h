@@ -847,7 +847,7 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 					comboBoxAnswer->Text != "" &&
 					listBoxOperation->Text != "")
 				{
-					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
+					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
 					{
 						//переменные
 						int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
@@ -946,7 +946,7 @@ private: System::Void textBoxSecond_TextChanged(System::Object^ sender, System::
 					comboBoxAnswer->Text != "" &&
 					listBoxOperation->Text != "")
 				{
-					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
+					if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
 					{
 						//переменные
 						int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
@@ -1032,7 +1032,7 @@ private: System::Void listBoxOperation_SelectedIndexChanged(System::Object^ send
 		int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
 		double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
 
-		if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
+		if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
 		{
 			double answer10; //ответ в 10 СС
 			String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
@@ -1087,7 +1087,7 @@ private: System::Void comboBoxAnswer_SelectedIndexChanged(System::Object^ sender
 		int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
 		double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
 
-		if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond)))
+		if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
 		{
 			double answer10; //ответ в 10 СС
 			String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
