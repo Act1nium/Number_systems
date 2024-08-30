@@ -879,7 +879,7 @@ private: System::Void textBoxFirst_TextChanged(System::Object^ sender, System::E
 
 						Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
 							textBoxAnswer->Text = "ERROR";
 						else
 							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
@@ -978,7 +978,7 @@ private: System::Void textBoxSecond_TextChanged(System::Object^ sender, System::
 
 						Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+						if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
 							textBoxAnswer->Text = "ERROR";
 						else
 							ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
@@ -1052,7 +1052,7 @@ private: System::Void listBoxOperation_SelectedIndexChanged(System::Object^ send
 
 			Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-			if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+			if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
 				textBoxAnswer->Text = "ERROR";
 			else
 				ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
@@ -1107,7 +1107,7 @@ private: System::Void comboBoxAnswer_SelectedIndexChanged(System::Object^ sender
 
 			Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-			if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX)
+			if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
 				textBoxAnswer->Text = "ERROR";
 			else
 				ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
