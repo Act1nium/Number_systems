@@ -249,7 +249,7 @@ namespace Numbersystems {
 		{
 			for (int i = 0; i < textBox->Text->Length; i++)
 			{
-				if (textBox->Text[i] != '0' && textBox->Text[i] != '-' && textBox->Text[i] != ',')
+				if (textBox->Text[i] != '0' && textBox->Text[i] != '-' && textBox->Text[i] != '.')
 					return false;
 			}
 		}
