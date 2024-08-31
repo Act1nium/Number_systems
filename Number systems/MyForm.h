@@ -112,9 +112,12 @@ namespace Numbersystems {
 									{
 										if (inputNumber[k] == '0')
 										{
-											inputNumber = inputNumber->Substring(1);
-											textBoxInput->Text = inputNumber;
-											k--;
+											if (inputNumber != "0")
+											{
+												inputNumber = inputNumber->Substring(1);
+												textBoxInput->Text = inputNumber;
+												k--;
+											}
 										}
 										else
 											break;
@@ -144,11 +147,9 @@ namespace Numbersystems {
 						case '.':
 							if (points > 0)
 							{
-								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i;
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
+								textBoxInput->SelectionStart = temporary - 1;
 							}
 							else
 							{
@@ -156,6 +157,19 @@ namespace Numbersystems {
 								{
 									inputNumber = inputNumber->Replace(".", "");
 									inputNumber += "0.";
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '.')
+								{
+									inputNumber = "0" + inputNumber;
+									textBoxInput->Text = inputNumber;
+									textBoxInput->SelectionStart = i + 2;
+								}
+								else if (inputNumber[0] == '-' && inputNumber[1] == '.')
+								{
+									inputNumber = inputNumber->Replace("-", "");
+									inputNumber = "-0" + inputNumber;
 									textBoxInput->Text = inputNumber;
 									textBoxInput->SelectionStart = i + 2;
 								}
