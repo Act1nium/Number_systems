@@ -50,6 +50,7 @@ namespace Numbersystems {
 			temporary = textBoxInput->SelectionStart;
 			inputNumber = textBoxInput->Text;
 			inputNumber = inputNumber->ToUpper();
+			inputNumber = inputNumber->Replace(",", ".");
 			textBoxInput->Text = inputNumber;
 			labelErrors->Text = "";
 			textBoxInput->SelectionStart = temporary;
@@ -146,6 +147,8 @@ namespace Numbersystems {
 								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = i;
+								inputNumber = lastInputNumber;
+								textBoxInput->Text = inputNumber;
 							}
 							else
 							{
@@ -158,31 +161,6 @@ namespace Numbersystems {
 								}
 								else
 									points++;
-							}
-							break;
-						case ',':
-							if (points > 0)
-							{
-								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
-								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i;
-							}
-							else
-							{
-								if (inputNumber == "," || inputNumber == "-,")
-								{
-									inputNumber = inputNumber->Replace(",", "");
-									inputNumber += "0.";
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 2;
-								}
-								else
-								{
-									points++;
-									inputNumber = inputNumber->Replace(",", ".");
-									textBoxInput->Text = inputNumber;
-									textBoxInput->SelectionStart = i + 1;
-								}
 							}
 							break;
 						default:
