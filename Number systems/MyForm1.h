@@ -136,9 +136,9 @@ namespace Numbersystems {
 						case '-':
 							if (i != 0)
 							{
-								inputNumber = inputNumber->Substring(0, i) + inputNumber->Substring(i + 1);
+								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
-								textBoxInput->SelectionStart = i;
+								textBoxInput->SelectionStart = temporary - 1;
 							}
 							break;
 						case '.':
