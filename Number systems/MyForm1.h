@@ -29,6 +29,8 @@ namespace Numbersystems {
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
 		bool zero = false; //является ли число нулем
+	private: System::Windows::Forms::Button^ ButtonClear;
+
 	private: System::Windows::Forms::ListBox^ listBoxOperation;
 
 	public:
@@ -619,13 +621,14 @@ namespace Numbersystems {
 			this->textBoxAnswer = (gcnew System::Windows::Forms::TextBox());
 			this->labelErrors = (gcnew System::Windows::Forms::Label());
 			this->listBoxOperation = (gcnew System::Windows::Forms::ListBox());
+			this->ButtonClear = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBoxFirst
 			// 
 			this->textBoxFirst->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBoxFirst->Location = System::Drawing::Point(13, 65);
+			this->textBoxFirst->Location = System::Drawing::Point(13, 40);
 			this->textBoxFirst->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxFirst->Name = L"textBoxFirst";
 			this->textBoxFirst->Size = System::Drawing::Size(403, 30);
@@ -636,7 +639,7 @@ namespace Numbersystems {
 			// 
 			this->textBoxSecond->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBoxSecond->Location = System::Drawing::Point(13, 240);
+			this->textBoxSecond->Location = System::Drawing::Point(13, 215);
 			this->textBoxSecond->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxSecond->Name = L"textBoxSecond";
 			this->textBoxSecond->Size = System::Drawing::Size(403, 30);
@@ -656,7 +659,7 @@ namespace Numbersystems {
 					L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27",
 					L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxFirst->Location = System::Drawing::Point(423, 62);
+			this->comboBoxFirst->Location = System::Drawing::Point(423, 37);
 			this->comboBoxFirst->Name = L"comboBoxFirst";
 			this->comboBoxFirst->Size = System::Drawing::Size(63, 33);
 			this->comboBoxFirst->TabIndex = 9;
@@ -675,7 +678,7 @@ namespace Numbersystems {
 					L"9", L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26",
 					L"27", L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxSecond->Location = System::Drawing::Point(423, 237);
+			this->comboBoxSecond->Location = System::Drawing::Point(423, 212);
 			this->comboBoxSecond->Name = L"comboBoxSecond";
 			this->comboBoxSecond->Size = System::Drawing::Size(63, 33);
 			this->comboBoxSecond->TabIndex = 13;
@@ -694,7 +697,7 @@ namespace Numbersystems {
 					L"9", L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26",
 					L"27", L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxAnswer->Location = System::Drawing::Point(423, 331);
+			this->comboBoxAnswer->Location = System::Drawing::Point(423, 297);
 			this->comboBoxAnswer->Name = L"comboBoxAnswer";
 			this->comboBoxAnswer->Size = System::Drawing::Size(63, 33);
 			this->comboBoxAnswer->TabIndex = 14;
@@ -703,7 +706,7 @@ namespace Numbersystems {
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(418, 34);
+			this->label5->Location = System::Drawing::Point(418, 9);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(60, 25);
 			this->label5->TabIndex = 15;
@@ -712,7 +715,7 @@ namespace Numbersystems {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(418, 209);
+			this->label1->Location = System::Drawing::Point(418, 184);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(60, 25);
 			this->label1->TabIndex = 16;
@@ -721,7 +724,7 @@ namespace Numbersystems {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(418, 303);
+			this->label2->Location = System::Drawing::Point(418, 269);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(60, 25);
 			this->label2->TabIndex = 17;
@@ -732,7 +735,7 @@ namespace Numbersystems {
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(240, 275);
+			this->label3->Location = System::Drawing::Point(240, 250);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(27, 29);
 			this->label3->TabIndex = 18;
@@ -742,7 +745,7 @@ namespace Numbersystems {
 			// 
 			this->textBoxAnswer->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBoxAnswer->Location = System::Drawing::Point(13, 334);
+			this->textBoxAnswer->Location = System::Drawing::Point(13, 302);
 			this->textBoxAnswer->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxAnswer->Name = L"textBoxAnswer";
 			this->textBoxAnswer->ReadOnly = true;
@@ -752,7 +755,7 @@ namespace Numbersystems {
 			// labelErrors
 			// 
 			this->labelErrors->AutoSize = true;
-			this->labelErrors->Location = System::Drawing::Point(210, 20);
+			this->labelErrors->Location = System::Drawing::Point(214, 9);
 			this->labelErrors->Name = L"labelErrors";
 			this->labelErrors->Size = System::Drawing::Size(0, 25);
 			this->labelErrors->TabIndex = 19;
@@ -762,18 +765,29 @@ namespace Numbersystems {
 			this->listBoxOperation->FormattingEnabled = true;
 			this->listBoxOperation->ItemHeight = 25;
 			this->listBoxOperation->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"+", L"-", L"*", L"/", L"^" });
-			this->listBoxOperation->Location = System::Drawing::Point(168, 110);
+			this->listBoxOperation->Location = System::Drawing::Point(168, 85);
 			this->listBoxOperation->Name = L"listBoxOperation";
 			this->listBoxOperation->RightToLeft = System::Windows::Forms::RightToLeft::No;
 			this->listBoxOperation->Size = System::Drawing::Size(168, 104);
 			this->listBoxOperation->TabIndex = 12;
 			this->listBoxOperation->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
 			// 
+			// ButtonClear
+			// 
+			this->ButtonClear->Location = System::Drawing::Point(423, 345);
+			this->ButtonClear->Name = L"ButtonClear";
+			this->ButtonClear->Size = System::Drawing::Size(63, 58);
+			this->ButtonClear->TabIndex = 20;
+			this->ButtonClear->Text = L"C";
+			this->ButtonClear->UseVisualStyleBackColor = true;
+			this->ButtonClear->Click += gcnew System::EventHandler(this, &MyForm1::ButtonClear_Click);
+			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
+			this->Controls->Add(this->ButtonClear);
 			this->Controls->Add(this->labelErrors);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
@@ -997,6 +1011,7 @@ namespace Numbersystems {
 			labelErrors->Text = "Choose a basis";
 		}
 	}
+
 	private: System::Void listBoxOperation_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
 			textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
@@ -1106,13 +1121,47 @@ namespace Numbersystems {
 				textBoxAnswer->Text = "COMPLEX";
 		}
 	}
+
 	private: System::Void comboBoxFirst_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 		labelErrors->Text = "";
 		textBoxFirst->Text = "";
 	}
+
 	private: System::Void comboBoxSecond_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 		labelErrors->Text = "";
 		textBoxSecond->Text = "";
 	}
-	};
+
+	private: System::Void ButtonClear_Click(System::Object^ sender, System::EventArgs^ e) {
+		labelErrors->Text = "";
+
+		textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+		textBoxFirst->Text = "";
+		textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+		lastFirst = "";
+
+		comboBoxFirst->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+		comboBoxFirst->SelectedIndex = -1;
+		comboBoxFirst->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+
+		listBoxOperation->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+		listBoxOperation->SelectedIndex = -1;
+		listBoxOperation->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+
+		textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+		textBoxSecond->Text = "";
+		textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+		lastSecond = "";
+
+		comboBoxSecond->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+		comboBoxSecond->SelectedIndex = -1;
+		comboBoxSecond->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+
+		textBoxAnswer->Text = "";
+
+		comboBoxAnswer->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
+		comboBoxAnswer->SelectedIndex = -1;
+		comboBoxAnswer->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
+	}
+};
 }

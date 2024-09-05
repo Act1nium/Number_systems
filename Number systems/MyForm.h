@@ -29,7 +29,8 @@ namespace Numbersystems {
 
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
-		bool zero = false; //является ли число нулем
+	private: System::Windows::Forms::Button^ ButtonClear;
+		   bool zero = false; //является ли число нулем
 
 	public:
 		//разворот строки
@@ -568,6 +569,7 @@ public:
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->labelErrors = (gcnew System::Windows::Forms::Label());
+			this->ButtonClear = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBoxDecimal
@@ -646,7 +648,7 @@ public:
 			// 
 			// ButtonCalculator
 			// 
-			this->ButtonCalculator->Location = System::Drawing::Point(18, 340);
+			this->ButtonCalculator->Location = System::Drawing::Point(18, 345);
 			this->ButtonCalculator->Name = L"ButtonCalculator";
 			this->ButtonCalculator->Size = System::Drawing::Size(153, 58);
 			this->ButtonCalculator->TabIndex = 6;
@@ -707,11 +709,22 @@ public:
 			this->labelErrors->Size = System::Drawing::Size(0, 25);
 			this->labelErrors->TabIndex = 12;
 			// 
+			// ButtonClear
+			// 
+			this->ButtonClear->Location = System::Drawing::Point(428, 345);
+			this->ButtonClear->Name = L"ButtonClear";
+			this->ButtonClear->Size = System::Drawing::Size(63, 58);
+			this->ButtonClear->TabIndex = 21;
+			this->ButtonClear->Text = L"C";
+			this->ButtonClear->UseVisualStyleBackColor = true;
+			this->ButtonClear->Click += gcnew System::EventHandler(this, &MyForm::ButtonClear_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
+			this->Controls->Add(this->ButtonClear);
 			this->Controls->Add(this->labelErrors);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label4);
@@ -1223,6 +1236,39 @@ private: System::Void comboBoxChoice_SelectedIndexChanged(System::Object^ sender
 		textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 		lastChosen = chosen;
 	}
+}
+
+private: System::Void ButtonClear_Click(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+
+	textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+	textBoxDecimal->Text = "";
+	textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+	lastDecimal = "";
+
+	textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+	textBoxBinary->Text = "";
+	textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+	lastBinary = "";
+
+	textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+	textBoxOctal->Text = "";
+	textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+	lastOctal = "";
+
+	textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+	textBoxHexadecimal->Text = "";
+	textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+	lastHexadecimal = "";
+
+	textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+	textBoxChosen->Text = "";
+	textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+	lastChosen = "";
+
+	comboBoxChoice->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBoxChoice_SelectedIndexChanged);
+	comboBoxChoice->SelectedIndex = -1;
+	comboBoxChoice->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBoxChoice_SelectedIndexChanged);
 }
 };
 }
