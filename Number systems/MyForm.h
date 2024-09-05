@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 #include "MyForm1.h"
 
 namespace Numbersystems {
