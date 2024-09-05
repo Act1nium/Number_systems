@@ -1,4 +1,4 @@
-#pragma once 
+п»ї#pragma once
 #include "MyForm1.h"
 
 namespace Numbersystems {
@@ -11,28 +11,28 @@ namespace Numbersystems {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Сводка для MyForm
+	/// РЎРІРѕРґРєР° РґР»СЏ MyForm
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	private:
-		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary для перевода в 10 СС
-		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary для перевода из 10 СС
-		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary для кол-ва знаков после запятой (СС - кол-во знаков)
-		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary для кол-ва символов INT_MAX
+		Dictionary<String^, int>^ numbers10 = gcnew Dictionary<String^, int>(); //Dictionary РґР»СЏ РїРµСЂРµРІРѕРґР° РІ 10 РЎРЎ
+		Dictionary<int, String^>^ numbers = gcnew Dictionary<int, String^>(); //Dictionary РґР»СЏ РїРµСЂРµРІРѕРґР° РёР· 10 РЎРЎ
+		Dictionary<int, int>^ decimals = gcnew Dictionary<int, int>(); //Dictionary РґР»СЏ РєРѕР»-РІР° Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№ (РЎРЎ - РєРѕР»-РІРѕ Р·РЅР°РєРѕРІ)
+		Dictionary<int, int>^ maxLength = gcnew Dictionary<int, int>(); //Dictionary РґР»СЏ РєРѕР»-РІР° СЃРёРјРІРѕР»РѕРІ INT_MAX
 
-		String^ lastDecimal = ""; //прошлое число в 10 СС
-		String^ lastBinary = ""; //прошлое число в 2 СС
-		String^ lastOctal = ""; //прошлое число в 8 СС
-		String^ lastHexadecimal = ""; //прошлое число в 16 СС
-		String^ lastChosen = ""; //прошлое число в выбранной СС
+		String^ lastDecimal = ""; //РїСЂРѕС€Р»РѕРµ С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+		String^ lastBinary = ""; //РїСЂРѕС€Р»РѕРµ С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+		String^ lastOctal = ""; //РїСЂРѕС€Р»РѕРµ С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+		String^ lastHexadecimal = ""; //РїСЂРѕС€Р»РѕРµ С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+		String^ lastChosen = ""; //РїСЂРѕС€Р»РѕРµ С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
 
-		int points = 0; //кол-во точек в числe
-		int temporary; //временная переменная
-		bool zero = false; //является ли число нулем
+		int points = 0; //РєРѕР»-РІРѕ С‚РѕС‡РµРє РІ С‡РёСЃР»e
+		int temporary; //РІСЂРµРјРµРЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
+		bool zero = false; //СЏРІР»СЏРµС‚СЃСЏ Р»Рё С‡РёСЃР»Рѕ РЅСѓР»РµРј
 
 	public:
-		//разворот строки
+		//СЂР°Р·РІРѕСЂРѕС‚ СЃС‚СЂРѕРєРё
 		void ReverseString(String^& str)
 		{
 			String^ temporaryorary = "";
@@ -44,7 +44,7 @@ namespace Numbersystems {
 
 			str = temporaryorary;
 		}
-		//отсеиваниe неверных символов
+		//РѕС‚СЃРµРёРІР°РЅРёe РЅРµРІРµСЂРЅС‹С… СЃРёРјРІРѕР»РѕРІ
 		void Symbols(TextBox^ textBoxInput, String^& inputNumber, String^& lastInputNumber, int& enterSystem)
 		{
 			temporary = textBoxInput->SelectionStart;
@@ -193,7 +193,7 @@ namespace Numbersystems {
 			}
 			points = 0;
 		}
-		//делим введенное число на целую и дробную части
+		//РґРµР»РёРј РІРІРµРґРµРЅРЅРѕРµ С‡РёСЃР»Рѕ РЅР° С†РµР»СѓСЋ Рё РґСЂРѕР±РЅСѓСЋ С‡Р°СЃС‚Рё
 		void Devide(String^& inputNumber,
 			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint)
 		{
@@ -214,7 +214,7 @@ namespace Numbersystems {
 			}
 			points = 0;
 		}
-		//проверка кол-ва знаков после запятой (точки)
+		//РїСЂРѕРІРµСЂРєР° РєРѕР»-РІР° Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№ (С‚РѕС‡РєРё)
 		void CheckLength(TextBox^ textBoxInput, String^& inputNumber, String^& inputNumberAfterPoint,
 			int& enterSystem)
 		{
@@ -226,15 +226,15 @@ namespace Numbersystems {
 				inputNumber = textBoxInput->Text;
 			}
 		}
-		//переводим число в 10 СС
+		//РїРµСЂРµРІРѕРґРёРј С‡РёСЃР»Рѕ РІ 10 РЎРЎ
 		void InputSystemTo10(String^& inputNumber,
 			String^& inputNumberBeforePoint, String^& inputNumberAfterPoint,
 			int& enterSystem, double& num10, int& num10BeforePoint, double& num10Fractional)
 		{		
-			//переводим в 10 СС целую часть числа
+			//РїРµСЂРµРІРѕРґРёРј РІ 10 РЎРЎ С†РµР»СѓСЋ С‡Р°СЃС‚СЊ С‡РёСЃР»Р°
 			for (int i = 0; i < inputNumberBeforePoint->Length; i++)
 				num10BeforePoint += numbers10[inputNumberBeforePoint->Substring(i, 1)] * pow(enterSystem, inputNumberBeforePoint->Length - i - 1);
-			//переводим в 10 СС дробную часть числа 
+			//РїРµСЂРµРІРѕРґРёРј РІ 10 РЎРЎ РґСЂРѕР±РЅСѓСЋ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° 
 			if (inputNumberAfterPoint != "")
 			{
 				for (int i = 0; i < inputNumberAfterPoint->Length && i < 30; i++)
@@ -243,7 +243,7 @@ namespace Numbersystems {
 
 			num10 = num10BeforePoint + num10Fractional;
 		}
-		//переводим число в нужную СС
+		//РїРµСЂРµРІРѕРґРёРј С‡РёСЃР»Рѕ РІ РЅСѓР¶РЅСѓСЋ РЎРЎ
 		void ToOutput(TextBox^ textBoxOutput, String^& inputNumber,
 			int num10BeforePoint, double num10Fractional, String^ strNum10Fractional,
 			String^& outputNumber, String^& outputNumberBeforePoint, String^& outputAfterPoint,
@@ -251,7 +251,7 @@ namespace Numbersystems {
 		{
 			if (inputNumber != "")
 			{
-				//переводим целую часть числа из 10 СС в нужную СС
+				//РїРµСЂРµРІРѕРґРёРј С†РµР»СѓСЋ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РёР· 10 РЎРЎ РІ РЅСѓР¶РЅСѓСЋ РЎРЎ
 				if (num10BeforePoint != 0)
 				{
 					while (num10BeforePoint != 0)
@@ -264,7 +264,7 @@ namespace Numbersystems {
 				else
 					outputNumberBeforePoint = "0";
 			}
-			//переводим дробную часть числа из 10 СС нужную СС
+			//РїРµСЂРµРІРѕРґРёРј РґСЂРѕР±РЅСѓСЋ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РёР· 10 РЎРЎ РЅСѓР¶РЅСѓСЋ РЎРЎ
 			while (num10Fractional >= 1)
 				num10Fractional /= 10;
 			for (int i = 0; num10Fractional != 0 && i < decimals[outputSystem]; i++)
@@ -504,7 +504,7 @@ public:
 
 	protected:
 		/// <summary>
-		/// Освободить все используемые ресурсы.
+		/// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
 		/// </summary>
 		~MyForm()
 		{
@@ -543,14 +543,14 @@ public:
 
 	private:
 		/// <summary>
-		/// Обязательная переменная конструктора.
+		/// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
+		/// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
+		/// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -742,46 +742,46 @@ public:
 private: System::Void ButtonCalculator_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (Application::OpenForms->Count < 2)
 	{
-		MyForm1^ form1 = gcnew MyForm1(); //создаем новый экземпляр формы
+		MyForm1^ form1 = gcnew MyForm1(); //СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ СЌРєР·РµРјРїР»СЏСЂ С„РѕСЂРјС‹
 		form1->Show();
 	}
 }
 
 private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	//переменные
-	int inputSystem = 10; //входящая СС
+	//РїРµСЂРµРјРµРЅРЅС‹Рµ
+	int inputSystem = 10; //РІС…РѕРґСЏС‰Р°СЏ РЎРЎ
 
-	double number10; //число в 10 СС
-	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	double number10Fractional = 0; //дробная часть числа в 10 СС
-	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+	double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+	int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ strNumber10BeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
+	String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-	String^ decimal = ""; //переменная для хранения числа в 10 СС
-	String^ decimalBeforePoint = ""; //число в 10 СС до точки
-	String^ decimalAfterPoint = ""; //число в 10 СС после точки
-	String^ last10 = lastDecimal; //копия прошлого числа в 10 СС
+	String^ decimal = ""; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
+	String^ last10 = lastDecimal; //РєРѕРїРёСЏ РїСЂРѕС€Р»РѕРіРѕ С‡РёСЃР»Р° РІ 10 РЎРЎ
 	
-	String^ binary = ""; //число в 2 СС
-	String^ binaryBeforePoint = ""; //число в 2 СС до точки
-	String^ binaryAfterPoint = ""; //число в 2 СС после точки
+	String^ binary = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+	String^ binaryBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ binaryAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ octal = ""; //число в 8 СС
-	String^ octalBeforePoint = ""; //число в 8 СС до точки
-	String^ octalAfterPoint = ""; //число в 8 СС после точки
+	String^ octal = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+	String^ octalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ octalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ hexadecimal = ""; //число в 16 СС
-	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
-	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
+	String^ hexadecimal = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+	String^ hexadecimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ hexadecimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ chosen = ""; //число в выбранной СС
-	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+	String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+	String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
 
 	if (textBoxDecimal->Text != "")
 	{
-		//разрешаем вводить только нужные символы
+		//СЂР°Р·СЂРµС€Р°РµРј РІРІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РЅСѓР¶РЅС‹Рµ СЃРёРјРІРѕР»С‹
 		textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 		Symbols(textBoxDecimal, decimal, last10, inputSystem);
 		textBoxDecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
@@ -837,40 +837,40 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 }
 
 private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	//переменные
-	int inputSystem = 2; //входящая СС
+	//РїРµСЂРµРјРµРЅРЅС‹Рµ
+	int inputSystem = 2; //РІС…РѕРґСЏС‰Р°СЏ РЎРЎ
 
-	double number10; //число в 10 СС
-	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	double number10Fractional = 0; //дробная часть числа в 10 СС
-	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+	double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+	int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ strNumber10BeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
+	String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-	String^ decimal = ""; //переменная для хранения числа в 10 СС
-	String^ decimalBeforePoint = ""; //число в 10 СС до точки
-	String^ decimalAfterPoint = ""; //число в 10 СС после точки
+	String^ decimal = ""; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 	
-	String^ binary = ""; //число в 2 СС
-	String^ binaryBeforePoint = ""; //число в 2 СС до точки
-	String^ binaryAfterPoint = ""; //число в 2 СС после точки
-	String^ last2 = lastBinary; //копия прошлого числа в 2 СС
+	String^ binary = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+	String^ binaryBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ binaryAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
+	String^ last2 = lastBinary; //РєРѕРїРёСЏ РїСЂРѕС€Р»РѕРіРѕ С‡РёСЃР»Р° РІ 2 РЎРЎ
 
-	String^ octal = ""; //число в 8 СС
-	String^ octalBeforePoint = ""; //число в 8 СС до точки
-	String^ octalAfterPoint = ""; //число в 8 СС после точки
+	String^ octal = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+	String^ octalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ octalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ hexadecimal = ""; //число в 16 СС
-	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
-	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
+	String^ hexadecimal = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+	String^ hexadecimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ hexadecimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ chosen = ""; //число в выбранной СС
-	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+	String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+	String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
 
 	if (textBoxBinary->Text != "")
 	{
-		//разрешаем вводить только нужные символы
+		//СЂР°Р·СЂРµС€Р°РµРј РІРІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РЅСѓР¶РЅС‹Рµ СЃРёРјРІРѕР»С‹
 		textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 		Symbols(textBoxBinary, binary, last2, inputSystem);
 		textBoxBinary->TextChanged += gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
@@ -926,40 +926,40 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 }
 
 private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	//переменные
-	int inputSystem = 8; //входящая СС
+	//РїРµСЂРµРјРµРЅРЅС‹Рµ
+	int inputSystem = 8; //РІС…РѕРґСЏС‰Р°СЏ РЎРЎ
 
-	double number10; //число в 10 СС
-	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	double number10Fractional = 0; //дробная часть числа в 10 СС
-	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+	double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+	int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ strNumber10BeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
+	String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-	String^ decimal = ""; //переменная для хранения числа в 10 СС
-	String^ decimalBeforePoint = ""; //число в 10 СС до точки
-	String^ decimalAfterPoint = ""; //число в 10 СС после точки
+	String^ decimal = ""; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ binary = ""; //число в 2 СС
-	String^ binaryBeforePoint = ""; //число в 2 СС до точки
-	String^ binaryAfterPoint = ""; //число в 2 СС после точки
+	String^ binary = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+	String^ binaryBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ binaryAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ octal = ""; //число в 8 СС
-	String^ octalBeforePoint = ""; //число в 8 СС до точки
-	String^ octalAfterPoint = ""; //число в 8 СС после точки
-	String^ last8 = lastOctal; //копия прошлого числа в 8 СС
+	String^ octal = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+	String^ octalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ octalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
+	String^ last8 = lastOctal; //РєРѕРїРёСЏ РїСЂРѕС€Р»РѕРіРѕ С‡РёСЃР»Р° РІ 8 РЎРЎ
 
-	String^ hexadecimal = ""; //число в 16 СС
-	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
-	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
+	String^ hexadecimal = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+	String^ hexadecimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ hexadecimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ chosen = ""; //число в выбранной СС
-	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+	String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+	String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
 
 	if (textBoxOctal->Text != "")
 	{
-		//разрешаем вводить только нужные символы
+		//СЂР°Р·СЂРµС€Р°РµРј РІРІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РЅСѓР¶РЅС‹Рµ СЃРёРјРІРѕР»С‹
 		textBoxOctal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
 		Symbols(textBoxOctal, octal, last8, inputSystem);
 		textBoxOctal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxOctal_TextChanged);
@@ -1013,40 +1013,40 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 }
 
 private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	//переменные
-	int inputSystem = 16; //входящая СС
+	//РїРµСЂРµРјРµРЅРЅС‹Рµ
+	int inputSystem = 16; //РІС…РѕРґСЏС‰Р°СЏ РЎРЎ
 
-	double number10; //число в 10 СС
-	int number10BeforePoint = 0; //целая часть числа в 10 СС
-	double number10Fractional = 0; //дробная часть числа в 10 СС
-	String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-	String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+	double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+	int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ strNumber10BeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
+	String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-	String^ decimal = ""; //переменная для хранения числа в 10 СС
-	String^ decimalBeforePoint = ""; //число в 10 СС до точки
-	String^ decimalAfterPoint = ""; //число в 10 СС после точки
+	String^ decimal = ""; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+	String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ binary = ""; //число в 2 СС
-	String^ binaryBeforePoint = ""; //число в 2 СС до точки
-	String^ binaryAfterPoint = ""; //число в 2 СС после точки
+	String^ binary = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+	String^ binaryBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ binaryAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ octal = ""; //число в 8 СС
-	String^ octalBeforePoint = ""; //число в 8 СС до точки
-	String^ octalAfterPoint = ""; //число в 8 СС после точки
+	String^ octal = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+	String^ octalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ octalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-	String^ hexadecimal = ""; //число в 16 СС
-	String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
-	String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
-	String^ last16 = lastHexadecimal; //копия прошлого числа в 16 СС
+	String^ hexadecimal = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+	String^ hexadecimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ hexadecimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
+	String^ last16 = lastHexadecimal; //РєРѕРїРёСЏ РїСЂРѕС€Р»РѕРіРѕ С‡РёСЃР»Р° РІ 16 РЎРЎ
 
-	String^ chosen = ""; //число в выбранной СС
-	String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-	String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+	String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+	String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+	String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
 
 	if (textBoxHexadecimal->Text != "")
 	{
-		//разрешаем вводить только нужные символы
+		//СЂР°Р·СЂРµС€Р°РµРј РІРІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РЅСѓР¶РЅС‹Рµ СЃРёРјРІРѕР»С‹
 		textBoxHexadecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
 		Symbols(textBoxHexadecimal, hexadecimal, last16, inputSystem);
 		textBoxHexadecimal->TextChanged += gcnew EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
@@ -1104,40 +1104,40 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (comboBoxChoice->Text != "")
 	{
-		//переменные
-		int inputSystem = System::Int32::Parse(comboBoxChoice->Text); //входящая СС
+		//РїРµСЂРµРјРµРЅРЅС‹Рµ
+		int inputSystem = System::Int32::Parse(comboBoxChoice->Text); //РІС…РѕРґСЏС‰Р°СЏ РЎРЎ
 
-		double number10; //число в 10 СС
-		int number10BeforePoint = 0; //целая часть числа в 10 СС
-		double number10Fractional = 0; //дробная часть числа в 10 СС
-		String^ strNumber10BeforePoint = ""; //число в 10 СС до точки (строкой)
-		String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+		double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+		int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		String^ strNumber10BeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
+		String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-		String^ decimal = ""; //переменная для хранения числа в 10 СС
-		String^ decimalBeforePoint = ""; //число в 10 СС до точки
-		String^ decimalAfterPoint = ""; //число в 10 СС после точки
+		String^ decimal = ""; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-		String^ binary = ""; //число в 2 СС
-		String^ binaryBeforePoint = ""; //число в 2 СС до точки
-		String^ binaryAfterPoint = ""; //число в 2 СС после точки
+		String^ binary = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ
+		String^ binaryBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ binaryAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 2 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-		String^ octal = ""; //число в 8 СС
-		String^ octalBeforePoint = ""; //число в 8 СС до точки
-		String^ octalAfterPoint = ""; //число в 8 СС после точки
+		String^ octal = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ
+		String^ octalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ octalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 8 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-		String^ hexadecimal = ""; //число в 16 СС
-		String^ hexadecimalBeforePoint = ""; //число в 16 СС до точки
-		String^ hexadecimalAfterPoint = ""; //число в 16 СС после точки
+		String^ hexadecimal = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ
+		String^ hexadecimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ hexadecimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 16 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 
-		String^ chosen = ""; //число в выбранной СС
-		String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-		String^ chosenAfterPoint = ""; //число в выбранной СС после точки
-		String^ lastC = lastChosen; //копия прошлого числа в выбранной СС
+		String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+		String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
+		String^ lastC = lastChosen; //РєРѕРїРёСЏ РїСЂРѕС€Р»РѕРіРѕ С‡РёСЃР»Р° РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
 
 
 		if (textBoxChosen->Text != "")
 		{
-			//разрешаем вводить только нужные символы
+			//СЂР°Р·СЂРµС€Р°РµРј РІРІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РЅСѓР¶РЅС‹Рµ СЃРёРјРІРѕР»С‹
 			textBoxChosen->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
 			Symbols(textBoxChosen, chosen, lastC, inputSystem);
 			textBoxChosen->TextChanged += gcnew EventHandler(this, &MyForm::textBoxChosen_TextChanged);
@@ -1199,20 +1199,20 @@ private: System::Void comboBoxChoice_SelectedIndexChanged(System::Object^ sender
 	labelErrors->Text = "";
 	if (textBoxDecimal->Text != "")
 	{
-		//переменные
+		//РїРµСЂРµРјРµРЅРЅС‹Рµ
 		int inputSystem = 10;
-		double number10; //число в 10 СС
-		int number10BeforePoint = 0; //целая часть числа в 10 СС
-		double number10Fractional = 0; //дробная часть числа в 10 СС
-		String^ strNumber10Fractional = "0."; // число в 10 СС после точки (строкой)
+		double number10; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ
+		int number10BeforePoint = 0; //С†РµР»Р°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		double number10Fractional = 0; //РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		String^ strNumber10Fractional = "0."; // С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё (СЃС‚СЂРѕРєРѕР№)
 
-		String^ decimal = textBoxDecimal->Text; //переменная для хранения числа в 10 СС
-		String^ decimalBeforePoint = ""; //число в 10 СС до точки
-		String^ decimalAfterPoint = ""; //число в 10 СС после точки 
+		String^ decimal = textBoxDecimal->Text; //РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‡РёСЃР»Р° РІ 10 РЎРЎ
+		String^ decimalBeforePoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ decimalAfterPoint = ""; //С‡РёСЃР»Рѕ РІ 10 РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё 
 
-		String^ chosen = ""; //число в выбранной СС
-		String^ chosenBeforePoint = ""; //число в выбранной СС до точки
-		String^ chosenAfterPoint = ""; //число в выбранной СС после точки
+		String^ chosen = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ
+		String^ chosenBeforePoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РґРѕ С‚РѕС‡РєРё
+		String^ chosenAfterPoint = ""; //С‡РёСЃР»Рѕ РІ РІС‹Р±СЂР°РЅРЅРѕР№ РЎРЎ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 		int chosenSystem = System::Int32::Parse(comboBoxChoice->Text);
 
 
