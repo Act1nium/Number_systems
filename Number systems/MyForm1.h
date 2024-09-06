@@ -67,6 +67,7 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = i;
+							labelErrors->Text = "Incorrect input";
 						}
 						else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
 						{
@@ -141,6 +142,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
+								labelErrors->Text = "Incorrect input";
 							}
 							break;
 						case '.':
@@ -149,6 +151,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
+								labelErrors->Text = "Incorrect input";
 							}
 							else
 							{
@@ -180,6 +183,7 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = i;
+							labelErrors->Text = "Incorrect input";
 							break;
 						}
 					}

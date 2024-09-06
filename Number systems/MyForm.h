@@ -27,6 +27,8 @@ namespace Numbersystems {
 		String^ lastHexadecimal = ""; //прошлое число в 16 СС
 		String^ lastChosen = ""; //прошлое число в выбранной СС
 
+		int lastSelectionStart = 0;
+
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
 	private: System::Windows::Forms::Button^ ButtonClear;
@@ -66,6 +68,7 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = i;
+							labelErrors->Text = "Incorrect input";
 						}
 						else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
 						{
@@ -143,6 +146,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
+								labelErrors->Text = "Incorrect input";
 							}
 							break;
 						case '.':
@@ -151,6 +155,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
+								labelErrors->Text = "Incorrect input";
 							}
 							else
 							{
@@ -182,6 +187,7 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = i;
+							labelErrors->Text = "Incorrect input";
 							break;
 						}
 					}
