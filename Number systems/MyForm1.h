@@ -29,6 +29,8 @@ namespace Numbersystems {
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
 		bool zero = false; //является ли число нулем
+		int lastSelectionStart; //последнее положение курсора
+
 	private: System::Windows::Forms::Button^ ButtonClear;
 
 	private: System::Windows::Forms::ListBox^ listBoxOperation;
