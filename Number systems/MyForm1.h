@@ -641,7 +641,6 @@ namespace Numbersystems {
 			this->textBoxFirst->TabIndex = 6;
 			this->textBoxFirst->Click += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_Click);
 			this->textBoxFirst->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-			this->textBoxFirst->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm1::textBoxFirst_KeyDown);
 			// 
 			// textBoxSecond
 			// 
@@ -654,7 +653,6 @@ namespace Numbersystems {
 			this->textBoxSecond->TabIndex = 7;
 			this->textBoxSecond->Click += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_Click);
 			this->textBoxSecond->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-			this->textBoxSecond->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm1::textBoxSecond_KeyDown);
 			// 
 			// comboBoxFirst
 			// 
@@ -851,7 +849,6 @@ namespace Numbersystems {
 				if (firstBeforePoint->Length < maxLength[firstSystem])
 				{
 					lastFirst = first;
-					lastSelectionStart = textBoxFirst->SelectionStart;
 
 					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
 					CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
@@ -951,7 +948,6 @@ namespace Numbersystems {
 				if (secondBeforePoint->Length < maxLength[secondSystem])
 				{
 					lastSecond = second;
-					lastSelectionStart = textBoxSecond->SelectionStart;
 
 					textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
 					CheckLength(textBoxSecond, second, secondAfterPoint, secondSystem);
@@ -1183,25 +1179,11 @@ private: System::Void textBoxFirst_Click(System::Object^ sender, System::EventAr
 		lastSelectionStart = textBoxFirst->SelectionStart + textBoxFirst->SelectionLength;
 }
 
-private: System::Void textBoxFirst_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-	if (e->KeyCode == Keys::Left)
-		lastSelectionStart = textBoxFirst->SelectionStart - 1;
-	else if (e->KeyCode == Keys::Right)
-		lastSelectionStart = textBoxFirst->SelectionStart + 1;
-}
-
 private: System::Void textBoxSecond_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (textBoxSecond->SelectionLength == 0)
 		lastSelectionStart = textBoxSecond->SelectionStart;
 	else
 		lastSelectionStart = textBoxSecond->SelectionStart + textBoxSecond->SelectionLength;
-}
-
-private: System::Void textBoxSecond_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-	if (e->KeyCode == Keys::Left)
-		lastSelectionStart = textBoxSecond->SelectionStart - 1;
-	else if (e->KeyCode == Keys::Right)
-		lastSelectionStart = textBoxSecond->SelectionStart + 1;
 }
 };
 }
