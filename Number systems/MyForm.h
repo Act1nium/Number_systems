@@ -29,9 +29,10 @@ namespace Numbersystems {
 
 		int points = 0; //кол-во точек в числe
 		int temporary; //временная переменная
+		bool zero = false; //является ли число нулем
+		int lastSelectionStart; //прошлое положение курсора
 
 	private: System::Windows::Forms::Button^ ButtonClear;
-		   bool zero = false; //является ли число нулем
 
 	public:
 		//разворот строки
@@ -66,7 +67,7 @@ namespace Numbersystems {
 						{
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
-							textBoxInput->SelectionStart = i;
+							textBoxInput->SelectionStart = lastSelectionStart;
 							labelErrors->Text = "Incorrect input";
 							break;
 						}
@@ -186,7 +187,7 @@ namespace Numbersystems {
 						default:
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
-							textBoxInput->SelectionStart = i;
+							textBoxInput->SelectionStart = lastSelectionStart;
 							labelErrors->Text = "Incorrect input";
 							break;
 						}
@@ -584,7 +585,9 @@ public:
 			this->textBoxDecimal->Name = L"textBoxDecimal";
 			this->textBoxDecimal->Size = System::Drawing::Size(473, 30);
 			this->textBoxDecimal->TabIndex = 0;
+			this->textBoxDecimal->Click += gcnew System::EventHandler(this, &MyForm::textBoxDecimal_Click);
 			this->textBoxDecimal->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			this->textBoxDecimal->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxDecimal_KeyDown);
 			// 
 			// textBoxBinary
 			// 
@@ -595,7 +598,9 @@ public:
 			this->textBoxBinary->Name = L"textBoxBinary";
 			this->textBoxBinary->Size = System::Drawing::Size(473, 30);
 			this->textBoxBinary->TabIndex = 1;
+			this->textBoxBinary->Click += gcnew System::EventHandler(this, &MyForm::textBoxBinary_Click);
 			this->textBoxBinary->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+			this->textBoxBinary->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxBinary_KeyDown);
 			// 
 			// textBoxOctal
 			// 
@@ -820,6 +825,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		if (decimal != lastDecimal)
 		{
 			lastDecimal = decimal;
+			lastSelectionStart = textBoxDecimal->SelectionStart;
 
 			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 			ToOutput(textBoxBinary, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
@@ -1272,6 +1278,30 @@ private: System::Void ButtonClear_Click(System::Object^ sender, System::EventArg
 	comboBoxChoice->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBoxChoice_SelectedIndexChanged);
 	comboBoxChoice->SelectedIndex = -1;
 	comboBoxChoice->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBoxChoice_SelectedIndexChanged);
+}
+
+private: System::Void textBoxDecimal_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (textBoxDecimal->SelectionLength == 0)
+		lastSelectionStart = textBoxDecimal->SelectionStart;
+}
+
+private: System::Void textBoxDecimal_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	if (e->KeyCode == Keys::Left)
+		lastSelectionStart = textBoxDecimal->SelectionStart - 1;
+	if (e->KeyCode == Keys::Right)
+		lastSelectionStart = textBoxDecimal->SelectionStart + 1;
+}
+
+private: System::Void textBoxBinary_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (textBoxBinary->SelectionLength == 0)
+		lastSelectionStart = textBoxBinary->SelectionStart;
+}
+
+private: System::Void textBoxBinary_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	if (e->KeyCode == Keys::Left)
+		lastSelectionStart = textBoxBinary->SelectionStart - 1;
+	if (e->KeyCode == Keys::Right)
+		lastSelectionStart = textBoxBinary->SelectionStart + 1;
 }
 };
 }
