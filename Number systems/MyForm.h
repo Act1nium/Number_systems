@@ -55,7 +55,7 @@ namespace Numbersystems {
 			inputNumber = inputNumber->ToUpper();
 			inputNumber = inputNumber->Replace(",", ".");
 			textBoxInput->Text = inputNumber;
-			labelErrors->Text = "";
+			/*labelErrors->Text = "";*/
 			textBoxInput->SelectionStart = temporary;
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
@@ -770,6 +770,7 @@ private: System::Void ButtonCalculator_Click(System::Object^ sender, System::Eve
 }
 
 private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
 	//переменные
 	int inputSystem = 10; //входящая СС
 
@@ -826,6 +827,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 		if (decimal != lastDecimal)
 		{
 			lastDecimal = decimal;
+			lastSelectionStart = textBoxDecimal->SelectionStart;
 
 			textBoxBinary->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxBinary_TextChanged);
 			ToOutput(textBoxBinary, decimal, number10BeforePoint, number10Fractional, strNumber10Fractional, binary, binaryBeforePoint, binaryAfterPoint, 2);
@@ -859,6 +861,7 @@ private: System::Void textBoxDecimal_TextChanged(System::Object^ sender, System:
 }
 
 private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
 	//переменные
 	int inputSystem = 2; //входящая СС
 
@@ -915,6 +918,7 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 		if (binary != lastBinary)
 		{
 			lastBinary = binary;
+			lastSelectionStart = textBoxBinary->SelectionStart;
 
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			ToOutput(textBoxDecimal, binary, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
@@ -948,6 +952,7 @@ private: System::Void textBoxBinary_TextChanged(System::Object^ sender, System::
 }
 
 private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
 	//переменные
 	int inputSystem = 8; //входящая СС
 
@@ -1009,6 +1014,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 		if (octal != lastOctal)
 		{
 			lastOctal = octal;
+			lastSelectionStart = textBoxOctal->SelectionStart;
 
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			ToOutput(textBoxDecimal, octal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
@@ -1035,6 +1041,7 @@ private: System::Void textBoxOctal_TextChanged(System::Object^ sender, System::E
 }
 
 private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
 	//переменные
 	int inputSystem = 16; //входящая СС
 
@@ -1091,6 +1098,7 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 		if (hexadecimal != lastHexadecimal)
 		{
 			lastHexadecimal = hexadecimal;
+			lastSelectionStart = textBoxHexadecimal->SelectionStart;
 
 			textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 			ToOutput(textBoxDecimal, hexadecimal, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
@@ -1124,6 +1132,7 @@ private: System::Void textBoxHexadecimal_TextChanged(System::Object^ sender, Sys
 }
 
 private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
 	if (comboBoxChoice->Text != "")
 	{
 		//переменные
@@ -1182,6 +1191,7 @@ private: System::Void textBoxChosen_TextChanged(System::Object^ sender, System::
 			if (chosen != lastChosen)
 			{
 				lastChosen = chosen;
+				lastSelectionStart = textBoxChosen->SelectionStart;
 
 				textBoxDecimal->TextChanged -= gcnew EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
 				ToOutput(textBoxDecimal, chosen, number10BeforePoint, number10Fractional, strNumber10Fractional, decimal, decimalBeforePoint, decimalAfterPoint, 10);
@@ -1281,7 +1291,7 @@ private: System::Void ButtonClear_Click(System::Object^ sender, System::EventArg
 }
 
 private: System::Void textBoxDecimal_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxDecimal->SelectionLength == 0)
+	if (textBoxDecimal->SelectionLength != 0)
 		lastSelectionStart = textBoxDecimal->SelectionStart;
 	else
 		lastSelectionStart = textBoxDecimal->SelectionStart + textBoxDecimal->SelectionLength;
