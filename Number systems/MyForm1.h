@@ -410,6 +410,25 @@ namespace Numbersystems {
 
 			textBoxOutput->Text = outputNumber;
 		}
+		//узнаем прошлое положение курсора при клике мышкой
+		void SetLastSelectionStart_Click(TextBox^ textBoxInput)
+		{
+			if (textBoxInput->SelectionLength == 0)
+				lastSelectionStart = textBoxInput->SelectionStart;
+			else
+				lastSelectionStart = textBoxInput->SelectionStart + textBoxInput->SelectionLength;
+		}
+		//узнаем прошлое положение курсора при нажатии кнопки на клавиатуре
+		void SetLastSelectionStart_KeyUp(TextBox^ textBoxInput, System::Windows::Forms::KeyEventArgs^ e1)
+		{
+			if (e1->KeyCode == Keys::Left || e1->KeyCode == Keys::Right ||
+				e1->KeyCode == Keys::Up || e1->KeyCode == Keys::Down) {
+				if (textBoxInput->SelectionLength == 0)
+					lastSelectionStart = textBoxInput->SelectionStart;
+				else
+					lastSelectionStart = textBoxInput->SelectionStart + textBoxInput->SelectionLength;
+			}
+		}
 	public:
 		MyForm1(void)
 		{
@@ -641,6 +660,7 @@ namespace Numbersystems {
 			this->textBoxFirst->TabIndex = 6;
 			this->textBoxFirst->Click += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_Click);
 			this->textBoxFirst->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+			this->textBoxFirst->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm1::textBoxFirst_KeyUp);
 			// 
 			// textBoxSecond
 			// 
@@ -653,6 +673,7 @@ namespace Numbersystems {
 			this->textBoxSecond->TabIndex = 7;
 			this->textBoxSecond->Click += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_Click);
 			this->textBoxSecond->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+			this->textBoxSecond->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm1::textBoxSecond_KeyUp);
 			// 
 			// comboBoxFirst
 			// 
@@ -849,6 +870,7 @@ namespace Numbersystems {
 				if (firstBeforePoint->Length < maxLength[firstSystem])
 				{
 					lastFirst = first;
+					lastSelectionStart = textBoxFirst->SelectionStart;
 
 					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
 					CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
@@ -948,6 +970,7 @@ namespace Numbersystems {
 				if (secondBeforePoint->Length < maxLength[secondSystem])
 				{
 					lastSecond = second;
+					lastSelectionStart = textBoxSecond->SelectionStart;
 
 					textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
 					CheckLength(textBoxSecond, second, secondAfterPoint, secondSystem);
@@ -1173,17 +1196,19 @@ namespace Numbersystems {
 	}
 
 private: System::Void textBoxFirst_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxFirst->SelectionLength == 0)
-		lastSelectionStart = textBoxFirst->SelectionStart;
-	else
-		lastSelectionStart = textBoxFirst->SelectionStart + textBoxFirst->SelectionLength;
+	SetLastSelectionStart_Click(textBoxFirst);
 }
 
 private: System::Void textBoxSecond_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxSecond->SelectionLength == 0)
-		lastSelectionStart = textBoxSecond->SelectionStart;
-	else
-		lastSelectionStart = textBoxSecond->SelectionStart + textBoxSecond->SelectionLength;
+	SetLastSelectionStart_Click(textBoxSecond);
+}
+
+private: System::Void textBoxFirst_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxFirst, e);
+}
+
+private: System::Void textBoxSecond_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxSecond, e);
 }
 };
 }

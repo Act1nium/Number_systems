@@ -347,6 +347,25 @@ namespace Numbersystems {
 
 			textBoxOutput->Text = outputNumber;
 		}
+		//узнаем прошлое положение курсора при клике мышкой
+		void SetLastSelectionStart_Click(TextBox^ textBoxInput)
+		{
+			if (textBoxInput->SelectionLength == 0)
+				lastSelectionStart = textBoxInput->SelectionStart;
+			else
+				lastSelectionStart = textBoxInput->SelectionStart + textBoxInput->SelectionLength;
+		}
+		//узнаем прошлое положение курсора при нажатии кнопки на клавиатуре
+		void SetLastSelectionStart_KeyUp(TextBox^ textBoxInput, System::Windows::Forms::KeyEventArgs^ e1)
+		{
+			if (e1->KeyCode == Keys::Left || e1->KeyCode == Keys::Right ||
+				e1->KeyCode == Keys::Up || e1->KeyCode == Keys::Down) {
+				if (textBoxInput->SelectionLength == 0)
+					lastSelectionStart = textBoxInput->SelectionStart;
+				else
+					lastSelectionStart = textBoxInput->SelectionStart + textBoxInput->SelectionLength;
+			}
+		}
 private: System::Windows::Forms::Label^ labelErrors;
 public:
 
@@ -587,6 +606,7 @@ public:
 			this->textBoxDecimal->TabIndex = 0;
 			this->textBoxDecimal->Click += gcnew System::EventHandler(this, &MyForm::textBoxDecimal_Click);
 			this->textBoxDecimal->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxDecimal_TextChanged);
+			this->textBoxDecimal->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxDecimal_KeyUp);
 			// 
 			// textBoxBinary
 			// 
@@ -599,6 +619,7 @@ public:
 			this->textBoxBinary->TabIndex = 1;
 			this->textBoxBinary->Click += gcnew System::EventHandler(this, &MyForm::textBoxBinary_Click);
 			this->textBoxBinary->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxBinary_TextChanged);
+			this->textBoxBinary->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxBinary_KeyUp);
 			// 
 			// textBoxOctal
 			// 
@@ -611,6 +632,7 @@ public:
 			this->textBoxOctal->TabIndex = 2;
 			this->textBoxOctal->Click += gcnew System::EventHandler(this, &MyForm::textBoxOctal_Click);
 			this->textBoxOctal->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxOctal_TextChanged);
+			this->textBoxOctal->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxOctal_KeyUp);
 			// 
 			// textBoxHexadecimal
 			// 
@@ -623,6 +645,7 @@ public:
 			this->textBoxHexadecimal->TabIndex = 3;
 			this->textBoxHexadecimal->Click += gcnew System::EventHandler(this, &MyForm::textBoxHexadecimal_Click);
 			this->textBoxHexadecimal->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxHexadecimal_TextChanged);
+			this->textBoxHexadecimal->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxHexadecimal_KeyUp);
 			// 
 			// comboBoxChoice
 			// 
@@ -654,6 +677,7 @@ public:
 			this->textBoxChosen->TabIndex = 5;
 			this->textBoxChosen->Click += gcnew System::EventHandler(this, &MyForm::textBoxChosen_Click);
 			this->textBoxChosen->TextChanged += gcnew System::EventHandler(this, &MyForm::textBoxChosen_TextChanged);
+			this->textBoxChosen->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBoxChosen_KeyUp);
 			// 
 			// ButtonCalculator
 			// 
@@ -1291,38 +1315,43 @@ private: System::Void ButtonClear_Click(System::Object^ sender, System::EventArg
 }
 
 private: System::Void textBoxDecimal_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxDecimal->SelectionLength != 0)
-		lastSelectionStart = textBoxDecimal->SelectionStart;
-	else
-		lastSelectionStart = textBoxDecimal->SelectionStart + textBoxDecimal->SelectionLength;
+	SetLastSelectionStart_Click(textBoxDecimal);
 }
 
 private: System::Void textBoxBinary_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxBinary->SelectionLength == 0)
-		lastSelectionStart = textBoxBinary->SelectionStart;
-	else
-		lastSelectionStart = textBoxBinary->SelectionStart + textBoxBinary->SelectionLength;
+	SetLastSelectionStart_Click(textBoxBinary);
 }
 
 private: System::Void textBoxOctal_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxOctal->SelectionLength == 0)
-		lastSelectionStart = textBoxOctal->SelectionStart;
-	else
-		lastSelectionStart = textBoxOctal->SelectionStart + textBoxOctal->SelectionLength;
+	SetLastSelectionStart_Click(textBoxOctal);
 }
 
 private: System::Void textBoxHexadecimal_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxHexadecimal->SelectionLength == 0)
-		lastSelectionStart = textBoxHexadecimal->SelectionStart;
-	else
-		lastSelectionStart = textBoxHexadecimal->SelectionStart + textBoxHexadecimal->SelectionLength;
+	SetLastSelectionStart_Click(textBoxHexadecimal);
 }
 
 private: System::Void textBoxChosen_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBoxChosen->SelectionLength == 0)
-		lastSelectionStart = textBoxChosen->SelectionStart;
-	else
-		lastSelectionStart = textBoxChosen->SelectionStart + textBoxChosen->SelectionLength;
+	SetLastSelectionStart_Click(textBoxChosen);
+}
+
+private: System::Void textBoxDecimal_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxDecimal, e);
+}
+	   
+private: System::Void textBoxBinary_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxBinary, e);
+}
+
+private: System::Void textBoxOctal_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxOctal, e);
+}
+
+private: System::Void textBoxHexadecimal_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxHexadecimal, e);
+}
+
+private: System::Void textBoxChosen_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	SetLastSelectionStart_KeyUp(textBoxChosen, e);
 }
 };
 }
