@@ -32,6 +32,11 @@ namespace Numbersystems {
 		int lastSelectionStart; //последнее положение курсора
 
 	private: System::Windows::Forms::Button^ ButtonClear;
+	private: System::Windows::Forms::Button^ ButtonToFirst;
+	private: System::Windows::Forms::Button^ ButtonToSecond;
+
+
+
 
 	private: System::Windows::Forms::ListBox^ listBoxOperation;
 
@@ -647,6 +652,8 @@ namespace Numbersystems {
 			this->labelErrors = (gcnew System::Windows::Forms::Label());
 			this->listBoxOperation = (gcnew System::Windows::Forms::ListBox());
 			this->ButtonClear = (gcnew System::Windows::Forms::Button());
+			this->ButtonToFirst = (gcnew System::Windows::Forms::Button());
+			this->ButtonToSecond = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBoxFirst
@@ -811,11 +818,33 @@ namespace Numbersystems {
 			this->ButtonClear->UseVisualStyleBackColor = true;
 			this->ButtonClear->Click += gcnew System::EventHandler(this, &MyForm1::ButtonClear_Click);
 			// 
+			// ButtonToFirst
+			// 
+			this->ButtonToFirst->Location = System::Drawing::Point(13, 345);
+			this->ButtonToFirst->Name = L"ButtonToFirst";
+			this->ButtonToFirst->Size = System::Drawing::Size(120, 58);
+			this->ButtonToFirst->TabIndex = 21;
+			this->ButtonToFirst->Text = L"Ans → 1st";
+			this->ButtonToFirst->UseVisualStyleBackColor = true;
+			this->ButtonToFirst->Click += gcnew System::EventHandler(this, &MyForm1::ButtonToFirst_Click);
+			// 
+			// ButtonToSecond
+			// 
+			this->ButtonToSecond->Location = System::Drawing::Point(139, 345);
+			this->ButtonToSecond->Name = L"ButtonToSecond";
+			this->ButtonToSecond->Size = System::Drawing::Size(120, 58);
+			this->ButtonToSecond->TabIndex = 22;
+			this->ButtonToSecond->Text = L"Ans → 2nd";
+			this->ButtonToSecond->UseVisualStyleBackColor = true;
+			this->ButtonToSecond->Click += gcnew System::EventHandler(this, &MyForm1::ButtonToSecond_Click);
+			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(509, 415);
+			this->Controls->Add(this->ButtonToSecond);
+			this->Controls->Add(this->ButtonToFirst);
 			this->Controls->Add(this->ButtonClear);
 			this->Controls->Add(this->labelErrors);
 			this->Controls->Add(this->label3);
@@ -1209,6 +1238,70 @@ private: System::Void textBoxFirst_KeyUp(System::Object^ sender, System::Windows
 
 private: System::Void textBoxSecond_KeyUp(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 	SetLastSelectionStart_KeyUp(textBoxSecond, e);
+}
+
+private: System::Void ButtonToFirst_Click(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+
+	textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+	textBoxFirst->Text = textBoxAnswer->Text;
+	textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+	lastFirst = textBoxFirst->Text;
+
+	comboBoxFirst->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+	comboBoxFirst->SelectedIndex = comboBoxAnswer->SelectedIndex;
+	comboBoxFirst->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+
+	listBoxOperation->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+	listBoxOperation->SelectedIndex = -1;
+	listBoxOperation->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+
+	textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+	textBoxSecond->Text = "";
+	textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+	lastSecond = "";
+
+	comboBoxSecond->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+	comboBoxSecond->SelectedIndex = -1;
+	comboBoxSecond->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+
+	textBoxAnswer->Text = "";
+
+	comboBoxAnswer->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
+	comboBoxAnswer->SelectedIndex = -1;
+	comboBoxAnswer->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
+}
+
+private: System::Void ButtonToSecond_Click(System::Object^ sender, System::EventArgs^ e) {
+	labelErrors->Text = "";
+
+	textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+	textBoxFirst->Text = "";
+	textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+	lastFirst = "";
+
+	comboBoxFirst->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+	comboBoxFirst->SelectedIndex = -1;
+	comboBoxFirst->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxFirst_SelectedIndexChanged);
+
+	listBoxOperation->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+	listBoxOperation->SelectedIndex = -1;
+	listBoxOperation->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::listBoxOperation_SelectedIndexChanged);
+
+	textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+	textBoxSecond->Text = textBoxAnswer->Text;
+	textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+	lastSecond = textBoxAnswer->Text;
+
+	comboBoxSecond->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+	comboBoxSecond->SelectedIndex = comboBoxAnswer->SelectedIndex;
+	comboBoxSecond->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxSecond_SelectedIndexChanged);
+
+	textBoxAnswer->Text = "";
+
+	comboBoxAnswer->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
+	comboBoxAnswer->SelectedIndex = -1;
+	comboBoxAnswer->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
 }
 };
 }
