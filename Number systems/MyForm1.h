@@ -61,7 +61,6 @@ namespace Numbersystems {
 			inputNumber = inputNumber->ToUpper();
 			inputNumber = inputNumber->Replace(",", ".");
 			textBoxInput->Text = inputNumber;
-			labelErrors->Text = "";
 			textBoxInput->SelectionStart = temporary;
 			for (int i = 0; i < inputNumber->Length; i++)
 			{
@@ -74,7 +73,8 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = lastSelectionStart;
-							labelErrors->Text = "Incorrect input";
+							labelErrors->Text = "Некорректный ввод";
+							break;
 						}
 						else if (i == 1 && inputNumber[0] == '0' || i == 2 && inputNumber[0] == '-' && inputNumber[1] == '0')
 						{
@@ -149,7 +149,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
-								labelErrors->Text = "Incorrect input";
+								labelErrors->Text = "Некорректный ввод";
 							}
 							break;
 						case '.':
@@ -158,7 +158,7 @@ namespace Numbersystems {
 								inputNumber = lastInputNumber;
 								textBoxInput->Text = inputNumber;
 								textBoxInput->SelectionStart = temporary - 1;
-								labelErrors->Text = "Incorrect input";
+								labelErrors->Text = "Некорректный ввод";
 							}
 							else
 							{
@@ -190,7 +190,7 @@ namespace Numbersystems {
 							inputNumber = lastInputNumber;
 							textBoxInput->Text = inputNumber;
 							textBoxInput->SelectionStart = lastSelectionStart;
-							labelErrors->Text = "Incorrect input";
+							labelErrors->Text = "Некорректный ввод";
 							break;
 						}
 					}
@@ -434,6 +434,15 @@ namespace Numbersystems {
 					lastSelectionStart = textBoxInput->SelectionStart + textBoxInput->SelectionLength;
 			}
 		}
+		//переход к прошлому варианту при переполнении поля
+		void Error(TextBox^ textBoxInput, String^% inputNumber, String^% lastInputNumber)
+		{
+			inputNumber = lastInputNumber;
+			textBoxInput->Text = inputNumber;
+			textBoxInput->SelectionStart = lastSelectionStart;
+			labelErrors->Text = "Ошибка";
+		}
+
 	public:
 		MyForm1(void)
 		{
@@ -663,7 +672,7 @@ namespace Numbersystems {
 			this->textBoxFirst->Location = System::Drawing::Point(13, 40);
 			this->textBoxFirst->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxFirst->Name = L"textBoxFirst";
-			this->textBoxFirst->Size = System::Drawing::Size(403, 30);
+			this->textBoxFirst->Size = System::Drawing::Size(408, 30);
 			this->textBoxFirst->TabIndex = 6;
 			this->textBoxFirst->Click += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_Click);
 			this->textBoxFirst->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
@@ -676,7 +685,7 @@ namespace Numbersystems {
 			this->textBoxSecond->Location = System::Drawing::Point(13, 215);
 			this->textBoxSecond->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxSecond->Name = L"textBoxSecond";
-			this->textBoxSecond->Size = System::Drawing::Size(403, 30);
+			this->textBoxSecond->Size = System::Drawing::Size(408, 30);
 			this->textBoxSecond->TabIndex = 7;
 			this->textBoxSecond->Click += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_Click);
 			this->textBoxSecond->TextChanged += gcnew System::EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
@@ -695,7 +704,7 @@ namespace Numbersystems {
 					L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26", L"27",
 					L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxFirst->Location = System::Drawing::Point(423, 37);
+			this->comboBoxFirst->Location = System::Drawing::Point(428, 37);
 			this->comboBoxFirst->Name = L"comboBoxFirst";
 			this->comboBoxFirst->Size = System::Drawing::Size(63, 33);
 			this->comboBoxFirst->TabIndex = 9;
@@ -714,7 +723,7 @@ namespace Numbersystems {
 					L"9", L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26",
 					L"27", L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxSecond->Location = System::Drawing::Point(423, 212);
+			this->comboBoxSecond->Location = System::Drawing::Point(428, 212);
 			this->comboBoxSecond->Name = L"comboBoxSecond";
 			this->comboBoxSecond->Size = System::Drawing::Size(63, 33);
 			this->comboBoxSecond->TabIndex = 13;
@@ -733,7 +742,7 @@ namespace Numbersystems {
 					L"9", L"10", L"11", L"12", L"13", L"14", L"15", L"16", L"17", L"18", L"19", L"20", L"21", L"22", L"23", L"24", L"25", L"26",
 					L"27", L"28", L"29", L"30", L"31", L"32", L"33", L"34", L"35", L"36"
 			});
-			this->comboBoxAnswer->Location = System::Drawing::Point(423, 297);
+			this->comboBoxAnswer->Location = System::Drawing::Point(428, 297);
 			this->comboBoxAnswer->Name = L"comboBoxAnswer";
 			this->comboBoxAnswer->Size = System::Drawing::Size(63, 33);
 			this->comboBoxAnswer->TabIndex = 14;
@@ -742,36 +751,36 @@ namespace Numbersystems {
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(418, 9);
+			this->label5->Location = System::Drawing::Point(404, 9);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(60, 25);
+			this->label5->Size = System::Drawing::Size(112, 25);
 			this->label5->TabIndex = 15;
-			this->label5->Text = L"Basis";
+			this->label5->Text = L"Основание";
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(418, 184);
+			this->label1->Location = System::Drawing::Point(404, 184);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(60, 25);
+			this->label1->Size = System::Drawing::Size(112, 25);
 			this->label1->TabIndex = 16;
-			this->label1->Text = L"Basis";
+			this->label1->Text = L"Основание";
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(418, 269);
+			this->label2->Location = System::Drawing::Point(404, 269);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(60, 25);
+			this->label2->Size = System::Drawing::Size(112, 25);
 			this->label2->TabIndex = 17;
-			this->label2->Text = L"Basis";
+			this->label2->Text = L"Основание";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(240, 250);
+			this->label3->Location = System::Drawing::Point(232, 257);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(27, 29);
 			this->label3->TabIndex = 18;
@@ -781,17 +790,19 @@ namespace Numbersystems {
 			// 
 			this->textBoxAnswer->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->textBoxAnswer->Location = System::Drawing::Point(13, 302);
+			this->textBoxAnswer->Location = System::Drawing::Point(13, 300);
 			this->textBoxAnswer->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->textBoxAnswer->Name = L"textBoxAnswer";
 			this->textBoxAnswer->ReadOnly = true;
-			this->textBoxAnswer->Size = System::Drawing::Size(403, 30);
+			this->textBoxAnswer->Size = System::Drawing::Size(408, 30);
 			this->textBoxAnswer->TabIndex = 8;
 			// 
 			// labelErrors
 			// 
 			this->labelErrors->AutoSize = true;
-			this->labelErrors->Location = System::Drawing::Point(214, 9);
+			this->labelErrors->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->labelErrors->Location = System::Drawing::Point(190, 9);
 			this->labelErrors->Name = L"labelErrors";
 			this->labelErrors->Size = System::Drawing::Size(0, 25);
 			this->labelErrors->TabIndex = 19;
@@ -810,7 +821,7 @@ namespace Numbersystems {
 			// 
 			// ButtonClear
 			// 
-			this->ButtonClear->Location = System::Drawing::Point(423, 345);
+			this->ButtonClear->Location = System::Drawing::Point(428, 345);
 			this->ButtonClear->Name = L"ButtonClear";
 			this->ButtonClear->Size = System::Drawing::Size(63, 58);
 			this->ButtonClear->TabIndex = 20;
@@ -824,7 +835,7 @@ namespace Numbersystems {
 			this->ButtonToFirst->Name = L"ButtonToFirst";
 			this->ButtonToFirst->Size = System::Drawing::Size(120, 58);
 			this->ButtonToFirst->TabIndex = 21;
-			this->ButtonToFirst->Text = L"Ans → 1st";
+			this->ButtonToFirst->Text = L"Отв → 1-е";
 			this->ButtonToFirst->UseVisualStyleBackColor = true;
 			this->ButtonToFirst->Click += gcnew System::EventHandler(this, &MyForm1::ButtonToFirst_Click);
 			// 
@@ -834,7 +845,7 @@ namespace Numbersystems {
 			this->ButtonToSecond->Name = L"ButtonToSecond";
 			this->ButtonToSecond->Size = System::Drawing::Size(120, 58);
 			this->ButtonToSecond->TabIndex = 22;
-			this->ButtonToSecond->Text = L"Ans → 2nd";
+			this->ButtonToSecond->Text = L"Отв → 2-е";
 			this->ButtonToSecond->UseVisualStyleBackColor = true;
 			this->ButtonToSecond->Click += gcnew System::EventHandler(this, &MyForm1::ButtonToSecond_Click);
 			// 
@@ -866,7 +877,7 @@ namespace Numbersystems {
 			this->MaximizeBox = false;
 			this->Name = L"MyForm1";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Number systems";
+			this->Text = L"Системы счисления";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -898,66 +909,65 @@ namespace Numbersystems {
 
 				if (firstBeforePoint->Length < maxLength[firstSystem])
 				{
-					lastFirst = first;
-					lastSelectionStart = textBoxFirst->SelectionStart;
-
-					textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-					CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
-					textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
-
-					if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
-						textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
-						comboBoxAnswer->Text != "" &&
-						listBoxOperation->Text != "")
+					if (first != lastFirst)
 					{
-						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
+						textBoxFirst->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+						CheckLength(textBoxFirst, first, firstAfterPoint, firstSystem);
+						textBoxFirst->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxFirst_TextChanged);
+
+						lastFirst = first;
+						lastSelectionStart = textBoxFirst->SelectionStart;
+
+						if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
+							textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
+							comboBoxAnswer->Text != "" &&
+							listBoxOperation->Text != "")
 						{
-							//переменные
-							int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
-							int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
+							if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
+							{
+								//переменные
+								int secondSystem = System::Int32::Parse(comboBoxSecond->Text); //СС второго числа
+								int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
 
-							double secondNumber10; //второе число в 10 СС
-							int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
-							double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
+								double secondNumber10; //второе число в 10 СС
+								int secondNumber10BeforePoint = 0; //целая часть второго числа в 10 СС
+								double secondNumber10Fractional = 0; //дробная часть второго числа в 10 СС
 
-							String^ second = textBoxSecond->Text; //второе число
-							String^ secondBeforePoint = ""; //второе число до точки
-							String^ secondAfterPoint = ""; //второе число после точки
-							String^ lastS = lastSecond; //копия прошлого второго числа
+								String^ second = textBoxSecond->Text; //второе число
+								String^ secondBeforePoint = ""; //второе число до точки
+								String^ secondAfterPoint = ""; //второе число после точки
+								String^ lastS = lastSecond; //копия прошлого второго числа
 
-							double answer10; //ответ в 10 СС
-							String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
-							int answer10BeforePoint; //ответ в 10 СС до точки
-							double answer10Fractional; //десятичная часть ответа в 10 СС
-							String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+								double answer10; //ответ в 10 СС
+								String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+								int answer10BeforePoint; //ответ в 10 СС до точки
+								double answer10Fractional; //десятичная часть ответа в 10 СС
+								String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
 
-							String^ answer = ""; //ответ
-							String^ answerBeforePoint = ""; //ответ до точки
-							String^ answerAfterPoint = ""; //ответ после точки
-							//переводим введенные числа в 10 СС
-							InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+								String^ answer = ""; //ответ
+								String^ answerBeforePoint = ""; //ответ до точки
+								String^ answerAfterPoint = ""; //ответ после точки
+								//переводим введенные числа в 10 СС
+								InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
 
-							Devide(second, secondBeforePoint, secondAfterPoint);
-							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+								Devide(second, secondBeforePoint, secondAfterPoint);
+								InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
 
-							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
+								Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
-								textBoxAnswer->Text = "ERROR";
+								if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
+									textBoxAnswer->Text = "Ошибка";
+								else
+									ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+							}
 							else
-								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+								textBoxAnswer->Text = "Комплексное число";
 						}
 						else
-							textBoxAnswer->Text = "COMPLEX";
+							textBoxAnswer->Text = "";
 					}
-					else
-						textBoxAnswer->Text = "";
 				}
-				else
-				{
-					textBoxFirst->Text = "";
-					labelErrors->Text = "ERROR";
-				}
+				else Error(textBoxFirst, first, lastFirst);
 			}
 			else
 			{
@@ -968,7 +978,7 @@ namespace Numbersystems {
 		else
 		{
 			textBoxFirst->Text = "";
-			labelErrors->Text = "Choose a basis";
+			labelErrors->Text = "Выберите основание";
 		}
 	}
 
@@ -998,66 +1008,65 @@ namespace Numbersystems {
 
 				if (secondBeforePoint->Length < maxLength[secondSystem])
 				{
-					lastSecond = second;
-					lastSelectionStart = textBoxSecond->SelectionStart;
-
-					textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-					CheckLength(textBoxSecond, second, secondAfterPoint, secondSystem);
-					textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
-
-					if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
-						textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
-						comboBoxAnswer->Text != "" &&
-						listBoxOperation->Text != "")
+					if (second != lastSecond)
 					{
-						if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
+						textBoxSecond->TextChanged -= gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+						CheckLength(textBoxSecond, second, secondAfterPoint, secondSystem);
+						textBoxSecond->TextChanged += gcnew EventHandler(this, &MyForm1::textBoxSecond_TextChanged);
+
+						lastSecond = second;
+						lastSelectionStart = textBoxSecond->SelectionStart;
+
+						if (textBoxFirst->Text != "" && textBoxFirst->Text != "-" &&
+							textBoxSecond->Text != "" && textBoxSecond->Text != "-" &&
+							comboBoxAnswer->Text != "" &&
+							listBoxOperation->Text != "")
 						{
-							//переменные
-							int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
-							int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
+							if (!(textBoxFirst->Text[0] == '-' && listBoxOperation->Text[0] == '^' && IsFractional(textBoxSecond) && !IsZero(textBoxFirst)))
+							{
+								//переменные
+								int firstSystem = System::Int32::Parse(comboBoxFirst->Text); //СС первого числа
+								int answerSystem = System::Int32::Parse(comboBoxAnswer->Text); //СС ответа
 
-							double firstNumber10; //первое число в 10 СС
-							int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
-							double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
+								double firstNumber10; //первое число в 10 СС
+								int firstNumber10BeforePoint = 0; //целая часть первого числа в 10 СС
+								double firstNumber10Fractional = 0; //дробная часть первого числа в 10 СС
 
-							String^ first = textBoxFirst->Text; //первое число
-							String^ firstBeforePoint = ""; //первое число до точки
-							String^ firstAfterPoint = ""; //первое число после точки
-							String^ lastF = lastFirst; //копия прошлого первого числа
+								String^ first = textBoxFirst->Text; //первое число
+								String^ firstBeforePoint = ""; //первое число до точки
+								String^ firstAfterPoint = ""; //первое число после точки
+								String^ lastF = lastFirst; //копия прошлого первого числа
 
-							double answer10; //ответ в 10 СС
-							String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
-							int answer10BeforePoint; //ответ в 10 СС до точки
-							double answer10Fractional; //десятичная часть ответа в 10 СС
-							String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
+								double answer10; //ответ в 10 СС
+								String^ strAnswer10 = ""; //ответ в 10 СС (строкой)
+								int answer10BeforePoint; //ответ в 10 СС до точки
+								double answer10Fractional; //десятичная часть ответа в 10 СС
+								String^ strAnswer10Fractional = "0."; //десятичная часть ответа в 10 СС (строкой)
 
-							String^ answer = ""; //ответ
-							String^ answerBeforePoint = ""; //ответ до точки
-							String^ answerAfterPoint = ""; //ответ после точки
-							//переводим введенные числа в 10 СС
-							InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
+								String^ answer = ""; //ответ
+								String^ answerBeforePoint = ""; //ответ до точки
+								String^ answerAfterPoint = ""; //ответ после точки
+								//переводим введенные числа в 10 СС
+								InputSystemTo10(second, secondBeforePoint, secondAfterPoint, secondSystem, secondNumber10, secondNumber10BeforePoint, secondNumber10Fractional);
 
-							Devide(first, firstBeforePoint, firstAfterPoint);
-							InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
+								Devide(first, firstBeforePoint, firstAfterPoint);
+								InputSystemTo10(first, firstBeforePoint, firstAfterPoint, firstSystem, firstNumber10, firstNumber10BeforePoint, firstNumber10Fractional);
 
-							Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
+								Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
-							if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
-								textBoxAnswer->Text = "ERROR";
+								if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
+									textBoxAnswer->Text = "Ошибка";
+								else
+									ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+							}
 							else
-								ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
+								textBoxAnswer->Text = "Комплексное число";
 						}
 						else
-							textBoxAnswer->Text = "COMPLEX";
+							textBoxAnswer->Text = "";
 					}
-					else
-						textBoxAnswer->Text = "";
 				}
-				else
-				{
-					textBoxSecond->Text = "";
-					labelErrors->Text = "ERROR";
-				}
+				else Error(textBoxSecond, second, lastSecond);
 			}
 			else
 			{
@@ -1068,7 +1077,7 @@ namespace Numbersystems {
 		else
 		{
 			textBoxSecond->Text = "";
-			labelErrors->Text = "Choose a basis";
+			labelErrors->Text = "Выберите основание";
 		}
 	}
 
@@ -1118,12 +1127,12 @@ namespace Numbersystems {
 				Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
 				if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
-					textBoxAnswer->Text = "ERROR";
+					textBoxAnswer->Text = "Ошибка";
 				else
 					ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 			}
 			else
-				textBoxAnswer->Text = "COMPLEX";
+				textBoxAnswer->Text = "Комплексное число";
 		}
 	}
 
@@ -1173,12 +1182,12 @@ namespace Numbersystems {
 				Count(answer10, strAnswer10, answer10BeforePoint, answer10Fractional, firstNumber10, secondNumber10);
 
 				if (answer10 == INFINITY || answer10 == -INFINITY || answer10 < INT_MIN || answer10 > INT_MAX || System::Double::IsNaN(answer10))
-					textBoxAnswer->Text = "ERROR";
+					textBoxAnswer->Text = "Ошибка";
 				else
 					ToOutput(textBoxAnswer, strAnswer10, answer10BeforePoint, answer10Fractional, strAnswer10Fractional, answer, answerBeforePoint, answerAfterPoint, System::Int32::Parse(comboBoxAnswer->Text));
 			}
 			else
-				textBoxAnswer->Text = "COMPLEX";
+				textBoxAnswer->Text = "Комплексное число";
 		}
 	}
 
@@ -1243,7 +1252,7 @@ private: System::Void textBoxSecond_KeyUp(System::Object^ sender, System::Window
 private: System::Void ButtonToFirst_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (textBoxAnswer->Text != "")
 	{
-		if (textBoxAnswer->Text != "ERROR" && textBoxAnswer->Text != "COMPLEX")
+		if (textBoxAnswer->Text != "Ошибка" && textBoxAnswer->Text != "Комплексное число")
 		{
 			labelErrors->Text = "";
 
@@ -1276,14 +1285,14 @@ private: System::Void ButtonToFirst_Click(System::Object^ sender, System::EventA
 			comboBoxAnswer->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
 		}
 		else
-			labelErrors->Text = "ERROR";
+			labelErrors->Text = "Ошибка";
 	}
 }
 
 private: System::Void ButtonToSecond_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (textBoxAnswer->Text != "")
 	{
-		if (textBoxAnswer->Text != "ERROR" && textBoxAnswer->Text != "COMPLEX")
+		if (textBoxAnswer->Text != "Ошибка" && textBoxAnswer->Text != "Комплексное число")
 		{
 			labelErrors->Text = "";
 
@@ -1316,7 +1325,7 @@ private: System::Void ButtonToSecond_Click(System::Object^ sender, System::Event
 			comboBoxAnswer->SelectedIndexChanged += gcnew EventHandler(this, &MyForm1::comboBoxAnswer_SelectedIndexChanged);
 		}
 		else
-			labelErrors->Text = "ERROR";
+			labelErrors->Text = "Ошибка";
 	}
 }
 };
